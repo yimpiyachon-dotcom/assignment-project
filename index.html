@@ -390,6 +390,49 @@ footer{
 @media(max-width:640px){.proc{padding-left:26px}.proc::before{left:7px}
   .proc-step{padding:14px 16px 16px}.proc-step::before{left:-24px;top:19px}}
 
+/* ---------- WIREFRAME BOARD (14 จอในผังเดียว) ---------- */
+.wboard{margin:16px 0 6px}
+.wb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+.wb-cell{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 10px 8px;
+  box-shadow:0 2px 8px -6px rgba(22,24,28,.35)}
+.wb-stage{position:relative;width:100%;height:276px;overflow:hidden;border-radius:8px}
+.wb-inner{position:absolute;top:50%;left:50%;width:248px;height:512px;
+  transform:translate(-50%,-50%) scale(.53);transform-origin:center center}
+.wb-cap{margin-top:8px;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.04em;
+  color:var(--ink-2);text-align:center;line-height:1.3}
+.wb-cap span{display:block;font-family:'IBM Plex Sans Thai',sans-serif;font-size:11px;
+  letter-spacing:0;color:var(--muted)}
+@media(max-width:640px){
+  .wb-grid{grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:10px}
+  .wb-stage{height:242px}
+  .wb-inner{transform:translate(-50%,-50%) scale(.465)}
+}
+
+/* ---------- SCREEN BOARD (ผนังรวมทุกหน้าจอ) ---------- */
+.board{margin:14px 0 8px}
+.board-side{display:flex;align-items:center;gap:12px;margin:26px 0 12px}
+.board-side b{font-size:15.5px;font-weight:600;white-space:nowrap}
+.board-side .c{width:10px;height:10px;border-radius:3px;flex:0 0 auto}
+.board-side .c.cust{background:var(--signal)}
+.board-side .c.rider{background:var(--ink)}
+.board-side .ln{flex:1;height:1px;background:var(--line)}
+.board-side .n{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);white-space:nowrap}
+.board-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+.board-cell{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 10px 8px;
+  box-shadow:0 2px 8px -6px rgba(22,24,28,.35)}
+.board-stage{position:relative;width:100%;height:272px;overflow:hidden;border-radius:8px}
+.board-inner{position:absolute;top:50%;left:50%;width:390px;height:812px;
+  transform:translate(-50%,-50%) scale(.318);transform-origin:center center}
+.board-cap{margin-top:8px;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.04em;
+  color:var(--ink-2);text-align:center;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.board-cap span{display:block;font-family:'IBM Plex Sans Thai',sans-serif;font-size:11px;
+  letter-spacing:0;color:var(--muted);white-space:normal}
+@media(max-width:640px){
+  .board-grid{grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:10px}
+  .board-stage{height:238px}
+  .board-inner{transform:translate(-50%,-50%) scale(.278)}
+}
+
 /* ---------- GREYBOX WIREFRAME (hi-fi structure) ---------- */
 .gw-set{display:flex;flex-wrap:wrap;gap:28px;margin:20px 0 6px}
 .gw{width:248px;flex:0 0 auto}
@@ -1089,6 +1132,73 @@ footer{
       <p>ตอนแรกผมวางจุดนัดรับไว้บนสุดเหนือเวลา เพราะคิดว่าเป็นข้อมูลใหม่ที่ต้องเน้น แต่พอวางเทียบกันจริงพบว่าผู้ใช้เปิดแอปมาเพื่อดูว่าอีกกี่นาที ไม่ใช่เพื่อดูว่านัดกันที่ไหน เพราะจุดนัดรับเป็นข้อมูลที่ยืนยันไปแล้วและไม่เปลี่ยน จึงย้ายลงมาเป็นลำดับสอง</p>
       <p>ข้อสังเกตนี้เกิดจากการเห็นสองเวอร์ชันวางข้างกัน ซึ่งเป็นเหตุผลที่ทำ wireframe ก่อนลง UI</p>
     </div>
+
+    <h3 style="margin-top:38px">บอร์ดรวมทุกหน้าจอ · 14 จอในผังเดียว</h3>
+    <p>ก่อนลง UI ผมวางโครงของทุกหน้าจอไว้ในผังเดียวเพื่อตรวจว่าครบทุก action หรือยัง และแต่ละสถานะต่างกันตรงไหนบ้าง แยกฝั่งลูกค้าและฝั่งไรเดอร์ให้เห็นขอบเขตของงานทั้งหมด</p>
+    <div class="wboard">
+      <div class="board-side"><span class="c cust"></span><b>ฝั่งลูกค้า</b><span class="ln"></span><span class="n">8 หน้าจอ</span></div>
+      <div class="wb-grid">
+      <div class="wb-cell">
+        <div class="wb-stage"><div class="wb-inner"><div class="gw-frame"><div class="gw-status"><span>9:41</span><span class="sig"><i></i><i></i><i></i></span></div><div class="gw-row"><span class="gw-dot "></span><div class="gw-col"><div class="gw-bar  w55"></div><div class="gw-bar sm w35"></div></div><span class="gw-dot "></span></div><div class="gw-seg"><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></div><div class="gw-row between"><div class="gw-bar sm w35"></div><div class="gw-bar sm w25"></div></div><div class="gw-bar xl dark w45"></div><div class="gw-bar  w65"></div><div class="gw-card key"><div class="gw-lbl">handoff</div><div class="gw-row "><span class="gw-dot "></span><div class="gw-col"><div class="gw-bar lg dark w85"></div><div class="gw-bar sm w65"></div></div></div><div class="gw-bar sm ink w45"></div></div><div class="gw-img" style="height:74px"><span class="pin " style="left:66%;top:32%"></span><span class="pin ghost" style="left:24%;top:62%"></span></div><div class="gw-card "><div class="gw-row "><span class="gw-dot" style="width:22px;height:22px"></span><div class="gw-col"><div class="gw-bar  w55"></div><div class="gw-bar sm w75"></div></div><span class="gw-dot "></span><span class="gw-dot "></span></div></div><div style="flex:1"></div><div class="gw-btn "><span class="gw-bar w35"></span></div><div class="gw-bar sm w45" style="margin:0 auto"></div><div class="gw-home"></div></div></div></div>
+        <div class="wb-cap">C-01<span>ใกล้ถึง</span></div>
+      </div>
+      <div class="wb-cell">
+        <div class="wb-stage"><div class="wb-inner"><div class="gw-frame"><div class="gw-status"><span>9:41</span><span class="sig"><i></i><i></i><i></i></span></div><div class="gw-row"><span class="gw-dot "></span><div class="gw-col"><div class="gw-bar  w55"></div><div class="gw-bar sm w35"></div></div><span class="gw-dot "></span></div><div class="gw-seg"><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></div><div class="gw-bar xl dark w45"></div><div class="gw-bar  w65"></div><div class="gw-scrim"></div><div class="gw-sheet"><div class="gw-grip"></div><div class="gw-row between"><div class="gw-bar lg dark w45"></div><span class="gw-dot sm"></span></div><div class="gw-bar sm w75"></div><div class="gw-card sel"><div class="gw-row "><span class="gw-dot sm on"></span><div class="gw-col"><div class="gw-bar dark w75"></div><div class="gw-bar sm w55"></div></div></div></div><div class="gw-card "><div class="gw-row "><span class="gw-dot sm ring"></span><div class="gw-col"><div class="gw-bar  w65"></div></div></div></div><div class="gw-card "><div class="gw-row "><span class="gw-dot sm ring"></span><div class="gw-col"><div class="gw-bar  w55"></div></div></div></div><div class="gw-lbl">ปักหมุดเอง</div><div class="gw-img" style="height:52px"><span class="pin " style="left:46%;top:38%"></span></div><div class="gw-card "><div class="gw-bar sm w85"></div></div><div class="gw-row between"><div class="gw-bar sm w45"></div><div class="gw-bar w25 dark" style="height:14px;border-radius:9px"></div></div><div class="gw-btn "><span class="gw-bar w45"></span></div></div><div class="gw-home"></div></div></div></div>
+        <div class="wb-cap">C-02<span>เลือกจุดนัดรับ</span></div>
+      </div>
+      <div class="wb-cell">
+        <div class="wb-stage"><div class="wb-inner"><div class="gw-frame"><div class="gw-status"><span>9:41</span><span class="sig"><i></i><i></i><i></i></span></div><div class="gw-row"><span class="gw-dot "></span><div class="gw-col"><div class="gw-bar  w55"></div><div class="gw-bar sm w35"></div></div><span class="gw-dot "></span></div><div class="gw-seg"><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></div><div class="gw-bar xl dark w45"></div><div class="gw-bar  w65"></div><div class="gw-scrim"></div><div class="gw-sheet"><div class="gw-grip"></div><div class="gw-row between"><div class="gw-bar lg dark w45"></div><span class="gw-dot sm"></span></div><div class="gw-bar sm w75"></div><div class="gw-card "><div class="gw-row "><span class="gw-dot sm ring"></span><div class="gw-col"><div class="gw-bar dark w75"></div><div class="gw-bar sm w55"></div></div></div></div><div class="gw-card sel"><div class="gw-row "><span class="gw-dot sm on"></span><div class="gw-col"><div class="gw-bar dark w65"></div></div></div></div><div class="gw-card "><div class="gw-row "><span class="gw-dot sm ring"></span><div class="gw-col"><div class="gw-bar  w55"></div></div></div></div><div class="gw-lbl">ปักหมุดเอง</div><div class="gw-img" style="height:52px"><span class="pin " style="left:46%;top:38%"></span></div><div class="gw-card "><div class="gw-bar sm w85"></div></div><div class="gw-row between"><div class="gw-bar sm w45"></div><div class="gw-bar w25 dark" style="height:14px;border-radius:9px"></div></div><div class="gw-btn "><span class="gw-bar w45"></span></div></div><div class="gw-home"></div></div></div></div>
+        <div class="wb-cap">C-02a<span>เลือกตัวเลือกอื่น</span></div>
+      </div>
+      <div class="wb-cell">
+        <div class="wb-stage"><div class="wb-inner"><div class="gw-frame"><div class="gw-status"><span>9:41</span><span class="sig"><i></i><i></i><i></i></span></div><div class="gw-row"><span class="gw-dot "></span><div class="gw-col"><div class="gw-bar  w55"></div><div class="gw-bar sm w35"></div></div><span class="gw-dot "></span></div><div class="gw-seg"><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></div><div class="gw-card alert"><div class="gw-row "><span class="gw-dot sm on"></span><div class="gw-bar sm w75"></div></div></div><div class="gw-bar xl dark w45"></div><div class="gw-bar  w65"></div><div class="gw-card key"><div class="gw-lbl">handoff</div><div class="gw-row "><span class="gw-dot "></span><div class="gw-col"><div class="gw-bar lg dark w85"></div><div class="gw-bar sm w65"></div></div></div><div class="gw-bar sm ink w45"></div></div><div class="gw-img" style="height:70px"><span class="pin " style="left:66%;top:32%"></span><span class="pin ghost" style="left:24%;top:62%"></span></div><div class="gw-card "><div class="gw-row "><span class="gw-dot" style="width:22px;height:22px"></span><div class="gw-col"><div class="gw-bar  w55"></div><div class="gw-bar sm w75"></div></div><span class="gw-dot "></span><span class="gw-dot "></span></div></div><div style="flex:1"></div><div class="gw-btn "><span class="gw-bar w35"></span></div><div class="gw-bar sm w45" style="margin:0 auto"></div><div class="gw-home"></div></div></div></div>
+        <div class="wb-cap">C-01′<span>ยืนยันแล้ว</span></div>
+      </div>
+      <div class="wb-cell">
+        <div class="wb-stage"><div class="wb-inner"><div class="gw-frame"><div class="gw-status"><span>9:41</span><span class="sig"><i></i><i></i><i></i></span></div><div class="gw-row"><span class="gw-dot "></span><div class="gw-col"><div class="gw-bar  w55"></div><div class="gw-bar sm w35"></div></div><span class="gw-dot "></span></div><div class="gw-seg"><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i></div><div class="gw-row "><span class="gw-dot "></span><div class="gw-bar lg dark w75"></div></div><div class="gw-bar sm w55"></div><div class="gw-card key"><div class="gw-lbl">handoff</div><div class="gw-row "><span class="gw-dot "></span><div class="gw-col"><div class="gw-bar lg dark w85"></div><div class="gw-bar sm w65"></div></div></div><div class="gw-bar sm ink w45"></div></div><div class="gw-img" style="height:78px"><span class="pin " style="left:66%;top:32%"></span><span class="pin ghost" style="left:24%;top:62%"></span></div><div class="gw-card "><div class="gw-row "><span class="gw-dot" style="width:22px;height:22px"></span><div class="gw-col"><div class="gw-bar  w55"></div><div class="gw-bar sm w75"></div></div><span class="gw-dot "></span><span class="gw-dot "></span></div></div><div style="flex:1"></div><div class="gw-btn "><span class="gw-bar w35"></span></div><div class="gw-bar sm w45" style="margin:0 auto"></div><div class="gw-home"></div></div></div></div>
+        <div class="wb-cap">C-04<span>ถึงแล้ว</span></div>
+      </div>
+      <div class="wb-cell">
+        <div class="wb-stage"><div class="wb-inner"><div class="gw-frame"><div class="gw-status"><span>9:41</span><span class="sig"><i></i><i></i><i></i></span></div><div class="gw-row"><span class="gw-dot "></span><div class="gw-col"><div class="gw-bar  w55"></div><div class="gw-bar sm w35"></div></div><span class="gw-dot "></span></div><div class="gw-seg"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i></div><div class="gw-row "><span class="gw-dot "></span><div class="gw-bar lg dark w75"></div></div><div class="gw-bar sm w55"></div><div class="gw-card alert"><div class="gw-bar sm w85"></div><div class="gw-bar sm w45"></div></div><div class="gw-card key"><div class="gw-lbl">handoff</div><div class="gw-bar dark w75"></div><div class="gw-bar sm w55"></div></div><div class="gw-img fill"><span class="pin" style="left:66%;top:32%"></span><span class="pin ghost" style="left:24%;top:62%"></span></div><div class="gw-btn "><span class="gw-bar w45"></span></div><div class="gw-row" style="gap:6px"><div class="gw-btn ghost" style="flex:1"><span class="gw-bar w45"></span></div><div class="gw-btn ghost" style="flex:1"><span class="gw-bar w35"></span></div></div><div class="gw-home"></div></div></div></div>
+        <div class="wb-cap">C-03<span>ไรเดอร์หาไม่เจอ</span></div>
+      </div>
+      <div class="wb-cell">
+        <div class="wb-stage"><div class="wb-inner"><div class="gw-frame"><div class="gw-status"><span>9:41</span><span class="sig"><i></i><i></i><i></i></span></div><div class="gw-row"><span class="gw-dot "></span><div class="gw-col"><div class="gw-bar  w55"></div><div class="gw-bar sm w35"></div></div><span class="gw-dot "></span></div><div class="gw-seg"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i></div><div class="gw-row between"><div class="gw-bar sm w35"></div><div class="gw-bar sm w25"></div></div><div class="gw-bar xl dark w35"></div><div class="gw-bar  w55"></div><div class="gw-card key"><div class="gw-lbl">handoff</div><div class="gw-row "><span class="gw-dot "></span><div class="gw-col"><div class="gw-bar lg dark w85"></div><div class="gw-bar sm w65"></div></div></div><div class="gw-bar sm ink w45"></div></div><div class="gw-img" style="height:74px"><span class="pin " style="left:66%;top:32%"></span><span class="pin ghost" style="left:24%;top:62%"></span></div><div class="gw-card "><div class="gw-row "><span class="gw-dot" style="width:22px;height:22px"></span><div class="gw-col"><div class="gw-bar  w55"></div><div class="gw-bar sm w75"></div></div><span class="gw-dot "></span><span class="gw-dot "></span></div></div><div style="flex:1"></div><div class="gw-btn "><span class="gw-bar w45"></span></div><div class="gw-bar sm w45" style="margin:0 auto"></div><div class="gw-home"></div></div></div></div>
+        <div class="wb-cap">C-05<span>รออยู่</span></div>
+      </div>
+      <div class="wb-cell">
+        <div class="wb-stage"><div class="wb-inner"><div class="gw-frame"><div class="gw-status"><span>9:41</span><span class="sig"><i></i><i></i><i></i></span></div><div class="gw-row"><span class="gw-dot "></span><div class="gw-col"><div class="gw-bar  w55"></div><div class="gw-bar sm w35"></div></div><span class="gw-dot "></span></div><div class="gw-seg"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div><div class="gw-row "><span class="gw-dot "></span><div class="gw-bar lg dark w65"></div></div><div class="gw-bar sm w45"></div><div class="gw-card key"><div class="gw-lbl">handoff</div><div class="gw-bar dark w75"></div><div class="gw-bar sm w55"></div></div><div class="gw-img" style="height:66px"><span class="pin " style="left:66%;top:32%"></span><span class="pin ghost" style="left:24%;top:62%"></span></div><div class="gw-card "><div class="gw-bar sm w45"></div><div class="gw-row "><span class="gw-dot sm on"></span><span class="gw-dot sm on"></span><span class="gw-dot sm on"></span><span class="gw-dot sm on"></span><span class="gw-dot sm on"></span></div></div><div style="flex:1"></div><div class="gw-btn "><span class="gw-bar w35"></span></div><div class="gw-bar sm w45" style="margin:0 auto"></div><div class="gw-home"></div></div></div></div>
+        <div class="wb-cap">C-06<span>ส่งมอบแล้ว</span></div>
+      </div>
+      </div>
+      <div class="board-side"><span class="c rider"></span><b>ฝั่งไรเดอร์</b><span class="ln"></span><span class="n">6 หน้าจอ</span></div>
+      <div class="wb-grid">
+      <div class="wb-cell">
+        <div class="wb-stage"><div class="wb-inner"><div class="gw-frame"><div class="gw-status"><span>9:41</span><span class="sig"><i></i><i></i><i></i></span></div><div class="gw-top"><span class="gw-dot" style="width:20px;height:20px;border-radius:5px"></span><div class="gw-col"><div class="gw-bar  w75"></div><div class="gw-bar sm w45"></div></div><div class="gw-bar w25" style="height:14px"></div></div><div class="gw-img" style="height:150px"><span class="pin " style="left:68%;top:28%"></span><span class="pin ghost" style="left:28%;top:70%"></span></div><div class="gw-card key"><div class="gw-row between"><div class="gw-lbl">handoff · ยืนยันแล้ว</div><div class="gw-bar sm w25"></div></div><div class="gw-bar lg dark w85"></div><div class="gw-bar sm w55"></div></div><div class="gw-card "><div class="gw-row between"><div class="gw-col"><div class="gw-bar  w65"></div><div class="gw-bar sm w45"></div></div><div class="gw-bar w25 dark" style="height:12px"></div></div></div><div style="flex:1"></div><div class="gw-btn "><span class="gw-bar w45"></span></div><div class="gw-bar sm w45" style="margin:0 auto"></div><div class="gw-home"></div></div></div></div>
+        <div class="wb-cap">R-01<span>นำทางช่วงท้าย</span></div>
+      </div>
+      <div class="wb-cell">
+        <div class="wb-stage"><div class="wb-inner"><div class="gw-frame"><div class="gw-status"><span>9:41</span><span class="sig"><i></i><i></i><i></i></span></div><div class="gw-top"><span class="gw-dot" style="width:18px;height:18px"></span><div class="gw-col"><div class="gw-bar  w65"></div><div class="gw-bar sm w35"></div></div></div><div class="gw-img" style="height:150px"><span class="pin " style="left:62%;top:30%"></span><span class="pin ghost" style="left:30%;top:66%"></span></div><div class="gw-card key"><div class="gw-row between"><div class="gw-lbl">handoff · ยืนยันแล้ว</div><div class="gw-bar sm w25"></div></div><div class="gw-bar lg dark w85"></div><div class="gw-bar sm w55"></div></div><div class="gw-card "><div class="gw-row "><span class="gw-dot "></span><div class="gw-bar sm w75"></div></div></div><div style="flex:1"></div><div class="gw-btn "><span class="gw-bar w45"></span></div><div class="gw-bar sm w45" style="margin:0 auto"></div><div class="gw-home"></div></div></div></div>
+        <div class="wb-cap">R-01′<span>รอลูกค้า</span></div>
+      </div>
+      <div class="wb-cell">
+        <div class="wb-stage"><div class="wb-inner"><div class="gw-frame"><div class="gw-status"><span>9:41</span><span class="sig"><i></i><i></i><i></i></span></div><div class="gw-row"><span class="gw-dot "></span><div class="gw-col"><div class="gw-bar  w55"></div><div class="gw-bar sm w35"></div></div><span class="gw-dot "></span></div><div class="gw-card alert"><div class="gw-bar sm w85"></div><div class="gw-bar sm w55"></div></div><div class="gw-lbl">เกิดอะไรขึ้น</div><div class="gw-card sel"><div class="gw-row "><span class="gw-dot "></span><div class="gw-bar dark w65"></div><span class="gw-dot sm on"></span></div></div><div class="gw-card "><div class="gw-row "><span class="gw-dot "></span><div class="gw-bar  w45"></div></div></div><div class="gw-card "><div class="gw-row "><span class="gw-dot "></span><div class="gw-bar  w55"></div></div></div><div class="gw-card "><div class="gw-row "><span class="gw-dot "></span><div class="gw-bar  w65"></div></div></div><div class="gw-lbl">ไม่บังคับ</div><div class="gw-btn dash" style="height:34px"><span class="gw-bar w55" style="background:#D5D3CB;opacity:1"></span></div><div style="flex:1"></div><div class="gw-btn "><span class="gw-bar w35"></span></div><div class="gw-home"></div></div></div></div>
+        <div class="wb-cap">R-02<span>แจ้งว่าหาไม่พบ</span></div>
+      </div>
+      <div class="wb-cell">
+        <div class="wb-stage"><div class="wb-inner"><div class="gw-frame"><div class="gw-status"><span>9:41</span><span class="sig"><i></i><i></i><i></i></span></div><div class="gw-row"><span class="gw-dot "></span><div class="gw-col"><div class="gw-bar  w55"></div><div class="gw-bar sm w35"></div></div><span class="gw-dot "></span></div><div class="gw-card alert"><div class="gw-bar sm w85"></div><div class="gw-bar sm w55"></div></div><div class="gw-lbl">เกิดอะไรขึ้น</div><div class="gw-card "><div class="gw-row "><span class="gw-dot "></span><div class="gw-bar  w65"></div></div></div><div class="gw-card sel"><div class="gw-row "><span class="gw-dot "></span><div class="gw-bar dark w45"></div><span class="gw-dot sm on"></span></div></div><div class="gw-card "><div class="gw-row "><span class="gw-dot "></span><div class="gw-bar  w55"></div></div></div><div class="gw-card "><div class="gw-row "><span class="gw-dot "></span><div class="gw-bar  w65"></div></div></div><div class="gw-lbl">ไม่บังคับ</div><div class="gw-btn dash" style="height:34px"><span class="gw-bar w55" style="background:#D5D3CB;opacity:1"></span></div><div style="flex:1"></div><div class="gw-btn "><span class="gw-bar w35"></span></div><div class="gw-home"></div></div></div></div>
+        <div class="wb-cap">R-02a<span>เลือกเหตุผลอื่น</span></div>
+      </div>
+      <div class="wb-cell">
+        <div class="wb-stage"><div class="wb-inner"><div class="gw-frame"><div class="gw-status"><span>9:41</span><span class="sig"><i></i><i></i><i></i></span></div><div class="gw-top"><span class="gw-dot" style="width:18px;height:18px"></span><div class="gw-col"><div class="gw-bar  w65"></div><div class="gw-bar sm w35"></div></div></div><div class="gw-img" style="height:160px"><span class="pin " style="left:60%;top:26%"></span><span class="pin ghost" style="left:26%;top:66%"></span></div><div class="gw-card key"><div class="gw-row between"><div class="gw-lbl">จุดนัดใหม่</div><div class="gw-bar sm w25"></div></div><div class="gw-bar lg dark w65"></div><div class="gw-bar sm w75"></div></div><div class="gw-card "><div class="gw-row "><span class="gw-dot "></span><div class="gw-bar sm w85"></div></div></div><div style="flex:1"></div><div class="gw-btn "><span class="gw-bar w35"></span></div><div class="gw-bar sm w45" style="margin:0 auto"></div><div class="gw-home"></div></div></div></div>
+        <div class="wb-cap">R-03<span>ได้ข้อมูลเพิ่ม</span></div>
+      </div>
+      <div class="wb-cell">
+        <div class="wb-stage"><div class="wb-inner"><div class="gw-frame"><div class="gw-status"><span>9:41</span><span class="sig"><i></i><i></i><i></i></span></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:0 14px"><span class="gw-dot" style="width:44px;height:44px;background:#8E8C85"></span><div class="gw-bar lg dark w65"></div><div class="gw-bar sm w75"></div><div class="gw-card" style="width:100%;margin-top:6px"><div class="gw-row between"><div class="gw-bar sm w35"></div><div class="gw-bar sm dark w25"></div></div></div></div><div class="gw-btn "><span class="gw-bar w35"></span></div><div class="gw-bar sm w45" style="margin:0 auto"></div><div class="gw-home"></div></div></div></div>
+        <div class="wb-cap">R-04<span>ส่งมอบสำเร็จ</span></div>
+      </div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1171,6 +1281,10 @@ footer{
         <div class="cb">อนุญาตให้แก้ได้จนถึงสถานะถึงแล้ว หลังจากนั้นล็อกเพื่อไม่ให้ไรเดอร์ที่กำลังเดินอยู่ได้รับข้อมูลที่ขัดกัน</div>
       </div>
     </div>
+    <div class="u-sub">Mockup UI · ทุกหน้าจอ ทุก action ในภาพเดียว</div>
+    <p class="u-sub-note">รวมหน้าจอทั้งหมดที่ออกแบบไว้ไว้ในผังเดียว แยกฝั่งลูกค้าและฝั่งไรเดอร์
+      เพื่อให้เห็นขอบเขตของงานและความสม่ำเสมอของภาษาออกแบบได้ในสายตาเดียว</p>
+    <div id="ui-board" class="u-scope board"></div>
   </div>
 </section>
 
@@ -1718,8 +1832,8 @@ const SPOTS = [
   {v:'a', title:'ทางเข้าฝั่ง A · ป้อมยาม',  note:'ใช้ล่าสุด 12 ส.ค.'},
   {v:'p', title:'ลานจอดหลังตึก',           note:'ไรเดอร์คนอื่นใช้บ่อยตอนกลางคืน'},
 ];
-function HandoffSheet({onClose, onConfirm}){
-  const [val,setVal] = useState('b');
+function HandoffSheet({onClose, onConfirm, selected='b'}){
+  const [val,setVal] = useState(selected);
   return (
     <>
       <div className="u-scrim" onClick={onClose}/>
@@ -1841,8 +1955,8 @@ const REASONS = [
   {k:'parking',  t:'ไม่มีที่จอด',      i:'Box'},
   {k:'room',     t:'เลขห้องไม่ตรง',    i:'Personalcard'},
 ];
-function RiderNotFound({onSend, onBack}){
-  const [pick,setPick] = useState('entrance');
+function RiderNotFound({onSend, onBack, picked='entrance'}){
+  const [pick,setPick] = useState(picked);
   return (
     <Phone>
       <TopBar title="แจ้งว่าหาจุดนัดไม่พบ" sub="ออร์เดอร์ #A2481" right={<Button type="text" shape="circle" icon={<Icon name="CloseCircle" size={20}/>}/>}/>
@@ -2223,6 +2337,55 @@ function DesignKit(){
   );
 }
 
+
+/* ---------- ผนังรวมทุกหน้าจอ ---------- */
+const BOARD_CUSTOMER = [
+  ['C-01','ใกล้ถึง',            <CustomerTrack stateKey="near"/>],
+  ['C-02','เลือกจุดนัดรับ',      <CustomerTrack stateKey="near"><HandoffSheet onClose={()=>{}}/></CustomerTrack>],
+  ['C-02a','เลือกตัวเลือกอื่น',  <CustomerTrack stateKey="near"><HandoffSheet selected="a" onClose={()=>{}}/></CustomerTrack>],
+  ['C-01′','ยืนยันแล้ว',         <CustomerTrack stateKey="near" toast="บันทึกจุดนัดรับแล้ว · ไรเดอร์เห็นทันที"/>],
+  ['C-04','ถึงแล้ว',             <CustomerTrack stateKey="arrived"/>],
+  ['C-03','ไรเดอร์หาไม่เจอ',     <CustomerTrack stateKey="notfound"/>],
+  ['C-05','รออยู่',              <CustomerTrack stateKey="waiting" toast="ส่งตำแหน่งให้ไรเดอร์แล้ว"/>],
+  ['C-06','ส่งมอบแล้ว',          <CustomerTrack stateKey="done"/>],
+];
+const BOARD_RIDER = [
+  ['R-01','นำทางช่วงท้าย',   <RiderNav/>],
+  ['R-01′','รอลูกค้า',        <RiderNav mode="arrived"/>],
+  ['R-02','แจ้งว่าหาไม่พบ',   <RiderNotFound/>],
+  ['R-02a','เลือกเหตุผลอื่น', <RiderNotFound picked="locked"/>],
+  ['R-03','ได้ข้อมูลเพิ่ม',   <RiderUpdated/>],
+  ['R-04','ส่งมอบสำเร็จ',     <RiderDone/>],
+];
+function BoardRow({items}){
+  return (
+    <div className="board-grid">
+      {items.map(([id,name,node])=>(
+        <div className="board-cell" key={id}>
+          <div className="board-stage"><div className="board-inner">{node}</div></div>
+          <div className="board-cap">{id}<span>{name}</span></div>
+        </div>
+      ))}
+    </div>
+  );
+}
+function ScreenBoard(){
+  return (
+    <div>
+      <div className="board-side">
+        <span className="c cust"></span><b>ฝั่งลูกค้า</b>
+        <span className="ln"></span><span className="n">{BOARD_CUSTOMER.length} หน้าจอ</span>
+      </div>
+      <BoardRow items={BOARD_CUSTOMER}/>
+      <div className="board-side">
+        <span className="c rider"></span><b>ฝั่งไรเดอร์</b>
+        <span className="ln"></span><span className="n">{BOARD_RIDER.length} หน้าจอ</span>
+      </div>
+      <BoardRow items={BOARD_RIDER}/>
+    </div>
+  );
+}
+
 function mount(id, node){
   const el = document.getElementById(id);
   if(!el) return;
@@ -2233,6 +2396,7 @@ mount('ui-c01',    <CustomerTrack stateKey="near"/>);
 mount('ui-flow',   <FlowScreens/>);
 mount('ui-proto',  <Prototype/>);
 mount('ui-states', <StatesDemo/>);
+mount('ui-board',  <ScreenBoard/>);
 mount('ui-kit',    <DesignKit/>);
 
 </script>
