@@ -1,0 +1,2233 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LAST 100M · UX/UI Assignment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#E9E8E2;
+  --paper-2:#F3F2ED;
+  --ink:#16181C;
+  --ink-2:#3D434C;
+  --muted:#767C86;
+  --line:#C9C7BE;
+  --signal:#F0B31A;
+  --signal-ink:#6B4A00;
+  --signal-soft:#FAEFCE;
+  --warn:#B33A0C;
+  --warn-soft:#F6E5DC;
+  --ok:#1B6B47;
+  --ok-soft:#DDEDE4;
+  --spine:172px;
+  --maxw:720px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'IBM Plex Sans Thai',system-ui,sans-serif;
+  font-weight:400;
+  font-size:16.5px;
+  line-height:1.72;
+  -webkit-font-smoothing:antialiased;
+}
+.mono{font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums}
+
+/* ---------- SPINE / distance ruler nav ---------- */
+.spine{
+  position:fixed;left:0;top:0;bottom:0;width:var(--spine);
+  border-right:1px solid var(--line);
+  background:var(--paper);
+  display:flex;flex-direction:column;
+  padding:22px 0 22px;
+  z-index:60;
+}
+.spine-logo{
+  padding:8px 26px 26px;border-bottom:1px solid var(--line);margin-bottom:26px;
+}
+.spine-logo img{width:100%;max-width:118px;height:auto;display:block;border-radius:6px;margin:0 auto}
+.ticks{flex:1;overflow-y:auto;padding-top:2px;scrollbar-width:none}
+.ticks::-webkit-scrollbar{display:none}
+.tick{
+  display:flex;align-items:baseline;gap:9px;
+  padding:10px 14px 10px 20px;
+  color:var(--ink-2);text-decoration:none;
+  border-left:2px solid transparent;
+  transition:color .15s,border-color .15s,background .15s;
+}
+.tick:hover{color:var(--ink);background:rgba(22,24,28,.05)}
+.tick .d{font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;letter-spacing:-.02em;color:var(--muted)}
+.tick .n{font-size:13px;line-height:1.35;font-weight:500}
+.tick.on{color:var(--signal-ink);border-left-color:var(--signal-ink);background:var(--signal-soft)}
+.tick.on .d{color:var(--signal-ink)}
+.tick.on .d{font-weight:600}
+
+/* ---------- LAYOUT ---------- */
+main{margin-left:var(--spine);padding:0 0 120px}
+section{
+  padding:72px 40px 0;
+  max-width:calc(var(--maxw) + 80px);
+  margin-left:auto;margin-right:auto;
+  scroll-margin-top:24px;
+}
+section:first-of-type{padding-top:0}
+.wrap{max-width:var(--maxw);margin-left:auto;margin-right:auto}
+
+/* ---------- HERO ---------- */
+.hero{
+  min-height:88vh;display:flex;align-items:center;justify-content:center;
+  gap:56px;flex-wrap:wrap;
+  padding:56px 40px 104px;max-width:none;
+  border-bottom:1px solid var(--line);
+}
+.hero-inner{flex:1 1 480px;max-width:640px;min-width:0}
+
+/* ---------- HERO device mockup ---------- */
+.hero-mock{
+  --s:.80;
+  flex:0 0 auto;position:relative;
+  width:338px;
+  display:flex;flex-direction:column;align-items:center;
+}
+.hero-mock-stage{
+  position:relative;z-index:1;width:100%;
+  height:672px;
+  overflow:visible;
+}
+.hero-mock::before{
+  content:'';position:absolute;left:-16%;right:-16%;top:2%;bottom:6%;z-index:0;
+  background:radial-gradient(58% 46% at 52% 38%,rgba(240,179,26,.30),transparent 72%),
+             radial-gradient(52% 40% at 45% 78%,rgba(22,24,28,.13),transparent 74%);
+  filter:blur(22px);
+}
+.hero-mock-inner{
+  position:absolute;z-index:1;top:50%;left:50%;width:390px;height:812px;
+  transform:translate(-50%,-50%) scale(var(--s)) rotate(-2.2deg);transform-origin:center center;
+}
+.hero-mock .u-phone{
+  border:11px solid #16181C;border-radius:52px;
+  box-shadow:0 46px 90px -44px rgba(22,24,28,.75),0 0 0 1px rgba(22,24,28,.14);
+}
+.hero-mock .u-phone::before{
+  content:'';position:absolute;top:11px;left:50%;transform:translateX(-50%);
+  width:116px;height:27px;background:#16181C;border-radius:99px;z-index:20;
+}
+.hero-mock .u-statusbar{padding-top:17px}
+@media(max-width:1180px){
+  .hero{gap:24px}
+  .hero-mock{--s:.68;width:292px}
+  .hero-mock-stage{height:574px}
+  .hero-mock-inner{transform:translate(-50%,-50%) scale(var(--s)) rotate(-2.2deg)}
+}
+@media(max-width:860px){
+  .hero{flex-direction:column;align-items:flex-start;gap:8px}
+  .hero-inner{flex:0 0 auto;max-width:100%}
+  .hero-mock{--s:.58;width:250px;margin:4px auto 0}
+  .hero-mock-stage{height:494px}
+  .hero-mock-inner{transform:translate(-50%,-50%) scale(var(--s)) rotate(-2.2deg)}
+}
+.hero-meta{
+  font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--muted);
+  letter-spacing:.02em;margin-bottom:26px;
+}
+.hero h1{
+  font-size:clamp(46px,8.4vw,104px);font-weight:700;line-height:1.06;
+  letter-spacing:-.035em;margin:0 0 10px;
+}
+.hero h1 .m{
+  display:inline-block;background:var(--signal);color:var(--ink);
+  line-height:.88;padding:.06em .07em .04em;border-radius:2px;vertical-align:baseline;
+}
+.hero-sub{
+  font-size:clamp(17px,2.2vw,23px);font-weight:400;color:var(--ink-2);
+  line-height:1.55;max-width:26ch;margin:30px 0 44px;
+}
+.gauge{max-width:560px;margin-bottom:38px}
+.gauge-bar{
+  position:relative;height:3px;background:var(--line);margin:0 0 10px;
+}
+.gauge-fill{position:absolute;left:0;top:0;height:3px;background:var(--signal);
+  box-shadow:0 0 0 1px var(--signal-ink);width:0;
+  animation:draw 1.5s cubic-bezier(.22,.9,.3,1) .35s forwards}
+@keyframes draw{to{width:100%}}
+.gauge-pin{
+  position:absolute;top:-5px;width:12px;height:12px;border-radius:50%;
+  background:var(--signal);border:2px solid var(--signal-ink);box-sizing:border-box;left:0;
+  animation:pin 1.5s cubic-bezier(.22,.9,.3,1) .35s forwards}
+@keyframes pin{to{left:calc(100% - 12px)}}
+.gauge-labels{display:flex;justify-content:space-between;
+  font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted)}
+.hero-by{font-size:14.5px;color:var(--ink-2)}
+.hero-by b{font-weight:600;color:var(--ink)}
+
+/* ---------- TYPE ---------- */
+.sec-head{margin-bottom:30px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.sec-d{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--signal-ink);
+  font-weight:500;margin-bottom:7px}
+.sec-head h2{font-size:clamp(26px,3.4vw,34px);font-weight:600;letter-spacing:-.022em;line-height:1.2}
+.sec-head p{margin-top:9px;color:var(--ink-2);font-size:15.5px;max-width:60ch}
+h3{font-size:18.5px;font-weight:600;letter-spacing:-.012em;margin:34px 0 10px}
+h4{font-size:15px;font-weight:600;margin:0 0 6px}
+p{margin-bottom:14px;max-width:68ch}
+p:last-child{margin-bottom:0}
+.lead{font-size:19px;line-height:1.6;color:var(--ink);font-weight:500;max-width:52ch}
+.dim{color:var(--muted)}
+ul{margin:0 0 14px 0;padding-left:19px}
+li{margin-bottom:6px;max-width:66ch}
+a{color:var(--signal-ink)}
+strong{font-weight:600}
+
+/* ---------- BLOCKS ---------- */
+.panel{
+  background:var(--paper-2);border:1px solid var(--line);
+  padding:22px 24px;margin:20px 0;
+}
+.panel.sig{border-left:3px solid var(--signal-ink)}
+.panel.warn{border-left:3px solid var(--warn);background:var(--warn-soft)}
+.panel.ok{border-left:3px solid var(--ok);background:var(--ok-soft)}
+.panel h4{margin-bottom:8px}
+.panel p:last-child,.panel ul:last-child{margin-bottom:0}
+
+.quote{
+  border-left:2px solid var(--ink);padding:2px 0 2px 18px;margin:18px 0;
+  font-size:15.5px;color:var(--ink-2);
+}
+
+.shift{display:flex;flex-wrap:wrap;align-items:center;gap:18px;margin:22px 0}
+.shift-box{border:1px solid var(--line);padding:14px 18px;background:var(--paper-2);min-width:180px}
+.shift-box .k{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--muted);margin-bottom:5px}
+.shift-box .v{font-size:15.5px;font-weight:500;line-height:1.45}
+.shift-box.to{border-color:var(--signal-ink);background:var(--signal-soft)}
+.shift-arrow{font-family:'IBM Plex Mono',monospace;color:var(--signal-ink);font-size:19px;font-weight:500}
+
+table{width:100%;border-collapse:collapse;margin:18px 0;font-size:14.5px}
+th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;font-size:12.5px;color:var(--muted);background:var(--paper-2);
+  font-family:'IBM Plex Mono',monospace;letter-spacing:-.01em}
+td .mono{font-size:13px}
+.tag{display:inline-flex;align-items:center;gap:6px;
+  font-family:'IBM Plex Sans Thai',system-ui,sans-serif;font-size:13px;font-weight:600;
+  background:#fff;border:1px solid var(--line);border-radius:99px;
+  padding:4px 12px 4px 10px;white-space:nowrap;color:var(--ink)}
+.tag::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--muted);flex:0 0 auto}
+.tag.y::before{background:var(--ok)}
+.tag.n::before{background:var(--warn)}
+.tag.s::before{background:var(--signal);box-shadow:0 0 0 1px var(--signal-ink) inset}
+
+pre{
+  font-family:'IBM Plex Mono',monospace;font-size:12.5px;line-height:1.75;
+  background:var(--paper-2);border:1px solid var(--line);
+  padding:18px 20px;margin:18px 0;overflow-x:auto;color:var(--ink-2);
+}
+pre b{color:var(--signal-ink);font-weight:600}
+pre i{color:var(--warn);font-style:normal}
+
+.steps{display:flex;flex-wrap:wrap;gap:0;margin:20px 0;border:1px solid var(--line)}
+.step{flex:1;min-width:118px;padding:14px 14px;border-right:1px solid var(--line);background:var(--paper-2)}
+.step:last-child{border-right:none}
+.step .sn{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--signal-ink);margin-bottom:5px}
+.step .st{font-size:13.5px;font-weight:500;line-height:1.4}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:20px 0}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:20px 0}
+.card{border:1px solid var(--line);background:var(--paper-2);padding:16px 18px}
+.card .ct{font-size:14.5px;font-weight:600;margin-bottom:6px}
+.card .cb{font-size:13.5px;color:var(--ink-2);line-height:1.6}
+
+/* phone mock */
+.phone-row{display:flex;gap:30px;align-items:flex-start;flex-wrap:wrap;margin:24px 0}
+.phone{
+  width:252px;flex-shrink:0;border:1px solid var(--ink);border-radius:22px;
+  background:#fff;padding:14px 15px 18px;
+}
+.ph-status{display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;
+  font-size:9.5px;color:var(--muted);margin-bottom:16px}
+.ph-eta{font-family:'IBM Plex Mono',monospace;font-size:35px;font-weight:600;
+  letter-spacing:-.04em;line-height:1;margin-bottom:3px}
+.ph-eta span{font-size:14px;font-weight:500;color:var(--muted)}
+.ph-cap{font-size:12.5px;color:var(--muted);margin-bottom:16px}
+.ph-hand{border:1px solid var(--signal-ink);background:var(--signal-soft);padding:11px 12px;margin-bottom:8px}
+.ph-hand .l{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--signal-ink);margin-bottom:5px}
+.ph-hand .a{font-size:14px;font-weight:600;line-height:1.35}
+.ph-hand .b{font-size:12.5px;color:var(--ink-2)}
+.ph-edit{font-size:11.5px;color:var(--signal-ink);margin-bottom:16px;display:inline-block}
+.ph-cta{background:var(--ink);color:#fff;text-align:center;padding:12px;font-size:14.5px;
+  font-weight:500;border-radius:4px;margin-bottom:9px}
+.ph-alt{text-align:center;font-size:12.5px;color:var(--muted)}
+.ph-notes{flex:1;min-width:230px;padding-top:6px}
+.ph-note{display:flex;gap:11px;margin-bottom:15px;font-size:13.5px;line-height:1.55}
+.ph-note .num{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--signal-ink);
+  flex-shrink:0;padding-top:2px;font-weight:500}
+
+/* ---------- WIREFRAMES ---------- */
+.wf-set{display:flex;gap:22px;flex-wrap:wrap;margin:22px 0 6px}
+.wf{width:216px;flex-shrink:0}
+.wf-frame{
+  border:1.5px solid var(--ink-2);border-radius:16px;background:#fff;
+  padding:9px;display:flex;flex-direction:column;gap:6px;min-height:392px;
+}
+.wf-cap{
+  margin-top:9px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;
+  color:var(--signal-ink);font-weight:500;
+}
+.wf-cap span{display:block;font-family:'IBM Plex Sans Thai',sans-serif;
+  font-size:12.5px;color:var(--ink-2);font-weight:400;line-height:1.5;margin-top:3px}
+.z{
+  border:1px dashed var(--line);background:var(--paper-2);
+  padding:8px 9px;font-size:10.5px;color:var(--muted);line-height:1.45;
+}
+.z-t{font-family:'IBM Plex Mono',monospace;font-size:8.5px;color:var(--ink-2);
+  display:block;margin-bottom:3px;font-weight:500}
+.z.fill{flex:1;display:flex;align-items:center;justify-content:center;text-align:center}
+.z.key{border-style:solid;border-color:var(--signal-ink);background:var(--signal-soft);color:var(--signal-ink)}
+.z.key .z-t{color:var(--signal-ink)}
+.z.cta{border-style:solid;border-color:var(--ink);background:var(--ink);color:var(--paper);
+  text-align:center;font-size:11.5px;padding:10px}
+.z.cta .z-t{color:rgba(233,232,226,.6)}
+.z.alert{border-style:solid;border-color:var(--warn);background:var(--warn-soft);color:var(--warn)}
+.z.alert .z-t{color:var(--warn)}
+.z.big{font-family:'IBM Plex Mono',monospace;font-size:23px;color:var(--ink);
+  font-weight:600;letter-spacing:-.03em;padding:11px 9px}
+.z-row{display:flex;gap:6px}
+.z-row>.z{flex:1}
+
+/* design system swatches */
+.sw-row{display:flex;flex-wrap:wrap;gap:9px;margin:14px 0}
+.sw{width:74px}
+.sw i{display:block;height:44px;border:1px solid var(--line)}
+.sw span{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--muted);
+  display:block;margin-top:5px;line-height:1.35}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}
+.chip{font-family:'IBM Plex Mono',monospace;font-size:11px;padding:4px 10px;
+  border:1px solid var(--line);background:var(--paper-2);color:var(--ink-2)}
+.chip.a{border-color:var(--signal-ink);color:var(--signal-ink);background:var(--signal-soft)}
+
+/* form answers */
+.fa{border:1px solid var(--ink);margin:18px 0;background:var(--paper-2)}
+.fa-q{padding:12px 18px;border-bottom:1px solid var(--line);font-size:13.5px;
+  font-weight:600;background:var(--ink);color:var(--paper)}
+.fa-a{padding:18px}
+.fa-a p{font-size:14.5px;margin-bottom:11px}
+.fa-a p:last-child{margin-bottom:0}
+
+footer{
+  margin-left:var(--spine);border-top:1px solid var(--line);
+  padding:44px 40px 60px;
+}
+.foot-in{max-width:var(--maxw);margin-left:auto;margin-right:auto}
+.refs{font-size:13px;color:var(--ink-2);line-height:1.85}
+.refs li{margin-bottom:9px;max-width:74ch}
+.note{font-size:12.5px;color:var(--muted);border-top:1px solid var(--line);
+  padding-top:16px;margin-top:22px;line-height:1.7;max-width:74ch}
+
+@media(max-width:900px){
+  .grid2,.grid3{grid-template-columns:1fr}
+}
+@media(max-width:760px){
+  :root{--spine:0px}
+  .spine{
+    position:sticky;top:0;left:auto;bottom:auto;width:100%;height:auto;
+    flex-direction:row;align-items:center;gap:8px;padding:8px 12px;
+    border-right:none;border-bottom:1px solid var(--line);
+  }
+  .spine-logo{padding:0 12px 0 0;border-bottom:none;border-right:1px solid var(--line);
+    margin-bottom:0;flex-shrink:0;width:80px}
+  .spine-logo img{max-height:36px;width:auto;max-width:100%}
+  .ticks{display:flex;overflow-x:auto;padding-top:0;gap:2px;flex:1}
+  .tick{flex-shrink:0;border-left:none;border-bottom:2px solid transparent;
+    padding:5px 9px;flex-direction:column;gap:0}
+  .tick.on{border-left-color:transparent;border-bottom-color:var(--signal-ink)}
+  .tick .n{white-space:nowrap;font-size:11px}
+  main,footer{margin-left:0}
+  section{padding:52px 20px 0}
+  .hero{padding:56px 20px 92px;min-height:auto}
+  footer{padding:36px 20px 48px}
+  .phone{width:100%;max-width:260px}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  .gauge-fill{width:100%}.gauge-pin{left:calc(100% - 12px)}
+  html{scroll-behavior:auto}
+}
+/* ---------- PAGER ---------- */
+.pager{position:fixed;right:26px;bottom:26px;z-index:70;display:flex;align-items:center;gap:10px}
+.pg-label{background:var(--paper-2);border:1px solid var(--line);border-radius:99px;
+  padding:7px 16px;display:flex;align-items:center;gap:9px;
+  box-shadow:0 10px 26px -18px rgba(22,24,28,.6)}
+.pg-label .d{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted)}
+.pg-label .n{font-size:13px;font-weight:600;color:var(--ink);white-space:nowrap}
+.pg{width:46px;height:46px;border-radius:50%;background:#fff;border:1px solid var(--line);
+  display:grid;place-items:center;cursor:pointer;color:var(--ink);
+  box-shadow:0 10px 26px -16px rgba(22,24,28,.7);transition:background .15s,color .15s,border-color .15s}
+.pg svg{width:17px;height:17px;display:block}
+.pg:hover:not([disabled]){background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.pg[disabled]{opacity:.32;cursor:default}
+@media(max-width:760px){
+  .pager{right:14px;bottom:14px;gap:8px}
+  .pg-label{display:none}
+  .pg{width:42px;height:42px}
+}
+
+:focus-visible{outline:2px solid var(--signal-ink);outline-offset:2px}
+
+/* ---------- PROCESS timeline ---------- */
+.proc{position:relative;margin:26px 0 10px;padding-left:36px}
+.proc::before{content:'';position:absolute;left:11px;top:22px;bottom:24px;width:1.5px;background:var(--line)}
+.proc-step{position:relative;background:#fff;border:1px solid var(--line);border-radius:14px;
+  padding:16px 20px 18px;margin-bottom:14px;box-shadow:0 2px 8px -6px rgba(22,24,28,.35)}
+.proc-step:last-child{margin-bottom:0}
+.proc-step::before{content:'';position:absolute;left:-29px;top:21px;width:11px;height:11px;border-radius:50%;
+  background:var(--paper);border:2px solid var(--line);box-sizing:border-box;z-index:1}
+.proc-step.on::before{background:var(--signal);border-color:var(--signal-ink)}
+.proc-num{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;color:var(--muted)}
+.proc-t{font-size:16.5px;font-weight:600;line-height:1.45;margin:1px 0 3px}
+.proc-d{font-size:14.5px;color:var(--ink-2);line-height:1.6;max-width:60ch}
+@media(max-width:640px){.proc{padding-left:26px}.proc::before{left:7px}
+  .proc-step{padding:14px 16px 16px}.proc-step::before{left:-24px;top:19px}}
+
+/* ---------- GREYBOX WIREFRAME (hi-fi structure) ---------- */
+.gw-set{display:flex;flex-wrap:wrap;gap:28px;margin:20px 0 6px}
+.gw{width:248px;flex:0 0 auto}
+.gw-frame{
+  width:248px;height:512px;background:#fff;border:1px solid #D5D3CB;border-radius:20px;
+  padding:8px 10px 0;display:flex;flex-direction:column;gap:7px;position:relative;overflow:hidden}
+.gw-status{display:flex;justify-content:space-between;align-items:center;
+  font-family:'IBM Plex Mono',monospace;font-size:7px;color:#A3A19A;padding:2px 3px 0}
+.gw-status .sig{display:flex;gap:2px}
+.gw-status .sig i{width:7px;height:5px;border-radius:1px;background:#D5D3CB;display:block}
+.gw-home{width:74px;height:3px;border-radius:9px;background:#D5D3CB;margin:auto auto 7px}
+.gw-bar{height:7px;border-radius:3px;background:#E4E2DB;flex:0 0 auto}
+.gw-bar.sm{height:5px}
+.gw-bar.lg{height:11px}
+.gw-bar.xl{height:19px;border-radius:4px}
+.gw-bar.dark{background:#B9B7AF}
+.gw-bar.ink{background:#6E6C66}
+.w25{width:25%}.w35{width:35%}.w45{width:45%}.w55{width:55%}.w65{width:65%}.w75{width:75%}.w85{width:85%}.w100{width:100%}
+.gw-stack{display:flex;flex-direction:column;gap:5px}
+.gw-row{display:flex;align-items:center;gap:6px}
+.gw-row.between{justify-content:space-between}
+.gw-col{display:flex;flex-direction:column;gap:5px;flex:1;min-width:0}
+.gw-dot{width:14px;height:14px;border-radius:50%;background:#E4E2DB;flex:0 0 auto}
+.gw-dot.sm{width:9px;height:9px}
+.gw-dot.on{background:#8E8C85}
+.gw-dot.ring{background:#fff;border:1px solid #C9C7BE}
+.gw-card{border:1px solid #D5D3CB;border-radius:9px;padding:8px;display:flex;flex-direction:column;gap:6px;background:#fff}
+.gw-card.key{border:1.5px solid #8E8C85;background:#F3F1EA}
+.gw-card.alert{border:1px solid #C9C7BE;border-left:3px solid #8E8C85;background:#F6F5F1}
+.gw-card.sel{border:1.5px solid #6E6C66}
+.gw-img{position:relative;background:#EFEDE7;border:1px solid #D5D3CB;border-radius:8px;flex:0 0 auto;overflow:hidden}
+.gw-img::before,.gw-img::after{content:'';position:absolute;inset:0;background:
+  linear-gradient(to top right,transparent calc(50% - .5px),#D5D3CB 50%,transparent calc(50% + .5px))}
+.gw-img::after{background:linear-gradient(to bottom right,transparent calc(50% - .5px),#D5D3CB 50%,transparent calc(50% + .5px))}
+.gw-img.fill{flex:1}
+.gw-img .pin{position:absolute;width:15px;height:15px;border-radius:50%;background:#8E8C85;z-index:2}
+.gw-img .pin.ghost{background:#fff;border:1.5px solid #8E8C85}
+.gw-btn{height:28px;border-radius:9px;background:#8E8C85;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.gw-btn .gw-bar{background:#fff;opacity:.85;height:6px}
+.gw-btn.ghost{background:#fff;border:1px solid #C9C7BE}
+.gw-btn.ghost .gw-bar{background:#C9C7BE;opacity:1}
+.gw-btn.dash{background:#fff;border:1px dashed #C9C7BE}
+.gw-lbl{font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:.1em;
+  text-transform:uppercase;color:#9C9A93;line-height:1}
+.gw-top{margin:-8px -10px 0;padding:10px;background:#8E8C85;border-radius:0;display:flex;align-items:center;gap:7px}
+.gw-top .gw-bar{background:rgba(255,255,255,.75)}
+.gw-top .gw-dot{background:rgba(255,255,255,.55)}
+.gw-seg{display:flex;gap:3px}
+.gw-seg i{height:4px;border-radius:2px;background:#E4E2DB;flex:1;display:block}
+.gw-seg i.on{background:#8E8C85}
+.gw-scrim{position:absolute;inset:0;background:rgba(40,40,38,.34);z-index:3;border-radius:20px}
+.gw-sheet{position:absolute;left:0;right:0;bottom:0;z-index:4;background:#fff;border:1px solid #D5D3CB;
+  border-radius:16px 16px 0 0;padding:8px 10px 10px;display:flex;flex-direction:column;gap:6px;max-height:78%}
+.gw-grip{width:34px;height:3px;border-radius:9px;background:#D5D3CB;margin:0 auto 3px}
+.gw-cap{margin-top:12px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;color:var(--ink);font-weight:500}
+.gw-cap span{display:block;font-family:'IBM Plex Sans Thai',sans-serif;font-size:13.5px;
+  letter-spacing:0;color:var(--ink-2);line-height:1.6;font-weight:400;margin-top:3px}
+@media(max-width:440px){.gw,.gw-frame{width:100%}}
+
+/* ---------- USER FLOW diagram ---------- */
+.flow{display:flex;flex-direction:column;align-items:center;margin:28px 0 12px}
+.fl-legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);
+  margin-bottom:22px;font-family:'IBM Plex Mono',monospace}
+.fl-key::before{content:'';display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:7px}
+.fl-key.cust::before{background:var(--signal)}
+.fl-key.rider::before{background:var(--ink)}
+.fl-key.sys::before{background:var(--muted)}
+.fl-node{border:1px solid var(--line);border-left:3px solid var(--line);background:var(--paper-2);
+  border-radius:12px;padding:11px 18px;font-size:15px;line-height:1.45;text-align:left;
+  max-width:320px;width:100%;}
+.fl-node .w{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.fl-node small{display:block;font-size:12.5px;color:var(--muted);line-height:1.45;margin-top:2px}
+.fl-node.cust{border-left-color:var(--signal)}
+.fl-node.rider{border-left-color:var(--ink)}
+.fl-node.sys{border-left-color:var(--muted);background:#fff}
+.fl-node.end{background:var(--ok-soft);border-color:#BBD9C9;border-left-color:var(--ok);
+  color:var(--ok);font-weight:600;text-align:center;max-width:220px}
+.fl-dec{background:var(--signal-soft);border:1px solid #EBD79A;color:var(--signal-ink);
+  border-radius:99px;padding:10px 22px;font-weight:600;font-size:15px;text-align:center}
+.fl-link{width:1.5px;height:24px;background:var(--line);position:relative;flex:0 0 auto}
+.fl-link::after{content:'';position:absolute;left:50%;bottom:0;transform:translateX(-50%);
+  border:5px solid transparent;border-top-color:var(--line)}
+.fl-fork{position:relative;width:100%;max-width:620px;height:26px;flex:0 0 auto}
+.fl-fork::before{content:'';position:absolute;left:24%;right:24%;top:0;height:26px;
+  border:1.5px solid var(--line);border-bottom:none}
+.fl-pair{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:center}
+.fl-arrow-r{color:var(--muted);font-size:18px}
+.fl-cols{display:flex;gap:30px;justify-content:center;align-items:flex-start;width:100%;flex-wrap:wrap}
+.fl-col{flex:1 1 250px;max-width:320px;display:flex;flex-direction:column;align-items:center}
+.fl-branch{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.06em;
+  border-radius:99px;padding:3px 12px;margin-bottom:12px}
+.fl-branch.ok{background:var(--ok-soft);color:var(--ok)}
+.fl-branch.warn{background:var(--warn-soft);color:var(--warn)}
+.fl-opts{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.fl-opt{border:1px solid var(--line);border-radius:99px;padding:6px 13px;font-size:13.5px;background:var(--paper-2)}
+.fl-opt.primary{background:var(--ink);color:var(--paper);border-color:var(--ink);font-weight:600}
+@media(max-width:640px){
+  .fl-fork{display:none}
+  .fl-cols{gap:8px}
+  .fl-col{max-width:100%}
+}
+
+/* ===== UI · Ant Design 5 + Iconsax ===== */
+.u-scope{--paper-2:#F3F2ED;--screen:#F5F4EF;--line-2:#E4E2DA}
+.u-frames{display:flex;gap:34px;flex-wrap:wrap;align-items:flex-start;max-width:100%}
+.u-frame-col{width:min(390px,100%);flex:0 0 auto;min-width:0}
+.u-phone{width:100%;max-width:390px;height:812px;background:var(--screen);border:1px solid var(--line);border-radius:38px;
+  box-shadow:0 24px 60px -30px rgba(22,24,28,.45);position:relative;overflow:hidden;display:flex;flex-direction:column}
+.u-statusbar{display:flex;align-items:center;justify-content:space-between;padding:14px 26px 6px;font-size:13px;font-weight:600}
+.u-screen-body{flex:1;overflow:hidden;display:flex;flex-direction:column;position:relative}
+.u-scroll{flex:1;overflow-y:auto;overflow-x:hidden;padding:0 20px 8px;scrollbar-width:none}
+.u-scroll::-webkit-scrollbar{display:none}
+.u-bottom-dock{padding:12px 20px 14px;border-top:1px solid var(--line-2);background:var(--screen)}
+.u-home-bar{height:5px;width:134px;border-radius:99px;background:var(--ink);opacity:.25;margin:6px auto 8px}
+.u-frame-cap{margin-top:16px}
+.u-frame-cap .id{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.08em;color:var(--ink);font-weight:500}
+.u-frame-cap p{margin:4px 0 0;font-size:14.5px;color:var(--ink-2);line-height:1.6}
+.u-topbar{display:flex;align-items:center;gap:12px;padding:6px 20px 12px}
+.u-topbar .t{flex:1;min-width:0}
+.u-topbar .t b{display:block;font-size:15px;font-weight:600;line-height:1.35}
+.u-topbar .t span{display:block;font-size:12.5px;color:var(--muted);line-height:1.3}
+.u-eta-num{font-family:'IBM Plex Mono',monospace;font-size:56px;line-height:1;font-weight:600;letter-spacing:-.02em}
+.u-map{position:relative;border-radius:14px;border:1px solid var(--line-2);overflow:hidden;background:
+  linear-gradient(0deg,rgba(201,199,190,.5) 1px,transparent 1px) 0 0/100% 34px,
+  linear-gradient(90deg,rgba(201,199,190,.5) 1px,transparent 1px) 0 0/34px 100%,
+  var(--paper-2)}
+.u-map .u-road{position:absolute;background:#DDDBD2}
+.u-map .u-pin{position:absolute;transform:translate(-50%,-100%);display:flex;flex-direction:column;align-items:center;gap:2px}
+.u-map .u-pin .u-dot{width:34px;height:34px;border-radius:99px;display:grid;place-items:center;box-shadow:0 4px 10px -4px rgba(0,0,0,.5)}
+.u-map .u-tag{font-family:'IBM Plex Mono',monospace;font-size:9.5px;background:var(--ink);color:#fff;padding:1px 6px;border-radius:4px;white-space:nowrap}
+.u-dash{border:1px dashed var(--line);border-radius:12px;display:flex;align-items:center;gap:10px;padding:14px;color:var(--muted);font-size:13.5px}
+.u-sheet{position:absolute;left:0;right:0;bottom:0;background:var(--screen);border-top:1px solid var(--line);
+  border-radius:22px 22px 0 0;box-shadow:0 -18px 40px -24px rgba(22,24,28,.5);display:flex;flex-direction:column;max-height:88%}
+.u-sheet .u-grip{width:44px;height:4px;border-radius:99px;background:var(--line);margin:10px auto 4px}
+.u-scrim{position:absolute;inset:0;background:rgba(22,24,28,.38)}
+.u-label{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.u-grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+.u-note{font-size:14.5px;color:var(--ink-2);max-width:70ch}
+.u-tokrow{display:flex;justify-content:space-between;gap:16px;padding:9px 0;border-bottom:1px dashed var(--line-2);font-size:14px}
+.u-tokrow:last-child{border-bottom:0}
+@media(max-width:440px){.u-frame-col,.u-phone{width:100%}.u-phone{height:760px}}
+.u-frames{margin:8px 0 4px}
+.u-mount{margin:22px 0 6px}
+.u-sub{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);margin:46px 0 6px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.u-sub-note{font-size:14.5px;color:var(--ink-2);margin:10px 0 18px;max-width:70ch}
+.u-step{display:flex;gap:10px;align-items:flex-start;margin-bottom:12px;min-height:52px}
+.u-step-n{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:var(--signal-ink);
+  background:var(--signal-soft);border-radius:99px;padding:2px 8px;flex:0 0 auto;margin-top:2px}
+.u-step b{display:block;font-size:14.5px;font-weight:600;line-height:1.45}
+.u-step span{display:block;font-size:12.5px;color:var(--muted);line-height:1.45}
+.u-actor{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.06em;color:var(--ink-2)}
+@media(max-width:440px){.u-frame-col,.u-phone{width:100%}.u-phone{height:760px}}
+
+</style>
+</head>
+<body>
+
+<nav class="spine" aria-label="สารบัญ">
+  <div class="spine-logo">
+    <img src="logo.jpeg" alt="โลโก้บริษัท">
+  </div>
+  <div class="ticks">
+    <a class="tick" href="#s0"><span class="d">100m</span><span class="n">ปก</span></a>
+    <a class="tick" href="#s1"><span class="d">90m</span><span class="n">ปัญหา</span></a>
+    <a class="tick" href="#s2"><span class="d">78m</span><span class="n">งานวิจัย</span></a>
+    <a class="tick" href="#s3"><span class="d">64m</span><span class="n">โอกาส</span></a>
+    <a class="tick" href="#s4"><span class="d">52m</span><span class="n">แนวคิด</span></a>
+    <a class="tick" href="#s5"><span class="d">40m</span><span class="n">User Flow</span></a>
+    <a class="tick" href="#s5b"><span class="d">34m</span><span class="n">Wireframe</span></a>
+    <a class="tick" href="#s6"><span class="d">28m</span><span class="n">UI</span></a>
+    <a class="tick" href="#s7"><span class="d">18m</span><span class="n">States</span></a>
+    <a class="tick" href="#s8"><span class="d">10m</span><span class="n">Design System</span></a>
+    <a class="tick" href="#s9"><span class="d">4m</span><span class="n">ตัวชี้วัด</span></a>
+    <a class="tick" href="#s10"><span class="d">1m</span><span class="n">กระบวนการ</span></a>
+    <a class="tick" href="#s11"><span class="d">0m</span><span class="n">คำตอบฟอร์ม</span></a>
+  </div>
+</nav>
+
+<main>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="s0">
+  <div class="hero-inner">
+    <div class="hero-meta">UX/UI Designer Assignment · Mobile First · Food Delivery</div>
+    <h1>LAST<br>100<span class="m">M</span></h1>
+    <p class="hero-sub">ออกแบบให้ช่วงส่งมอบร้อยเมตรสุดท้ายคาดเดาได้ ทั้งสำหรับลูกค้าและไรเดอร์</p>
+
+    <div class="gauge" aria-hidden="true">
+      <div class="gauge-bar"><div class="gauge-fill"></div><div class="gauge-pin"></div></div>
+      <div class="gauge-labels"><span>ไรเดอร์ออกจากร้าน</span><span>ส่งมอบสำเร็จ</span></div>
+    </div>
+
+    <p class="hero-by"><b>นายปิยชนน์ วรรณบุรี (ยิม)</b> · UX/UI Designer<br>
+    <span class="dim">Figma · Figma Make · Claude</span></p>
+  </div>
+
+  <div class="hero-mock u-scope" aria-label="ตัวอย่างหน้าจอ">
+    <div class="hero-mock-stage"><div class="hero-mock-inner" id="ui-hero"></div></div>
+  </div>
+</section>
+
+<!-- ============ 01 PROBLEM ============ -->
+<section id="s1">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-d">ระยะ 90 เมตร</div>
+      <h2>ปัญหาที่เจอ</h2>
+      <p>ช่วงสุดท้ายของการส่งอาหารยังเป็นช่วงที่ระบบปล่อยให้คนสองฝ่ายคุยกันเอง</p>
+    </div>
+
+    <p class="lead">แอปบอกได้ว่าไรเดอร์กำลังมา แต่ไม่ได้บอกว่าจะเจอกันตรงไหน</p>
+
+    <p>เมื่อไรเดอร์เข้าใกล้จุดหมาย แผนที่จะแสดงหมุดปักอยู่ที่ตัวอาคาร ซึ่งไม่พอสำหรับคอนโด ตึกออฟฟิศ หมู่บ้านจัดสรร หรือตลาด ทั้งลูกค้าและไรเดอร์จึงต้องประสานกันเองผ่านโทรศัพท์และแชตเรื่องทางเข้า จุดจอด และตำแหน่งจริงของผู้รับ</p>
+
+    <h3>ผู้ใช้ได้รับผลกระทบอย่างไร</h3>
+    <div class="grid3">
+      <div class="card">
+        <div class="ct">ลูกค้า</div>
+        <div class="cb">ต้องคอยเฝ้าหน้าจอ ไม่รู้ว่าควรลงไปรอตอนไหน และมักถูกโทรหาตอนที่ไม่สะดวก</div>
+      </div>
+      <div class="card">
+        <div class="ct">ไรเดอร์</div>
+        <div class="cb">วนหาทางเข้าและจุดจอด ต้องโทรซ้ำหลายรอบ เสียเวลาที่ควรใช้กับรอบถัดไป</div>
+      </div>
+      <div class="card">
+        <div class="ct">แพลตฟอร์ม</div>
+        <div class="cb">เวลาส่งต่อรอบยาวขึ้น อาหารเสียคุณภาพ และเสี่ยงเกิดออร์เดอร์ที่ส่งไม่สำเร็จ</div>
+      </div>
+    </div>
+
+    <div class="panel sig">
+      <h4>ทำไมถึงเลือกปัญหานี้</h4>
+      <p>เพราะมันไม่ใช่ปัญหาของหน้าจอเดียว แต่เป็นช่องว่างของการประสานงานระหว่างคนสองฝ่ายที่ระบบมองไม่เห็น แก้ด้วยการจัดหน้าจอใหม่อย่างเดียวไม่พอ ต้องแก้ที่โครงสร้างข้อมูลของปลายทาง</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 02 RESEARCH ============ -->
+<section id="s2">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-d">ระยะ 78 เมตร</div>
+      <h2>สิ่งที่งานวิจัยบอก</h2>
+      <p>ทบทวนงานวิจัยไทยและต่างประเทศเพื่อตรวจสอบว่าปัญหานี้มีอยู่จริงหรือเป็นแค่ความรู้สึก</p>
+    </div>
+
+    <table>
+      <thead><tr><th style="width:38%">แหล่ง</th><th>สิ่งที่นำมาใช้</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Puram et al. (2022)</strong><br><span class="dim">สัมภาษณ์ไรเดอร์ส่งอาหาร แบบ grounded theory</span></td>
+          <td>ความท้าทายของไรเดอร์แบ่งเป็นสี่หมวด โดยสองหมวดที่เกี่ยวกับเราคือเรื่องที่มาจากฝั่งลูกค้า และเรื่องเครื่องมือที่ใช้ทำงาน</td>
+        </tr>
+        <tr>
+          <td><strong>Olsson et al. (2023)</strong><br><span class="dim">ศึกษาประสบการณ์รับของที่บ้าน</span></td>
+          <td>ประสบการณ์การส่งมอบมีหลายมิติพร้อมกัน ทั้งความคิด อารมณ์ พฤติกรรม และร่างกาย ไม่ได้จบที่หน้าจอ</td>
+        </tr>
+        <tr>
+          <td><strong>Chamchang et al. (2026)</strong><br><span class="dim">สำรวจผู้บริโภคไทย 397 คน</span></td>
+          <td>ปริมาณพัสดุที่โตขึ้นในไทยสัมพันธ์กับปัญหาส่งไม่สำเร็จ ยืนยันว่าปัญหานี้มีอยู่ในบริบทไทย</td>
+        </tr>
+        <tr>
+          <td><strong>Ritthichai</strong><br><span class="dim">อาชีวอนามัยไรเดอร์มอเตอร์ไซค์ไทย</span></td>
+          <td>ไรเดอร์ทำงานภายใต้แรงกดดันด้านเวลาและสภาพแวดล้อมทางกายภาพ ทุกนาทีที่เสียไปมีต้นทุน</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="panel warn">
+      <h4>ข้อจำกัดที่ต้องพูดตรง ๆ</h4>
+      <p>งานวิจัยส่วนใหญ่ที่มีอยู่ศึกษาบริบทพัสดุ และเสนอทางออกเป็นตู้ล็อกเกอร์หรือจุดรับของนอกบ้าน ซึ่งเป็นการแก้ปัญหาด้วยการทำให้ทั้งสองฝ่ายไม่ต้องเจอกัน</p>
+      <p>แต่อาหารรอไม่ได้ การส่งมอบแบบเจอตัวจึงเป็นเงื่อนไขที่เลี่ยงไม่ได้ในบริการนี้ โจทย์จึงไม่ใช่ทำอย่างไรให้ไม่ต้องเจอกัน แต่คือทำอย่างไรให้การเจอกันคาดเดาได้ — ช่องว่างนี้เองคือที่มาของงานชิ้นนี้</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 03 OPPORTUNITY ============ -->
+<section id="s3">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-d">ระยะ 64 เมตร</div>
+      <h2>โอกาสในการออกแบบ</h2>
+      <p>ที่อยู่บอกว่าอาคารอยู่ตรงไหน แต่ไม่ได้บอกว่าคนสองคนจะเจอกันตรงไหน</p>
+    </div>
+
+    <p>ระบบเก็บปลายทางเป็น <strong>ที่อยู่</strong> ซึ่งเป็นข้อมูลของสถานที่ แต่สิ่งที่ทั้งสองฝ่ายต้องการจริงคือ <strong>จุดนัดรับ</strong> ซึ่งเป็นข้อมูลของการเจอกัน การเปลี่ยนหน่วยข้อมูลนี้คือแกนของงานทั้งชิ้น</p>
+
+    <div class="shift">
+      <div class="shift-box">
+        <div class="k">เดิม · ที่อยู่</div>
+        <div class="v">อาคาร A ชั้น 1</div>
+      </div>
+      <div class="shift-arrow">&rarr;</div>
+      <div class="shift-box to">
+        <div class="k">ใหม่ · จุดนัดรับ</div>
+        <div class="v">อาคาร A<br>ทางเข้าฝั่ง B · ล็อบบี้<br><span class="dim" style="font-size:13px">รับที่เคาน์เตอร์</span></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h4>ทำไมถึงตอบโจทย์ทั้งระบบ</h4>
+      <p>โจทย์ระบุว่าใครก็ตามที่อยู่ใน ecosystem ถือเป็นผู้ใช้ จุดนัดรับเป็นข้อมูลชิ้นเดียวที่ทั้งลูกค้า ไรเดอร์ และระบบใช้ร่วมกันได้ เมื่อฝ่ายหนึ่งยืนยัน อีกฝ่ายเห็นทันที ระบบจึงเปลี่ยนจากการส่งข้อความไปมา เป็นการทำงานบนสถานะร่วมกัน</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 04 CONCEPT ============ -->
+<section id="s4">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-d">ระยะ 52 เมตร</div>
+      <h2>สิ่งที่จะออกแบบใหม่</h2>
+      <p>ฟีเจอร์จุดนัดรับ บวกกับโมเดลสถานะที่เล่าเรื่องช่วงร้อยเมตรสุดท้าย</p>
+    </div>
+
+    <h3>โมเดลสถานะ</h3>
+    <p>ปัจจุบันแอปส่วนใหญ่มีสถานะเดียวคือ กำลังจัดส่ง ยาวไปจนถึงส่งสำเร็จ เราแตกช่วงนี้ออกเป็นห้าสถานะที่แต่ละสถานะมีสิ่งที่ผู้ใช้ควรทำต่างกัน</p>
+
+    <div class="steps">
+      <div class="step"><div class="sn">01</div><div class="st">ใกล้ถึง</div></div>
+      <div class="step"><div class="sn">02</div><div class="st">ถึงแล้ว</div></div>
+      <div class="step"><div class="sn">03</div><div class="st">กำลังหาจุดนัด</div></div>
+      <div class="step"><div class="sn">04</div><div class="st">รออยู่</div></div>
+      <div class="step"><div class="sn">05</div><div class="st">ส่งมอบ</div></div>
+    </div>
+
+    <h3>จุดนัดรับถูกกำหนดอย่างไร</h3>
+    <p>ถ้าให้ลูกค้ากรอกข้อมูลเพิ่มทุกครั้ง ไม่มีใครทำ ระบบจึงต้องเดาให้ก่อนแล้วให้ยืนยัน</p>
+
+    <div class="grid3">
+      <div class="card">
+        <div class="ct">ระบบเสนอให้ก่อน</div>
+        <div class="cb">ดึงจากจุดนัดรับที่เคยใช้สำเร็จในพิกัดเดียวกัน ทั้งของตัวเองและของออร์เดอร์อื่นในอาคารนั้น</div>
+      </div>
+      <div class="card">
+        <div class="ct">ลูกค้ายืนยันด้วยปุ่มเดียว</div>
+        <div class="cb">ค่าเริ่มต้นถูกอยู่แล้วในกรณีส่วนใหญ่ ลูกค้าจึงแค่กดยืนยัน ไม่ต้องพิมพ์</div>
+      </div>
+      <div class="card">
+        <div class="ct">แก้ได้ตอนไรเดอร์ใกล้ถึง</div>
+        <div class="cb">ถ้าวันนั้นอยู่คนละที่กับปกติ เปลี่ยนได้ทันทีจากการ์ดบนหน้าติดตาม ไรเดอร์เห็นทันที</div>
+      </div>
+    </div>
+
+    <div class="panel ok">
+      <h4>ข้อมูลชุดเดียว ใช้ได้ทั้งสองฝั่ง</h4>
+      <pre style="margin:8px 0 0;background:transparent;border:none;padding:0">ลูกค้า                        ไรเดอร์
+─────────────────────────────────────────────
+ไรเดอร์ใกล้ถึง          →      ลูกค้ายืนยันจุดนัดแล้ว
+ยืนยันจุดนัดรับ         →      <b>นำทางไปทางเข้าฝั่ง B</b>
+กด "กำลังลงไป"          →      ลูกค้ากำลังลงมา</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 05 USER FLOW ============ -->
+<section id="s5">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-d">ระยะ 40 เมตร</div>
+      <h2>User Flow</h2>
+      <p>ทำฝั่งลูกค้าเต็มเส้นทาง และทำฝั่งไรเดอร์เฉพาะจุดที่ตัดกัน</p>
+    </div>
+
+    <div class="flow">
+      <div class="fl-legend">
+        <span class="fl-key cust">ลูกค้า</span>
+        <span class="fl-key rider">ไรเดอร์</span>
+        <span class="fl-key sys">ระบบ</span>
+      </div>
+
+      <div class="fl-node cust"><span class="w">ลูกค้า</span>เปิดหน้าติดตามออร์เดอร์</div>
+      <div class="fl-link"></div>
+      <div class="fl-node rider"><span class="w">ไรเดอร์</span>เข้าระยะ 500 เมตรจากปลายทาง</div>
+      <div class="fl-link"></div>
+
+      <div class="fl-pair">
+        <div class="fl-node sys"><span class="w">ระบบ</span>เสนอจุดนัดรับ<small>ดึงจากจุดที่เคยส่งสำเร็จในพิกัดเดียวกัน</small></div>
+        <span class="fl-arrow-r">&rarr;</span>
+        <div class="fl-node cust"><span class="w">ลูกค้า</span>ยืนยันด้วยปุ่มเดียว หรือแก้ไข</div>
+      </div>
+      <div class="fl-link"></div>
+      <div class="fl-node rider"><span class="w">ไรเดอร์</span>ถึงจุดนัดรับ</div>
+      <div class="fl-link"></div>
+
+      <div class="fl-dec">ไรเดอร์หาจุดนัดเจอไหม</div>
+      <div class="fl-fork"></div>
+
+      <div class="fl-cols">
+        <div class="fl-col">
+          <span class="fl-branch ok">เจอ</span>
+          <div class="fl-node rider">รออยู่ที่จุดนัด<small>ลูกค้าเห็นว่าไรเดอร์รออยู่กี่นาทีแล้ว</small></div>
+          <div class="fl-link"></div>
+          <div class="fl-node end">ส่งมอบสำเร็จ</div>
+        </div>
+
+        <div class="fl-col">
+          <span class="fl-branch warn">ไม่เจอ</span>
+          <div class="fl-node rider">กด “หาจุดนัดไม่พบ”<small>เลือกเหตุผลเป็นปุ่ม ไม่ต้องพิมพ์</small></div>
+          <div class="fl-link"></div>
+          <div class="fl-node cust">ได้รับแจ้งเตือนทันที<small>พร้อมทางออกสามทาง เรียงตามความเร็ว</small></div>
+          <div class="fl-link"></div>
+          <div class="fl-opts">
+            <span class="fl-opt primary">แชร์ตำแหน่ง</span>
+            <span class="fl-opt">แก้จุดนัดรับ</span>
+            <span class="fl-opt">โทรหา</span>
+          </div>
+          <div class="fl-link"></div>
+          <div class="fl-node rider">นำทางไปจุดใหม่<small>เห็นเฉพาะสิ่งที่เปลี่ยนและระยะที่เหลือ</small></div>
+          <div class="fl-link"></div>
+          <div class="fl-node end">ส่งมอบสำเร็จ</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h4>ทำไมต้องมีเส้นทางที่หาไม่เจอ</h4>
+      <p>เพราะเป็นกรณีที่เกิดจริงบ่อยที่สุดในตึกสูงและตลาด ถ้าออกแบบเฉพาะเส้นทางที่ทุกอย่างราบรื่น ฟีเจอร์จะพังตรงจุดที่มันควรช่วยมากที่สุด การกดว่าหาไม่เจอจึงต้องเป็นทางออกที่ให้เกียรติไรเดอร์ ไม่ใช่การยอมรับความผิด</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 05b WIREFRAME ============ -->
+<section id="s5b">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-d">ระยะ 34 เมตร</div>
+      <h2>Wireframe</h2>
+      <p>ทดลองลำดับข้อมูลในแต่ละสถานะ ก่อนลงรายละเอียดหน้าตา</p>
+    </div>
+
+    <p>ก่อนออกแบบ ผมสำรวจโครงการจัดวางที่แอปนำทางสำหรับไรเดอร์ใช้กันอยู่ พบว่าแทบทุกตัวใช้โครงเดียวกันสี่ส่วน คือแถบคำสั่งถัดไปตรึงบนสุด แผนที่กินพื้นที่กลาง การ์ดข้อมูลออร์เดอร์ที่ขอบล่างพร้อมปุ่มหลักปุ่มเดียว และปุ่มแจ้งปัญหาลอยอยู่มุมขวา</p>
+
+    <p>โครงนี้ทำงานดีตอนไรเดอร์ยังขับอยู่ เพราะข้อมูลที่สำคัญที่สุดคือเลี้ยวตรงไหน แต่เมื่อถึงระยะร้อยเมตรสุดท้าย คำถามเปลี่ยนจากไปทางไหน เป็นเจอกันตรงไหน ซึ่งโครงเดิมไม่มีที่ว่างให้ข้อมูลชุดนั้น wireframe ชุดนี้จึงทดลองว่าจะแทรกจุดนัดรับเข้าไปโดยไม่รบกวนลำดับเดิมได้อย่างไร</p>
+
+    <h3>ฝั่งลูกค้า</h3>
+    <div class="wf-set">
+
+      <div class="wf">
+        <div class="wf-frame">
+          <div class="z"><span class="z-t">HEADER</span>ออร์เดอร์ · ชื่อร้าน</div>
+          <div class="z big"><span class="z-t">ETA · ลำดับ 1</span>2 นาที</div>
+          <div class="z"><span class="z-t">STATUS</span>ไรเดอร์กำลังเข้าซอย</div>
+          <div class="z key"><span class="z-t">HANDOFF · ลำดับ 2</span>อาคาร · ทางเข้า · ชั้น<br>ปุ่มข้อความ: เปลี่ยนจุดนัดรับ</div>
+          <div class="z fill"><span class="z-t">MAP</span>แผนที่ย่อ<br>แตะเพื่อขยาย</div>
+          <div class="z"><span class="z-t">RIDER</span>ชื่อ · คะแนน · ทะเบียน</div>
+          <div class="z cta"><span class="z-t">PRIMARY</span>กำลังลงไป</div>
+          <div class="z" style="border:none;background:none;text-align:center;padding:2px">ให้ไรเดอร์รอที่จุดนัด</div>
+        </div>
+        <div class="wf-cap">C-01 · ใกล้ถึง<span>เวลาอยู่บนสุดเพราะตอบคำถามว่าควรลงไปเมื่อไหร่ จุดนัดรับตามมาเป็นลำดับสอง แผนที่ถูกลดลงเป็นภาพย่อ</span></div>
+      </div>
+
+      <div class="wf">
+        <div class="wf-frame">
+          <div class="z"><span class="z-t">SHEET HEADER</span>เลือกจุดนัดรับ</div>
+          <div class="z key"><span class="z-t">SUGGESTED · ค่าเริ่มต้น</span>ทางเข้าฝั่ง B · ล็อบบี้<br>ใช้สำเร็จ 4 ครั้งที่นี่</div>
+          <div class="z"><span class="z-t">OPTION</span>ทางเข้าฝั่ง A · ป้อมยาม</div>
+          <div class="z"><span class="z-t">OPTION</span>ลานจอดหลังตึก</div>
+          <div class="z fill"><span class="z-t">MAP PICKER</span>ปักหมุดเอง<br>พร้อมช่องใส่โน้ต</div>
+          <div class="z"><span class="z-t">TOGGLE</span>จำไว้ใช้ครั้งต่อไป</div>
+          <div class="z cta"><span class="z-t">PRIMARY</span>ยืนยันจุดนัดรับ</div>
+        </div>
+        <div class="wf-cap">C-02 · เลือกจุดนัดรับ<span>ตัวเลือกที่ระบบเดาไว้ถูกวางบนสุดและถูกเลือกไว้แล้ว ลูกค้าจึงกดยืนยันได้เลยโดยไม่ต้องอ่านทั้งหมด</span></div>
+      </div>
+
+      <div class="wf">
+        <div class="wf-frame">
+          <div class="z alert"><span class="z-t">ALERT</span>ไรเดอร์หาจุดนัดไม่พบ</div>
+          <div class="z"><span class="z-t">CONTEXT</span>รออยู่บริเวณทางเข้าฝั่ง B<br>2 นาทีแล้ว</div>
+          <div class="z fill"><span class="z-t">MAP</span>ตำแหน่งไรเดอร์<br>เทียบกับจุดนัดรับ</div>
+          <div class="z cta"><span class="z-t">PRIMARY</span>แชร์ตำแหน่งของฉัน</div>
+          <div class="z-row">
+            <div class="z"><span class="z-t">SECONDARY</span>แก้จุดนัด</div>
+            <div class="z"><span class="z-t">SECONDARY</span>โทรหา</div>
+          </div>
+        </div>
+        <div class="wf-cap">C-03 · ไรเดอร์หาไม่เจอ<span>ทางออกที่เร็วที่สุดถูกยกเป็นปุ่มหลัก การโทรถูกลดลงเป็นตัวเลือกรอง เพราะเป็นวิธีที่ช้าที่สุดในสามอย่าง</span></div>
+      </div>
+
+    </div>
+
+    <h3>ฝั่งไรเดอร์ · เฉพาะจุดที่ตัดกัน</h3>
+    <div class="wf-set">
+
+      <div class="wf">
+        <div class="wf-frame">
+          <div class="z"><span class="z-t">NEXT MOVE</span>เลี้ยวซ้าย 120 ม.</div>
+          <div class="z fill"><span class="z-t">MAP</span>เส้นทาง<br>+ หมุดจุดนัดรับ</div>
+          <div class="z key"><span class="z-t">HANDOFF · ยืนยันแล้ว</span>ทางเข้าฝั่ง B · ล็อบบี้<br>ลูกค้ายืนยัน 09:41</div>
+          <div class="z"><span class="z-t">ORDER</span>ปลายทาง · ค่าส่ง</div>
+          <div class="z cta"><span class="z-t">PRIMARY</span>ถึงจุดนัดแล้ว</div>
+          <div class="z" style="border:none;background:none;text-align:center;padding:2px">หาจุดนัดไม่พบ</div>
+        </div>
+        <div class="wf-cap">R-01 · นำทางช่วงท้าย<span>แทรกจุดนัดรับไว้ใต้แผนที่ในตำแหน่งที่โครงเดิมใช้เป็นการ์ดออร์เดอร์ ไม่แย่งที่แถบคำสั่งถัดไป</span></div>
+      </div>
+
+      <div class="wf">
+        <div class="wf-frame">
+          <div class="z"><span class="z-t">HEADER</span>แจ้งว่าหาไม่พบ</div>
+          <div class="z"><span class="z-t">HINT</span>ลูกค้าจะได้รับแจ้งเตือนทันที<br>ไม่กระทบคะแนนของคุณ</div>
+          <div class="z-row">
+            <div class="z"><span class="z-t">REASON</span>หาทางเข้าไม่เจอ</div>
+            <div class="z"><span class="z-t">REASON</span>ประตูล็อก</div>
+          </div>
+          <div class="z-row">
+            <div class="z"><span class="z-t">REASON</span>ไม่มีที่จอด</div>
+            <div class="z"><span class="z-t">REASON</span>เลขห้องไม่ตรง</div>
+          </div>
+          <div class="z fill"><span class="z-t">OPTIONAL</span>ถ่ายภาพจุดที่ยืนอยู่<br>ให้ลูกค้าเห็น</div>
+          <div class="z cta"><span class="z-t">PRIMARY</span>ส่งให้ลูกค้า</div>
+        </div>
+        <div class="wf-cap">R-02 · แจ้งว่าหาไม่พบ<span>ให้เลือกเหตุผลเป็นปุ่มแทนการพิมพ์ เพราะไรเดอร์กดตอนคาหมวกอยู่ และเหตุผลที่เก็บได้กลายเป็นข้อมูลปรับปรุงจุดนัดรับของอาคารนั้น</span></div>
+      </div>
+
+      <div class="wf">
+        <div class="wf-frame">
+          <div class="z key"><span class="z-t">UPDATED</span>ลูกค้าแชร์ตำแหน่งแล้ว</div>
+          <div class="z fill"><span class="z-t">MAP</span>ตำแหน่งลูกค้าสด<br>+ ระยะเดินเท้า</div>
+          <div class="z"><span class="z-t">DELTA</span>จุดนัดใหม่: ล็อบบี้ฝั่งลิฟต์<br>ห่างจากคุณ 40 ม.</div>
+          <div class="z cta"><span class="z-t">PRIMARY</span>นำทางต่อ</div>
+        </div>
+        <div class="wf-cap">R-03 · ได้ข้อมูลเพิ่ม<span>แสดงเฉพาะสิ่งที่เปลี่ยนไปจากเดิมและระยะที่เหลือ ไม่แสดงข้อมูลออร์เดอร์ทั้งชุดซ้ำอีก</span></div>
+      </div>
+
+    </div>
+
+    <h3 style="margin-top:38px">Wireframe ความละเอียดสูง</h3>
+    <p>ชุดนี้เป็น wireframe ความละเอียดสูงกว่าชุดแรก คือวางบนสัดส่วนจอจริงและระบุขนาดของทุกบล็อกจริง
+        แต่ยังไม่ใส่สี ตัวอักษร หรือไอคอน เพื่อให้ตัดสินเรื่องลำดับและน้ำหนักของข้อมูลได้ก่อนที่หน้าตาจะเข้ามามีอิทธิพล
+        ทุกกล่องในนี้แปลงเป็นคอมโพเนนต์จริงในหัวข้อถัดไปแบบหนึ่งต่อหนึ่ง</p>
+
+      <h3>ฝั่งลูกค้า</h3>
+      <div class="gw-set">
+
+        <div class="gw">
+          <div class="gw-frame">
+            <div class="gw-status"><span>9:41</span><span class="sig"><i></i><i></i><i></i></span></div>
+            <div class="gw-row"><span class="gw-dot"></span><div class="gw-col"><div class="gw-bar w55"></div><div class="gw-bar sm w35"></div></div><span class="gw-dot"></span></div>
+            <div class="gw-seg"><i class="on"></i><i></i><i></i><i></i><i></i></div>
+            <div class="gw-row between"><div class="gw-bar sm w35"></div><div class="gw-bar sm w25"></div></div>
+            <div class="gw-stack" style="margin-top:2px">
+              <div class="gw-bar xl w45 dark"></div>
+              <div class="gw-bar w65"></div>
+            </div>
+            <div class="gw-card key">
+              <div class="gw-lbl">handoff · ลำดับ 2</div>
+              <div class="gw-row"><span class="gw-dot"></span><div class="gw-col"><div class="gw-bar lg w85 dark"></div><div class="gw-bar sm w65"></div></div></div>
+              <div class="gw-bar sm w45 ink"></div>
+            </div>
+            <div class="gw-img" style="height:74px"><span class="pin" style="left:64%;top:34%"></span><span class="pin ghost" style="left:26%;top:58%"></span></div>
+            <div class="gw-card">
+              <div class="gw-row"><span class="gw-dot" style="width:22px;height:22px"></span>
+                <div class="gw-col"><div class="gw-bar w55"></div><div class="gw-bar sm w75"></div></div>
+                <span class="gw-dot"></span><span class="gw-dot"></span></div>
+            </div>
+            <div style="flex:1"></div>
+            <div class="gw-btn"><span class="gw-bar w35"></span></div>
+            <div class="gw-bar sm w45" style="margin:0 auto"></div>
+            <div class="gw-home"></div>
+          </div>
+          <div class="gw-cap">C-01 · ใกล้ถึง<span>บล็อกเวลาเป็นก้อนที่หนาที่สุดบนจอ การ์ดจุดนัดรับใช้เส้นขอบหนากว่าเพื่อนบ้านเพื่อแยกชั้นข้อมูล และมีปุ่มทึบเพียงปุ่มเดียวที่ขอบล่าง</span></div>
+        </div>
+
+        <div class="gw">
+          <div class="gw-frame">
+            <div class="gw-status"><span>9:41</span><span class="sig"><i></i><i></i><i></i></span></div>
+            <div class="gw-row"><span class="gw-dot"></span><div class="gw-col"><div class="gw-bar w55"></div><div class="gw-bar sm w35"></div></div><span class="gw-dot"></span></div>
+            <div class="gw-seg"><i class="on"></i><i></i><i></i><i></i><i></i></div>
+            <div class="gw-bar xl w45 dark"></div>
+            <div class="gw-bar w65"></div>
+            <div class="gw-scrim"></div>
+            <div class="gw-sheet">
+              <div class="gw-grip"></div>
+              <div class="gw-row between"><div class="gw-bar lg w45 dark"></div><span class="gw-dot sm"></span></div>
+              <div class="gw-bar sm w75"></div>
+              <div class="gw-card sel">
+                <div class="gw-row"><span class="gw-dot sm on"></span><div class="gw-col"><div class="gw-bar w75 dark"></div><div class="gw-bar sm w55"></div></div></div>
+              </div>
+              <div class="gw-card"><div class="gw-row"><span class="gw-dot sm ring"></span><div class="gw-col"><div class="gw-bar w65"></div></div></div></div>
+              <div class="gw-card"><div class="gw-row"><span class="gw-dot sm ring"></span><div class="gw-col"><div class="gw-bar w55"></div></div></div></div>
+              <div class="gw-lbl">หรือปักหมุดเอง</div>
+              <div class="gw-img" style="height:52px"><span class="pin" style="left:46%;top:38%"></span></div>
+              <div class="gw-card" style="padding:10px 8px"><div class="gw-bar sm w85"></div></div>
+              <div class="gw-row between"><div class="gw-bar sm w45"></div><div class="gw-bar w25 dark" style="height:14px;border-radius:9px"></div></div>
+              <div class="gw-btn"><span class="gw-bar w45"></span></div>
+            </div>
+            <div class="gw-home"></div>
+          </div>
+          <div class="gw-cap">C-02 · เลือกจุดนัดรับ<span>Sheet สูงราวสามในสี่ของจอ การ์ดใบบนสุดถูกเลือกไว้แล้วและใช้ขอบหนา ทำให้เส้นทางที่สั้นที่สุดคือกดปุ่มล่างทันที</span></div>
+        </div>
+
+        <div class="gw">
+          <div class="gw-frame">
+            <div class="gw-status"><span>9:41</span><span class="sig"><i></i><i></i><i></i></span></div>
+            <div class="gw-row"><span class="gw-dot"></span><div class="gw-col"><div class="gw-bar w55"></div><div class="gw-bar sm w35"></div></div><span class="gw-dot"></span></div>
+            <div class="gw-seg"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div>
+            <div class="gw-row"><span class="gw-dot"></span><div class="gw-bar lg w75 dark"></div></div>
+            <div class="gw-bar sm w55"></div>
+            <div class="gw-card alert">
+              <div class="gw-bar sm w85"></div>
+              <div class="gw-bar sm w45"></div>
+            </div>
+            <div class="gw-card key">
+              <div class="gw-lbl">handoff</div>
+              <div class="gw-bar w75 dark"></div>
+              <div class="gw-bar sm w55"></div>
+            </div>
+            <div class="gw-img fill"><span class="pin" style="left:66%;top:32%"></span><span class="pin ghost" style="left:24%;top:62%"></span></div>
+            <div class="gw-btn"><span class="gw-bar w45"></span></div>
+            <div class="gw-row" style="gap:6px">
+              <div class="gw-btn ghost" style="flex:1"><span class="gw-bar w45"></span></div>
+              <div class="gw-btn ghost" style="flex:1"><span class="gw-bar w35"></span></div>
+            </div>
+            <div class="gw-home"></div>
+          </div>
+          <div class="gw-cap">C-03 · ไรเดอร์หาไม่เจอ<span>แถบแจ้งเตือนแทรกเหนือจุดนัดรับ แผนที่ขยายขึ้นเพราะกลายเป็นข้อมูลที่ต้องใช้ตัดสินใจ และปุ่มรองสองปุ่มถูกลดเป็นแบบโปร่ง</span></div>
+        </div>
+      </div>
+
+      <h3>ฝั่งไรเดอร์</h3>
+      <div class="gw-set">
+
+        <div class="gw">
+          <div class="gw-frame">
+            <div class="gw-status"><span>9:41</span><span class="sig"><i></i><i></i><i></i></span></div>
+            <div class="gw-top">
+              <span class="gw-dot" style="width:20px;height:20px;border-radius:5px"></span>
+              <div class="gw-col"><div class="gw-bar w75"></div><div class="gw-bar sm w45"></div></div>
+              <div class="gw-bar w25" style="height:14px"></div>
+            </div>
+            <div class="gw-img" style="height:150px"><span class="pin" style="left:68%;top:28%"></span><span class="pin ghost" style="left:28%;top:70%"></span></div>
+            <div class="gw-card key">
+              <div class="gw-row between"><div class="gw-lbl">handoff · ยืนยันแล้ว</div><div class="gw-bar sm w25"></div></div>
+              <div class="gw-bar lg w85 dark"></div>
+              <div class="gw-bar sm w55"></div>
+            </div>
+            <div class="gw-card">
+              <div class="gw-row between"><div class="gw-col"><div class="gw-bar w65"></div><div class="gw-bar sm w45"></div></div><div class="gw-bar w25 dark" style="height:12px"></div></div>
+            </div>
+            <div style="flex:1"></div>
+            <div class="gw-btn"><span class="gw-bar w45"></span></div>
+            <div class="gw-bar sm w45" style="margin:0 auto"></div>
+            <div class="gw-home"></div>
+          </div>
+          <div class="gw-cap">R-01 · นำทางช่วงท้าย<span>แถบคำสั่งถัดไปยังตรึงบนสุดตามโครงที่แอปนำทางใช้กันอยู่ จุดนัดรับถูกแทรกในตำแหน่งที่เดิมเป็นการ์ดออร์เดอร์</span></div>
+        </div>
+
+        <div class="gw">
+          <div class="gw-frame">
+            <div class="gw-status"><span>9:41</span><span class="sig"><i></i><i></i><i></i></span></div>
+            <div class="gw-row"><span class="gw-dot"></span><div class="gw-col"><div class="gw-bar w65"></div><div class="gw-bar sm w35"></div></div><span class="gw-dot"></span></div>
+            <div class="gw-card alert"><div class="gw-bar sm w85"></div><div class="gw-bar sm w55"></div></div>
+            <div class="gw-lbl">เกิดอะไรขึ้น · เลือกหนึ่งข้อ</div>
+            <div class="gw-card sel"><div class="gw-row"><span class="gw-dot"></span><div class="gw-bar w65 dark"></div><span class="gw-dot sm on"></span></div></div>
+            <div class="gw-card"><div class="gw-row"><span class="gw-dot"></span><div class="gw-bar w45"></div></div></div>
+            <div class="gw-card"><div class="gw-row"><span class="gw-dot"></span><div class="gw-bar w55"></div></div></div>
+            <div class="gw-card"><div class="gw-row"><span class="gw-dot"></span><div class="gw-bar w65"></div></div></div>
+            <div class="gw-lbl">ไม่บังคับ</div>
+            <div class="gw-btn dash" style="height:40px"><span class="gw-bar w55" style="background:#D5D3CB;opacity:1"></span></div>
+            <div style="flex:1"></div>
+            <div class="gw-btn"><span class="gw-bar w35"></span></div>
+            <div class="gw-home"></div>
+          </div>
+          <div class="gw-cap">R-02 · แจ้งว่าหาไม่พบ<span>เหตุผลเป็นแถวกดใหญ่สี่แถว สูงพอกดตอนสวมถุงมือ ส่วนการถ่ายภาพเป็นกล่องเส้นประเพื่อบอกว่าไม่บังคับ</span></div>
+        </div>
+
+        <div class="gw">
+          <div class="gw-frame">
+            <div class="gw-status"><span>9:41</span><span class="sig"><i></i><i></i><i></i></span></div>
+            <div class="gw-top">
+              <span class="gw-dot" style="width:18px;height:18px"></span>
+              <div class="gw-col"><div class="gw-bar w65"></div><div class="gw-bar sm w35"></div></div>
+            </div>
+            <div class="gw-img" style="height:170px">
+              <span class="pin" style="left:60%;top:26%"></span>
+              <span class="pin ghost" style="left:26%;top:66%"></span>
+            </div>
+            <div class="gw-card key">
+              <div class="gw-row between"><div class="gw-lbl">จุดนัดใหม่</div><div class="gw-bar sm w25"></div></div>
+              <div class="gw-bar lg w65 dark"></div>
+              <div class="gw-bar sm w75"></div>
+            </div>
+            <div class="gw-card"><div class="gw-row"><span class="gw-dot"></span><div class="gw-bar sm w85"></div></div></div>
+            <div style="flex:1"></div>
+            <div class="gw-btn"><span class="gw-bar w35"></span></div>
+            <div class="gw-bar sm w45" style="margin:0 auto"></div>
+            <div class="gw-home"></div>
+          </div>
+          <div class="gw-cap">R-03 · ได้ข้อมูลเพิ่ม<span>แสดงเฉพาะสิ่งที่เปลี่ยนกับระยะที่เหลือ การ์ดออร์เดอร์เดิมถูกตัดออกทั้งใบเพื่อไม่ให้อ่านซ้ำ</span></div>
+        </div>
+      </div>
+
+    <div class="panel sig">
+      <h4>สิ่งที่ได้จากขั้น wireframe</h4>
+      <p>ตอนแรกผมวางจุดนัดรับไว้บนสุดเหนือเวลา เพราะคิดว่าเป็นข้อมูลใหม่ที่ต้องเน้น แต่พอวางเทียบกันจริงพบว่าผู้ใช้เปิดแอปมาเพื่อดูว่าอีกกี่นาที ไม่ใช่เพื่อดูว่านัดกันที่ไหน เพราะจุดนัดรับเป็นข้อมูลที่ยืนยันไปแล้วและไม่เปลี่ยน จึงย้ายลงมาเป็นลำดับสอง</p>
+      <p>ข้อสังเกตนี้เกิดจากการเห็นสองเวอร์ชันวางข้างกัน ซึ่งเป็นเหตุผลที่ทำ wireframe ก่อนลง UI</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 06 UI ============ -->
+<section id="s6">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-d">ระยะ 28 เมตร</div>
+      <h2>หน้าจอหลัก</h2>
+      <p>สถานะไรเดอร์ใกล้ถึง คือหน้าที่ตัดสินว่าฟีเจอร์นี้ได้ผลหรือไม่</p>
+    </div>
+
+    <div class="phone-row u-scope">
+      <div id="ui-c01" style="width:390px;max-width:100%"></div>
+
+      <div class="ph-notes">
+        <div class="ph-note"><span class="num">01</span><span><strong>เวลาอยู่บนสุดและใหญ่ที่สุด</strong> เพราะเป็นข้อมูลเดียวที่ตอบคำถามว่าควรลงไปตอนไหน ซึ่งเป็นสิ่งที่ผู้ใช้เปิดแอปมาดู</span></div>
+        <div class="ph-note"><span class="num">02</span><span><strong>จุดนัดรับใช้กรอบสีเพื่อแยกชั้นข้อมูล</strong> ไม่ใช่เพื่อความสวย มันคือข้อมูลใหม่ที่ผู้ใช้ยังไม่คุ้น จึงต้องแยกออกจากข้อความอื่นชัดเจน</span></div>
+        <div class="ph-note"><span class="num">03</span><span><strong>ปุ่มหลักมีปุ่มเดียวต่อสถานะ</strong> ในสถานะนี้สิ่งที่ควรทำมีอย่างเดียวคือลงไปรอ ตัวเลือกอื่นถูกลดระดับเป็นข้อความ ไม่ใช่ปุ่มคู่กัน</span></div>
+        <div class="ph-note"><span class="num">04</span><span><strong>ไม่มีแผนที่เต็มจอ</strong> ในระยะนี้การเห็นหมุดเคลื่อนที่ไม่ช่วยตัดสินใจ แต่ทำให้ผู้ใช้เฝ้าหน้าจอ เราจึงแทนด้วยเวลาและตำแหน่งที่เป็นคำ</span></div>
+      </div>
+    </div>
+
+    <div class="u-sub">Screen flow · แตกตามแต่ละ action</div>
+    <p class="u-sub-note">ทุกการกระทำหนึ่งครั้งเห็นเป็นหนึ่งหน้าจอ ทั้งเส้นทางปกติและเส้นทางที่ไรเดอร์หาไม่เจอ
+      บรรทัดบนของแต่ละใบบอกว่าใครทำอะไร และระบบตอบอะไรกลับ</p>
+    <div id="ui-flow" class="u-scope"></div>
+
+    <div class="u-sub">Prototype · กดเล่นได้จริง</div>
+    <p class="u-sub-note">กดปุ่มบนหน้าจอเพื่อเดินเรื่องไปทีละขั้น แล้วสลับมุมมองระหว่างลูกค้ากับไรเดอร์
+      เพื่อดูว่าอีกฝ่ายเห็นอะไรในเหตุการณ์เดียวกัน ทั้งสองฝั่งอ่านจากจุดนัดรับชุดเดียวกัน</p>
+    <div id="ui-proto" class="u-scope u-mount"></div>
+
+    <div class="panel sig">
+      <h4>หลักที่ใช้ตัดสินทุกหน้าจอ</h4>
+      <p>แต่ละสถานะมีข้อมูลที่จำเป็นไม่เท่ากัน หน้าจอจึงแสดงเฉพาะสิ่งที่ผู้ใช้ต้องรู้และต้องทำในสถานะนั้น แทนที่จะแสดงข้อมูลทั้งหมดเท่ากันตลอดเส้นทาง</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 07 STATES ============ -->
+<section id="s7">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-d">ระยะ 18 เมตร</div>
+      <h2>สถานะและกรณีที่ผิดแผน</h2>
+      <p>สิ่งที่แสดงบนหน้าจอเดียวกัน เมื่อสถานะเปลี่ยน</p>
+    </div>
+
+    <table>
+      <thead><tr><th style="width:22%">สถานะ</th><th style="width:34%">ข้อความหลัก</th><th>ปุ่มหลัก</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tag s">ใกล้ถึง</span></td><td>อีก 2 นาที</td><td>กำลังลงไป</td></tr>
+        <tr><td><span class="tag s">ถึงแล้ว</span></td><td>ไรเดอร์ถึงจุดนัดแล้ว</td><td>กำลังลงไป</td></tr>
+        <tr><td><span class="tag n">หาไม่เจอ</span></td><td>ไรเดอร์หาจุดนัดไม่พบ</td><td>แชร์ตำแหน่ง</td></tr>
+        <tr><td><span class="tag s">รออยู่</span></td><td>ไรเดอร์รออยู่ 3 นาที</td><td>แจ้งว่าใกล้ถึงแล้ว</td></tr>
+        <tr><td><span class="tag y">ส่งมอบแล้ว</span></td><td>ส่งมอบเรียบร้อย</td><td>ให้คะแนน</td></tr>
+      </tbody>
+    </table>
+
+    <div class="u-sub">ลองสลับสถานะ · การ์ดใบเดียวกัน</div>
+    <div id="ui-states" class="u-scope u-mount"></div>
+
+    <h3>กรณีที่ต้องออกแบบเผื่อ</h3>
+    <div class="grid2">
+      <div class="card">
+        <div class="ct">ลูกค้าไม่ตอบ</div>
+        <div class="cb">หลังไรเดอร์รอครบเวลาที่กำหนด ระบบเสนอทางเลือกให้ไรเดอร์แทนการปล่อยให้ตัดสินใจเอง เช่น ฝากไว้จุดที่ตกลงกันล่วงหน้า</div>
+      </div>
+      <div class="card">
+        <div class="ct">สัญญาณ GPS คลาดเคลื่อนในตึกสูง</div>
+        <div class="cb">เมื่อความแม่นยำต่ำกว่าเกณฑ์ ระบบซ่อนระยะทางเป็นเมตร แล้วแสดงเป็นเวลาแทน เพื่อไม่ให้ตัวเลขที่ผิดสร้างความคาดหวังผิด</div>
+      </div>
+      <div class="card">
+        <div class="ct">ไรเดอร์ถึงก่อนลูกค้าพร้อม</div>
+        <div class="cb">ลูกค้าเลือกให้รอที่จุดนัดได้ พร้อมแจ้งเวลาโดยประมาณ ไรเดอร์เห็นตัวเลขนั้นและตัดสินใจต่อได้</div>
+      </div>
+      <div class="card">
+        <div class="ct">เปลี่ยนจุดนัดกลางทาง</div>
+        <div class="cb">อนุญาตให้แก้ได้จนถึงสถานะถึงแล้ว หลังจากนั้นล็อกเพื่อไม่ให้ไรเดอร์ที่กำลังเดินอยู่ได้รับข้อมูลที่ขัดกัน</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 08 DESIGN SYSTEM ============ -->
+<section id="s8">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-d">ระยะ 10 เมตร</div>
+      <h2>Component และ Design System</h2>
+      <p>ออกแบบให้ขยายต่อได้ ไม่ใช่แค่หน้าจอที่สวยในไฟล์เดียว</p>
+    </div>
+
+    <p>คอมโพเนนต์ในงานนี้ถูกแยกตามหน้าที่ ไม่ใช่ตามหน้าจอ การ์ดสถานะหนึ่งตัวรับได้ทุกสถานะผ่าน property เดียวกัน ทำให้เพิ่มสถานะใหม่ในอนาคตไม่ต้องสร้างการ์ดใหม่</p>
+
+    <h3>คอมโพเนนต์หลัก</h3>
+    <div class="chips">
+      <span class="chip a">Status Card</span>
+      <span class="chip a">Handoff Point Card</span>
+      <span class="chip">ETA Display</span>
+      <span class="chip">Rider Card</span>
+      <span class="chip">Primary Button</span>
+      <span class="chip">Bottom Sheet</span>
+      <span class="chip">Notification Banner</span>
+      <span class="chip">Map Marker</span>
+      <span class="chip">Location Picker</span>
+    </div>
+
+    <h3>สถานะของคอมโพเนนต์</h3>
+    <div class="chips">
+      <span class="chip">default</span>
+      <span class="chip">pressed</span>
+      <span class="chip">disabled</span>
+      <span class="chip">loading</span>
+      <span class="chip">error</span>
+      <span class="chip">empty</span>
+    </div>
+
+    <h3>สี</h3>
+    <div class="sw-row">
+      <div class="sw"><i style="background:#16181C"></i><span>ink<br>#16181C</span></div>
+      <div class="sw"><i style="background:#F0B31A"></i><span>signal<br>#F0B31A</span></div>
+      <div class="sw"><i style="background:#6B4A00"></i><span>signal-ink<br>#6B4A00</span></div>
+      <div class="sw"><i style="background:#1B6B47"></i><span>success<br>#1B6B47</span></div>
+      <div class="sw"><i style="background:#B33A0C"></i><span>alert<br>#B33A0C</span></div>
+      <div class="sw"><i style="background:#767C86"></i><span>muted<br>#767C86</span></div>
+      <div class="sw"><i style="background:#E9E8E2"></i><span>surface<br>#E9E8E2</span></div>
+    </div>
+    <p class="dim" style="font-size:14px">สีเหลืองใช้เฉพาะกับข้อมูลที่เกี่ยวกับตำแหน่งและการนำทาง ไม่ใช้เป็นสีตกแต่ง เมื่อผู้ใช้เห็นสีนี้จึงรู้ทันทีว่าเป็นเรื่องสถานที่ โดยแยกเป็นสองค่า คือเหลืองสดสำหรับพื้นและไฮไลต์ และเหลืองเข้มสำหรับตัวอักษร เพราะเหลืองสดบนพื้นสว่างมีคอนทราสต์ไม่พอต่อการอ่าน</p>
+
+    <h3>ตัวอักษรและระยะห่าง</h3>
+    <table>
+      <tbody>
+        <tr><td style="width:34%"><strong>ตัวเลขเวลาและระยะ</strong></td><td class="mono">Mono · 32–40px · tabular</td></tr>
+        <tr><td><strong>หัวข้อในหน้าจอ</strong></td><td class="mono">Sans · 18–22px · 600</td></tr>
+        <tr><td><strong>เนื้อความ</strong></td><td class="mono">Sans · 15–16px · 400</td></tr>
+        <tr><td><strong>ป้ายกำกับ</strong></td><td class="mono">Mono · 11–12px · 500</td></tr>
+        <tr><td><strong>ระยะห่าง</strong></td><td class="mono">กริด 8pt · แตะได้อย่างน้อย 44px</td></tr>
+      </tbody>
+    </table>
+    <p class="dim" style="font-size:14px">ใช้ฟอนต์ monospace กับตัวเลขเพราะความกว้างเท่ากันทุกหลัก เวลานับถอยหลังจาก 10 เป็น 9 นาที ตัวเลขจะไม่ขยับ ซึ่งสำคัญกับหน้าจอที่อัปเดตตัวเองตลอด</p>
+    <div class="u-sub">คอมโพเนนต์จริง · Ant Design 5 + Iconsax</div>
+    <div id="ui-kit" class="u-scope u-mount"></div>
+  </div>
+</section>
+
+<!-- ============ 09 METRICS ============ -->
+<section id="s9">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-d">ระยะ 4 เมตร</div>
+      <h2>จะวัดผลอย่างไร</h2>
+      <p>ตัวชี้วัดที่ออกแบบไว้จะวัดหากได้พัฒนาจริง ไม่ใช่ผลที่เกิดขึ้นแล้ว</p>
+    </div>
+
+    <div class="panel sig">
+      <h4>ตัวชี้วัดหลัก</h4>
+      <p style="font-size:17px;font-weight:500;margin:0">สัดส่วนออร์เดอร์ที่ส่งมอบสำเร็จโดยไม่มีการโทรหรือแชตระหว่างลูกค้ากับไรเดอร์</p>
+      <p style="font-size:14px;margin-top:9px;color:var(--ink-2)">เลือกตัวนี้เพราะมันวัดว่าปัญหาถูกแก้จริงหรือไม่ ไม่ใช่วัดว่าฟีเจอร์ถูกกดกี่ครั้ง ถ้าคนยังต้องโทรกันอยู่ แปลว่าเรายังไม่ได้แก้อะไร</p>
+    </div>
+
+    <table>
+      <thead><tr><th style="width:26%">ด้าน</th><th>ตัวชี้วัด</th></tr></thead>
+      <tbody>
+        <tr><td>ประสิทธิภาพ</td><td>เวลาตั้งแต่ไรเดอร์ถึงจุดนัดจนส่งมอบเสร็จ</td></tr>
+        <tr><td>ประสิทธิภาพ</td><td>เวลาที่ไรเดอร์ใช้วนหาจุดนัดในแต่ละออร์เดอร์</td></tr>
+        <tr><td>ความขัดข้อง</td><td>จำนวนการติดต่อต่อออร์เดอร์</td></tr>
+        <tr><td>คุณภาพ</td><td>สัดส่วนออร์เดอร์ที่ส่งไม่สำเร็จหรือล่าช้า</td></tr>
+        <tr><td>การใช้งาน</td><td>สัดส่วนออร์เดอร์ที่มีจุดนัดรับครบถ้วน</td></tr>
+        <tr><td>ความง่าย</td><td>อัตราทำงานสำเร็จ และคะแนนความง่ายรายงาน</td></tr>
+      </tbody>
+    </table>
+
+    <div class="panel">
+      <h4>จะทดสอบอย่างไร</h4>
+      <p>ทดสอบกับผู้ใช้ 5 คน แบบมีผู้ดำเนินการ ให้ทำสามงาน คือ ยืนยันจุดนัดรับ เปลี่ยนจุดนัดกลางทาง และตอบสนองเมื่อไรเดอร์แจ้งว่าหาไม่เจอ โดยวัดอัตราสำเร็จและจุดที่ผู้ใช้ลังเล</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 10 PROCESS ============ -->
+<section id="s10">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-d">ระยะ 1 เมตร</div>
+      <h2>กระบวนการทำงาน</h2>
+      <p>ตั้งแต่ได้รับโจทย์จนถึงส่งงาน</p>
+    </div>
+
+    <div class="proc">
+      <div class="proc-step on">
+        <div class="proc-num">ขั้นที่ 01</div>
+        <div class="proc-t">ทำความเข้าใจโจทย์</div>
+        <div class="proc-d">อ่านโจทย์ให้จบก่อน แล้วตั้งใจไม่รีบเลือกปัญหา นับทุกคนใน ecosystem เป็นผู้ใช้ ไม่ใช่แค่คนสั่งอาหาร</div>
+      </div>
+      <div class="proc-step">
+        <div class="proc-num">ขั้นที่ 02</div>
+        <div class="proc-t">ทบทวนงานวิจัย</div>
+        <div class="proc-d">หาว่าปัญหาที่คิดไว้มีหลักฐานรองรับ หรือเป็นแค่ความรู้สึกของเราเอง ตรวจทุกแหล่งว่ามีอยู่จริงก่อนนำมาใช้</div>
+      </div>
+      <div class="proc-step">
+        <div class="proc-num">ขั้นที่ 03</div>
+        <div class="proc-t">เลือกปัญหา</div>
+        <div class="proc-d">เลือกช่วงร้อยเมตรสุดท้าย เพราะเป็นจุดที่ระบบยังไม่เข้าไปช่วย และงานวิจัยที่มีอยู่เสนอทางออกที่ใช้กับอาหารไม่ได้</div>
+      </div>
+      <div class="proc-step">
+        <div class="proc-num">ขั้นที่ 04</div>
+        <div class="proc-t">นิยามโอกาส</div>
+        <div class="proc-d">เปลี่ยนหน่วยข้อมูลของปลายทางจาก “ที่อยู่” เป็น “จุดนัดรับ” ซึ่งเป็นแกนของงานทั้งชิ้น</div>
+      </div>
+      <div class="proc-step">
+        <div class="proc-num">ขั้นที่ 05</div>
+        <div class="proc-t">เขียน User Flow</div>
+        <div class="proc-d">ทำทั้งเส้นทางปกติและเส้นทางที่ไรเดอร์หาไม่เจอ เพราะเส้นทางที่ผิดแผนคือจุดที่ฟีเจอร์ต้องพิสูจน์ตัวเอง</div>
+      </div>
+      <div class="proc-step">
+        <div class="proc-num">ขั้นที่ 06</div>
+        <div class="proc-t">Wireframe</div>
+        <div class="proc-d">ทดลองลำดับข้อมูลในแต่ละสถานะก่อนลงหน้าตา และได้ข้อสังเกตว่าเวลาควรอยู่เหนือจุดนัดรับ</div>
+      </div>
+      <div class="proc-step">
+        <div class="proc-num">ขั้นที่ 07</div>
+        <div class="proc-t">UI และ Design System</div>
+        <div class="proc-d">ลงรายละเอียดด้วย Ant Design และ Iconsax พร้อมสร้างคอมโพเนนต์ที่รับได้ทุกสถานะผ่าน property เดียว</div>
+      </div>
+      <div class="proc-step on">
+        <div class="proc-num">ขั้นที่ 08</div>
+        <div class="proc-t">ทบทวนตัวเอง</div>
+        <div class="proc-d">ตรวจว่าทุกการตัดสินใจย้อนกลับไปหาเหตุผลได้ แล้วตัดสิ่งที่อธิบายที่มาไม่ได้ออก</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h4>สิ่งที่ตั้งใจไม่ทำ</h4>
+      <p>ไม่ทำแอปไรเดอร์ทั้งระบบ ทำเฉพาะสามหน้าจอที่ตัดกับฝั่งลูกค้า เพราะการทำสองฝั่งให้ครบจะทำให้ทั้งคู่ตื้น การเลือกทำฝั่งเดียวให้ลึกและแสดงจุดเชื่อมให้เห็นชัด ตอบโจทย์เรื่องคุณภาพมากกว่าความครบ</p>
+    </div>
+
+    <div class="panel">
+      <h4>ใช้ AI อย่างไร</h4>
+      <p>ใช้ช่วยค้นและสรุปงานวิจัย รวมถึงตรวจทานตรรกะของ flow ว่ามีกรณีไหนที่ยังไม่ได้คิดถึง ส่วนการเลือกปัญหา การตัดสินใจเรื่องลำดับข้อมูล และงานออกแบบทั้งหมดทำเอง โดยตรวจสอบทุกแหล่งอ้างอิงว่ามีอยู่จริงก่อนนำมาใช้</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 11 FORM ANSWERS ============ -->
+<section id="s11">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-d">ระยะ 0 เมตร</div>
+      <h2>คำตอบสำหรับฟอร์ม</h2>
+      <p>คัดลอกไปวางในแต่ละช่องได้เลย ปรับสำนวนเป็นของตัวเองก่อนส่ง</p>
+    </div>
+
+    <div class="fa">
+      <div class="fa-q">Problem &amp; Insight · ไม่เกิน 5–7 บรรทัด</div>
+      <div class="fa-a">
+        <p>ช่วงร้อยเมตรสุดท้ายของการส่งอาหารยังเป็นช่วงที่ระบบปล่อยให้ลูกค้ากับไรเดอร์ประสานกันเอง แอปแสดงหมุดที่ตัวอาคาร ซึ่งไม่พอสำหรับคอนโด ตึกออฟฟิศ หรือตลาด</p>
+        <p>เลือกปัญหานี้เพราะงานวิจัยที่สัมภาษณ์ไรเดอร์ส่งอาหารโดยตรงพบว่าความท้าทายส่วนหนึ่งมาจากฝั่งลูกค้าและจากเครื่องมือที่ใช้ทำงาน และเพราะทางออกที่งานวิจัยเสนอกันส่วนใหญ่คือตู้ล็อกเกอร์ ซึ่งใช้กับอาหารไม่ได้</p>
+        <p>ลูกค้าต้องเฝ้าหน้าจอและถูกโทรหาตอนไม่สะดวก ไรเดอร์เสียเวลาวนหาทางเข้าและโทรซ้ำ ส่วนแพลตฟอร์มได้เวลาส่งที่ยาวขึ้นและความเสี่ยงที่ออร์เดอร์จะส่งไม่สำเร็จ</p>
+      </div>
+    </div>
+
+    <div class="fa">
+      <div class="fa-q">Proposed Solution Concept &amp; Idea</div>
+      <div class="fa-a">
+        <p>เปลี่ยนหน่วยข้อมูลของปลายทางจากที่อยู่ เป็นจุดนัดรับ จากเดิมที่ระบบรู้แค่ว่าอาคาร A ชั้น 1 ให้เปลี่ยนเป็นอาคาร A ทางเข้าฝั่ง B ล็อบบี้ รับที่เคาน์เตอร์</p>
+        <p>ระบบเสนอจุดนัดรับให้ก่อนจากประวัติการส่งสำเร็จในพิกัดเดียวกัน ลูกค้ายืนยันด้วยปุ่มเดียวโดยไม่ต้องพิมพ์ และแก้ได้จนถึงตอนไรเดอร์มาถึง</p>
+        <p>พร้อมกันนั้นแตกสถานะกำลังจัดส่งออกเป็นห้าสถานะ คือ ใกล้ถึง ถึงแล้ว กำลังหาจุดนัด รออยู่ และส่งมอบ โดยแต่ละสถานะแสดงเฉพาะสิ่งที่ผู้ใช้ต้องรู้และต้องทำในตอนนั้น</p>
+        <p>จุดนัดรับเป็นข้อมูลชุดเดียวที่ทั้งลูกค้าและไรเดอร์เห็นตรงกัน เมื่อฝ่ายหนึ่งยืนยัน อีกฝ่ายเห็นทันที ระบบจึงเปลี่ยนจากการส่งข้อความไปมาเป็นการทำงานบนสถานะร่วมกัน</p>
+      </div>
+    </div>
+
+    <div class="fa">
+      <div class="fa-q">Short UI Design Rationale</div>
+      <div class="fa-a">
+        <p>จัดลำดับข้อมูลตามสิ่งที่ผู้ใช้ต้องตัดสินใจในสถานะนั้น เวลาอยู่บนสุดและใหญ่ที่สุดเพราะเป็นคำตอบของคำถามว่าควรลงไปตอนไหน จุดนัดรับใช้กรอบสีเพื่อแยกชั้นข้อมูลเพราะเป็นข้อมูลใหม่ที่ผู้ใช้ยังไม่คุ้น</p>
+        <p>แต่ละสถานะมีปุ่มหลักปุ่มเดียว ตัวเลือกรองถูกลดระดับเป็นข้อความ และตัดแผนที่เต็มจอออกในระยะใกล้ เพราะการเห็นหมุดเคลื่อนที่ไม่ช่วยตัดสินใจ แต่ทำให้ผู้ใช้เฝ้าหน้าจอ</p>
+        <p>ใช้ฟอนต์ monospace กับตัวเลขเพราะความกว้างเท่ากันทุกหลัก ทำให้ตัวเลขไม่ขยับเวลานับถอยหลัง และใช้สีเหลืองเฉพาะกับข้อมูลตำแหน่งเท่านั้น เพื่อให้ผู้ใช้เรียนรู้ความหมายของสีได้ โดยแยกค่าเหลืองสดสำหรับพื้นออกจากเหลืองเข้มสำหรับตัวอักษร เพื่อให้ผ่านเกณฑ์คอนทราสต์</p>
+      </div>
+    </div>
+
+    <div class="fa">
+      <div class="fa-q">อธิบายขั้นตอนการออกแบบตั้งแต่ได้รับโจทย์ถึงการส่งงาน</div>
+      <div class="fa-a">
+        <p>เริ่มจากอ่านโจทย์แล้วตั้งใจไม่รีบเลือกปัญหา ไล่หา friction ในระบบส่งอาหารโดยนับทั้งลูกค้าและไรเดอร์เป็นผู้ใช้ จากนั้นทบทวนงานวิจัยไทยและต่างประเทศเพื่อตรวจว่าปัญหาที่คิดไว้มีหลักฐานรองรับหรือเป็นแค่ความรู้สึก</p>
+        <p>พบว่างานวิจัยส่วนใหญ่ศึกษาบริบทพัสดุและเสนอตู้ล็อกเกอร์เป็นทางออก ซึ่งใช้กับอาหารไม่ได้ จึงเลือกโฟกัสที่ช่วงร้อยเมตรสุดท้าย และนิยามโอกาสเป็นการเปลี่ยนหน่วยข้อมูลจากที่อยู่เป็นจุดนัดรับ</p>
+        <p>เขียน user flow ทั้งเส้นทางปกติและเส้นทางที่ไรเดอร์หาไม่เจอ ทำ wireframe เพื่อทดลองลำดับข้อมูลในแต่ละสถานะ แล้วจึงลง UI พร้อมสร้างคอมโพเนนต์ที่รับได้ทุกสถานะ</p>
+        <p>ขั้นสุดท้ายย้อนกลับมาตรวจว่าทุกการตัดสินใจอธิบายที่มาได้ และตัดสิ่งที่อธิบายไม่ได้ออก</p>
+      </div>
+    </div>
+
+    <div class="fa">
+      <div class="fa-q">อธิบายความเข้าใจเกี่ยวกับ Component / Design System</div>
+      <div class="fa-a">
+        <p>Design system คือข้อตกลงร่วมกันของทีมว่าอะไรใช้เมื่อไหร่ ไม่ใช่คลังของหน้าจอสวย ๆ คุณค่าของมันวัดที่ว่าคนที่ไม่ได้ออกแบบหน้านั้นหยิบไปใช้แล้วได้ผลลัพธ์ที่ถูกหรือไม่</p>
+        <p>ในงานนี้จึงแยกคอมโพเนนต์ตามหน้าที่ ไม่ใช่ตามหน้าจอ การ์ดสถานะหนึ่งตัวรับได้ทั้งห้าสถานะผ่าน property เดียวกัน การเพิ่มสถานะใหม่ในอนาคตจึงไม่ต้องสร้างการ์ดใหม่ และไม่เกิดการ์ดที่หน้าตาคล้ายกันแต่ไม่เหมือนกันกระจายอยู่ในไฟล์</p>
+        <p>ทุกคอมโพเนนต์ต้องมีสถานะ error และ empty ตั้งแต่แรก เพราะสถานะที่ผิดแผนคือจุดที่ระบบมักพัง และเป็นจุดที่ผู้ใช้ต้องการความชัดเจนมากที่สุด</p>
+        <p>นอกจากนี้ token ของสีต้องมีความหมาย ไม่ใช่แค่ชื่อสี ในงานนี้สีเหลืองผูกกับข้อมูลตำแหน่งเท่านั้น เมื่อความหมายถูกล็อกไว้ที่ token คนที่มาทำต่อจะใช้ผิดได้ยากขึ้น</p>
+      </div>
+    </div>
+
+    <div class="fa">
+      <div class="fa-q">คุณชอบทำงานร่วมกับทีมในลักษณะไหนมากที่สุด และเพราะอะไร</div>
+      <div class="fa-a">
+        <p>ชอบทีมที่มีวัฒนธรรม “Design is a shared responsibility” และเปิดกว้างทางความคิด (Psychological Safety) ทุกคนไม่ว่าจะเป็น PM, Dev หรือ Designer สามารถออกไอเดียและท้าทายกันด้วยเหตุผลได้ โดยไม่มี Ego</p>
+        <p>เหตุผลหลักคือ งานออกแบบที่ดีและใช้งานได้จริง (Feasibility) ไม่สามารถเกิดขึ้นจาก Designer คนเดียวได้ การดึง PM เข้ามาคุยเรื่อง Business Goal ตั้งแต่วันแรก และดึง Dev เข้ามาร่วมรีวิวความเป็นไปได้ทางเทคนิคตั้งแต่เนิ่น ๆ จะช่วยลดปัญหา Redesign หน้างานและทำให้ Launch ได้ตามเป้าหมาย</p>
+        <p>นอกจากนี้ ยังชอบทีมที่เปิดรับการนำ AI Tools เข้ามาใน Workflow เพื่อช่วยลดขั้นตอน Manual เช่น การ Brainstorm ไอเดียเบื้องต้น, Research ข้อมูล หรือ Generate ตัวอย่าง Prototype/Content ช่วยประหยัดเวลาและพลังงาน ให้ทีมได้โฟกัสกับปัญหาที่สำคัญ การตัดสินใจเรื่อง Experience ที่ซับซ้อน และการสร้าง Value สูงสุดให้กับผู้ใช้งาน</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="foot-in">
+    <h3 style="margin-top:0">แหล่งอ้างอิง</h3>
+    <ul class="refs">
+      <li>Puram, P., Gurumurthy, A., Narmetta, M., &amp; Mor, R.S. (2022). Last-mile challenges in on-demand food delivery during COVID-19: understanding the riders' perspective using a grounded theory approach. <em>International Journal of Logistics Management, 33</em>(3), 901–925.</li>
+      <li>Olsson, J., Hellström, D., &amp; Vakulenko, Y. (2023). Customer experience dimensions in last-mile delivery: an empirical study on unattended home delivery. <em>International Journal of Physical Distribution &amp; Logistics Management, 53</em>(2), 184–205.</li>
+      <li>Chamchang, P., Nueangyao, T., Watthanasiripakdee, N., &amp; Katudampa Thantrige, G.P.M. (2026). Enhancing Last-Mile Delivery Sustainability in Thailand: Empirical Evidence on Smart Parcel Locker Acceptance. <em>Sustainability, 18</em>(16), 8342.</li>
+      <li>Ritthichai. The Study of Situations, Factors and Impacts on Safety, Occupational Health and Working Environment of Food Delivery Motorcyclists.</li>
+      <li class="dim">[เพิ่ม/ตรวจสอบแหล่งที่เหลือก่อนส่ง]</li>
+    </ul>
+
+    <p class="note">งานวิจัยที่อ้างอิงส่วนใหญ่ศึกษาบริบท parcel delivery และ out-of-home delivery ผู้ออกแบบใช้เป็นฐานทำความเข้าใจ last-mile experience โดยรวม แล้วตีความต่อยอดสู่บริบท food delivery ซึ่งยังมีงานวิจัยเฉพาะทางจำกัด ช่องว่างนี้เป็นที่มาของโจทย์ในงานชิ้นนี้ ตัวชี้วัดทั้งหมดเป็นเป้าหมายที่ออกแบบไว้จะวัด ไม่ใช่ผลที่เกิดขึ้นจริง</p>
+
+    <p style="margin-top:28px;font-size:14px">ขอบคุณครับ<br><strong>นายปิยชนน์ วรรณบุรี (ยิม)</strong> · UX/UI Designer</p>
+  </div>
+</footer>
+
+<div class="pager">
+  <div class="pg-label"><span class="d" id="pg-d">100m</span><span class="n" id="pg-n">ปก</span></div>
+  <button class="pg" id="pg-prev" type="button" aria-label="หัวข้อก่อนหน้า">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+  <button class="pg" id="pg-next" type="button" aria-label="หัวข้อถัดไป">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+</div>
+
+<script>
+(function(){
+  var ticks = Array.prototype.slice.call(document.querySelectorAll('.tick'));
+  var secs = ticks.map(function(t){ return document.querySelector(t.getAttribute('href')); });
+  function sync(){
+    var y = window.scrollY + window.innerHeight * 0.32;
+    var idx = 0;
+    for (var i = 0; i < secs.length; i++){
+      if (secs[i] && secs[i].offsetTop <= y) idx = i;
+    }
+    ticks.forEach(function(t,i){ t.classList.toggle('on', i === idx); });
+    cur = idx;
+    var t = ticks[idx];
+    if (t){
+      lblD.textContent = t.querySelector('.d').textContent;
+      lblN.textContent = t.querySelector('.n').textContent;
+    }
+    prev.disabled = idx <= 0;
+    next.disabled = idx >= secs.length - 1;
+  }
+  function go(step){
+    var i = Math.min(secs.length - 1, Math.max(0, cur + step));
+    if (secs[i]) secs[i].scrollIntoView({behavior:'smooth', block:'start'});
+  }
+  var prev = document.getElementById('pg-prev');
+  var next = document.getElementById('pg-next');
+  var lblD = document.getElementById('pg-d');
+  var lblN = document.getElementById('pg-n');
+  var cur = 0;
+  prev.addEventListener('click', function(){ go(-1); });
+  next.addEventListener('click', function(){ go(1); });
+  document.addEventListener('keydown', function(e){
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var el = e.target;
+    if (el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.isContentEditable)) return;
+    if (e.key === 'ArrowRight' || e.key === 'PageDown'){ e.preventDefault(); go(1); }
+    if (e.key === 'ArrowLeft'  || e.key === 'PageUp'){ e.preventDefault(); go(-1); }
+  });
+
+  var busy = false;
+  window.addEventListener('scroll', function(){
+    if (busy) return;
+    busy = true;
+    requestAnimationFrame(function(){ sync(); busy = false; });
+  }, {passive:true});
+  window.addEventListener('resize', sync);
+  sync();
+})();
+</script>
+
+<!-- ===== UI runtime · React + Ant Design 5 + Iconsax ===== -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.13/dayjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/antd/5.21.6/antd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.26.2/babel.min.js"></script>
+<script>
+var ICONS = {"Location":{"l":[{"d":"M12 13.43a3.12 3.12 0 1 0 0-6.24 3.12 3.12 0 0 0 0 6.24Z","s":1},{"d":"M3.62 8.49c1.97-8.66 14.8-8.65 16.76.01 1.15 5.08-2.01 9.38-4.78 12.04a5.193 5.193 0 0 1-7.21 0c-2.76-2.66-5.92-6.97-4.77-12.05Z","s":1}],"b":[{"d":"M20.621 8.45c-1.05-4.62-5.08-6.7-8.62-6.7h-.01c-3.53 0-7.57 2.07-8.62 6.69-1.17 5.16 1.99 9.53 4.85 12.28a5.436 5.436 0 0 0 3.78 1.53c1.36 0 2.72-.51 3.77-1.53 2.86-2.75 6.02-7.11 4.85-12.27Zm-8.62 5.01a3.15 3.15 0 1 1 0-6.3 3.15 3.15 0 0 1 0 6.3Z","s":0}]},"Routing":{"l":[{"d":"M2.07 4.6c.8-3.46 6.01-3.46 6.8 0 .47 2.03-.82 3.75-1.94 4.82-.82.78-2.11.77-2.93 0C2.89 8.35 1.6 6.63 2.07 4.6ZM15.07 16.6c.8-3.46 6.04-3.46 6.84 0 .47 2.03-.82 3.75-1.95 4.82-.82.78-2.12.77-2.94 0-1.13-1.07-2.42-2.79-1.95-4.82Z","s":1},{"d":"M12 5h2.68c1.85 0 2.71 2.29 1.32 3.51L8.01 15.5C6.62 16.71 7.48 19 9.32 19H12","s":1},{"d":"M5.486 5.5h.012M18.486 17.5h.012","s":1}],"b":[{"d":"M8.88 4.599c-.8-3.46-6.01-3.47-6.81 0-.47 2.03.82 3.75 1.94 4.82.82.77 2.11.77 2.93 0 1.12-1.07 2.4-2.79 1.94-4.82Zm-3.37 1.6c-.55 0-1-.45-1-1s.44-1 .99-1h.01c.56 0 1 .45 1 1s-.44 1-1 1ZM21.91 16.599c-.8-3.46-6.03-3.47-6.84 0-.47 2.03.82 3.75 1.95 4.82.82.77 2.12.77 2.94 0 1.13-1.07 2.42-2.79 1.95-4.82Zm-3.38 1.6c-.55 0-1-.45-1-1s.44-1 .99-1h.01c.55 0 1 .45 1 1s-.45 1-1 1ZM12 19.75H9.32c-1.16 0-2.17-.7-2.57-1.78-.41-1.08-.11-2.27.76-3.04l7.99-6.99c.48-.42.49-.99.35-1.38-.15-.39-.53-.81-1.17-.81H12c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h2.68c1.16 0 2.17.7 2.57 1.78.41 1.08.11 2.27-.76 3.04L8.5 16.06c-.48.42-.49.99-.35 1.38.15.39.53.81 1.17.81H12c.41 0 .75.34.75.75s-.34.75-.75.75Z","s":0}]},"Clock":{"l":[{"d":"M22 12c0 5.52-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2s10 4.48 10 10Z","s":1},{"d":"m15.71 15.18-3.1-1.85c-.54-.32-.98-1.09-.98-1.72v-4.1","s":1}],"b":[{"d":"M12 2C6.49 2 2 6.49 2 12s4.49 10 10 10 10-4.49 10-10S17.51 2 12 2Zm4.35 13.57a.746.746 0 0 1-1.03.26l-3.1-1.85c-.77-.46-1.34-1.47-1.34-2.36v-4.1c0-.41.34-.75.75-.75s.75.34.75.75v4.1c0 .36.3.89.61 1.07l3.1 1.85c.36.21.48.67.26 1.03Z","s":0}]},"Call":{"l":[{"d":"M21.97 18.33c0 .36-.08.73-.25 1.09-.17.36-.39.7-.68 1.02-.49.54-1.03.93-1.64 1.18-.6.25-1.25.38-1.95.38-1.02 0-2.11-.24-3.26-.73s-2.3-1.15-3.44-1.98a28.75 28.75 0 0 1-3.28-2.8 28.414 28.414 0 0 1-2.79-3.27c-.82-1.14-1.48-2.28-1.96-3.41C2.24 8.67 2 7.58 2 6.54c0-.68.12-1.33.36-1.93.24-.61.62-1.17 1.15-1.67C4.15 2.31 4.85 2 5.59 2c.28 0 .56.06.81.18.26.12.49.3.67.56l2.32 3.27c.18.25.31.48.4.7.09.21.14.42.14.61 0 .24-.07.48-.21.71-.13.23-.32.47-.56.71l-.76.79c-.11.11-.16.24-.16.4 0 .08.01.15.03.23.03.08.06.14.08.2.18.33.49.76.93 1.28.45.52.93 1.05 1.45 1.58.54.53 1.06 1.02 1.59 1.47.52.44.95.74 1.29.92.05.02.11.05.18.08.08.03.16.04.25.04.17 0 .3-.06.41-.17l.76-.75c.25-.25.49-.44.72-.56.23-.14.46-.21.71-.21.19 0 .39.04.61.13.22.09.45.22.7.39l3.31 2.35c.26.18.44.39.55.64.1.25.16.5.16.78Z","s":1}],"b":[{"d":"M11.05 14.95L9.2 16.8c-.39.39-1.01.39-1.41.01-.11-.11-.22-.21-.33-.32a28.414 28.414 0 01-2.79-3.27c-.82-1.14-1.48-2.28-1.96-3.41C2.24 8.67 2 7.58 2 6.54c0-.68.12-1.33.36-1.93.24-.61.62-1.17 1.15-1.67C4.15 2.31 4.85 2 5.59 2c.28 0 .56.06.81.18.26.12.49.3.67.56l2.32 3.27c.18.25.31.48.4.7.09.21.14.42.14.61 0 .24-.07.48-.21.71-.13.23-.32.47-.56.71l-.76.79c-.11.11-.16.24-.16.4 0 .08.01.15.03.23.03.08.06.14.08.2.18.33.49.76.93 1.28.45.52.93 1.05 1.45 1.58.1.1.21.2.31.3.4.39.41 1.03.01 1.43zM21.97 18.33a2.54 2.54 0 01-.25 1.09c-.17.36-.39.7-.68 1.02-.49.54-1.03.93-1.64 1.18-.01 0-.02.01-.03.01-.59.24-1.23.37-1.92.37-1.02 0-2.11-.24-3.26-.73s-2.3-1.15-3.44-1.98c-.39-.29-.78-.58-1.15-.89l3.27-3.27c.28.21.53.37.74.48.05.02.11.05.18.08.08.03.16.04.25.04.17 0 .3-.06.41-.17l.76-.75c.25-.25.49-.44.72-.56.23-.14.46-.21.71-.21.19 0 .39.04.61.13.22.09.45.22.7.39l3.31 2.35c.26.18.44.39.55.64.1.25.16.5.16.78z","s":0}]},"Messages2":{"l":[{"d":"m18.47 16.83.39 3.16c.1.83-.79 1.41-1.5.98l-4.19-2.49c-.46 0-.91-.03-1.35-.09A4.86 4.86 0 0 0 13 15.23c0-2.84-2.46-5.14-5.5-5.14-1.16 0-2.23.33-3.12.91-.03-.25-.04-.5-.04-.76C4.34 5.69 8.29 2 13.17 2S22 5.69 22 10.24c0 2.7-1.39 5.09-3.53 6.59Z","s":1},{"d":"M13 15.23c0 1.19-.44 2.29-1.18 3.16-.99 1.2-2.56 1.97-4.32 1.97l-2.61 1.55c-.44.27-1-.1-.94-.61l.25-1.97C2.86 18.4 2 16.91 2 15.23c0-1.76.94-3.31 2.38-4.23.89-.58 1.96-.91 3.12-.91 3.04 0 5.5 2.3 5.5 5.14Z","s":1}],"b":[{"d":"m18.47 16.83.39 3.16c.1.83-.79 1.41-1.5.98l-3.46-2.06c-.24-.14-.3-.44-.17-.68.5-.92.77-1.96.77-3 0-3.66-3.14-6.64-7-6.64-.79 0-1.56.12-2.28.36a.505.505 0 0 1-.64-.6C5.49 4.71 8.99 2 13.17 2 18.05 2 22 5.69 22 10.24c0 2.7-1.39 5.09-3.53 6.59Z","s":0},{"d":"M13 15.23c0 1.19-.44 2.29-1.18 3.16-.99 1.2-2.56 1.97-4.32 1.97l-2.61 1.55c-.44.27-1-.1-.94-.61l.25-1.97C2.86 18.4 2 16.91 2 15.23c0-1.76.94-3.31 2.38-4.23.89-.58 1.96-.91 3.12-.91 3.04 0 5.5 2.3 5.5 5.14Z","s":0}]},"Send2":{"l":[{"d":"m7.4 6.32 8.49-2.83c3.81-1.27 5.88.81 4.62 4.62l-2.83 8.49c-1.9 5.71-5.02 5.71-6.92 0l-.84-2.52-2.52-.84c-5.71-1.9-5.71-5.01 0-6.92ZM10.11 13.65l3.58-3.59","s":1}],"b":[{"d":"m16.14 2.96-9.03 3c-6.07 2.03-6.07 5.34 0 7.36l2.68.89.89 2.68c2.02 6.07 5.34 6.07 7.36 0l3.01-9.02c1.34-4.05-.86-6.26-4.91-4.91Zm.32 5.38-3.8 3.82c-.15.15-.34.22-.53.22s-.38-.07-.53-.22a.754.754 0 0 1 0-1.06l3.8-3.82c.29-.29.77-.29 1.06 0 .29.29.29.77 0 1.06Z","s":0}]},"Camera":{"l":[{"d":"M6.76 22h10.48c2.76 0 3.86-1.69 3.99-3.75l.52-8.26A3.753 3.753 0 0 0 18 6c-.61 0-1.17-.35-1.45-.89l-.72-1.45C15.37 2.75 14.17 2 13.15 2h-2.29c-1.03 0-2.23.75-2.69 1.66l-.72 1.45C7.17 5.65 6.61 6 6 6 3.83 6 2.11 7.83 2.25 9.99l.52 8.26C2.89 20.31 4 22 6.76 22ZM10.5 8h3","s":1},{"d":"M12 18c1.79 0 3.25-1.46 3.25-3.25S13.79 11.5 12 11.5s-3.25 1.46-3.25 3.25S10.21 18 12 18Z","s":1}],"b":[{"d":"M18 6c-.61 0-1.17-.35-1.45-.89l-.72-1.45C15.37 2.75 14.17 2 13.15 2h-2.29c-1.03 0-2.23.75-2.69 1.66l-.72 1.45C7.17 5.65 6.61 6 6 6 3.83 6 2.11 7.83 2.25 9.99l.52 8.26C2.89 20.31 4 22 6.76 22h10.48c2.76 0 3.86-1.69 3.99-3.75l.52-8.26A3.753 3.753 0 0 0 18 6Zm-7.5 1.25h3c.41 0 .75.34.75.75s-.34.75-.75.75h-3c-.41 0-.75-.34-.75-.75s.34-.75.75-.75ZM12 18.12c-1.86 0-3.38-1.51-3.38-3.38 0-1.87 1.51-3.38 3.38-3.38 1.87 0 3.38 1.51 3.38 3.38 0 1.87-1.52 3.38-3.38 3.38Z","s":0}]},"ArrowRight2":{"l":[{"d":"M8.91 19.92l6.52-6.52c.77-.77.77-2.03 0-2.8L8.91 4.08","s":1}],"b":[{"d":"M15.2 10.492l-1.97-1.97-3.21-3.21c-.68-.67-1.84-.19-1.84.77v11.84c0 .96 1.16 1.44 1.84.76l5.18-5.18c.83-.82.83-2.18 0-3.01z","s":0}]},"ArrowLeft2":{"l":[{"d":"M15 19.92L8.48 13.4c-.77-.77-.77-2.03 0-2.8L15 4.08","s":1}],"b":[{"d":"M13.978 5.319l-3.21 3.21-1.97 1.96a2.13 2.13 0 000 3.01l5.18 5.18c.68.68 1.84.19 1.84-.76V6.079c0-.96-1.16-1.44-1.84-.76z","s":0}]},"ArrowRight3":{"l":[{"d":"M6 12V9.33c0-3.31 2.35-4.67 5.22-3.01l2.31 1.34L15.84 9c2.87 1.66 2.87 4.37 0 6.03l-2.31 1.34-2.31 1.34C8.35 19.34 6 17.99 6 14.67V12z","s":1}],"b":[{"d":"M6 9.33v5.34c0 3.32 2.35 4.67 5.22 3.02l1.28-.74c.31-.18.5-.51.5-.87V7.92c0-.36-.19-.69-.5-.87l-1.28-.74C8.35 4.66 6 6.01 6 9.33zM14 8.792v6.43c0 .39.42.63.75.43l1.1-.64c2.87-1.65 2.87-4.37 0-6.02l-1.1-.64a.503.503 0 00-.75.44z","s":0}]},"TickCircle":{"l":[{"d":"M12 22c5.5 0 10-4.5 10-10S17.5 2 12 2 2 6.5 2 12s4.5 10 10 10Z","s":1},{"d":"m7.75 12 2.83 2.83 5.67-5.66","s":1}],"b":[{"d":"M12 2C6.49 2 2 6.49 2 12s4.49 10 10 10 10-4.49 10-10S17.51 2 12 2Zm4.78 7.7-5.67 5.67a.75.75 0 0 1-1.06 0l-2.83-2.83a.754.754 0 0 1 0-1.06c.29-.29.77-.29 1.06 0l2.3 2.3 5.14-5.14c.29-.29.77-.29 1.06 0 .29.29.29.76 0 1.06Z","s":0}]},"InfoCircle":{"l":[{"d":"M12 22c5.5 0 10-4.5 10-10S17.5 2 12 2 2 6.5 2 12s4.5 10 10 10ZM12 8v5","s":1},{"d":"M11.995 16h.009","s":1}],"b":[{"d":"M12 2C6.49 2 2 6.49 2 12s4.49 10 10 10 10-4.49 10-10S17.51 2 12 2Zm-.75 6c0-.41.34-.75.75-.75s.75.34.75.75v5c0 .41-.34.75-.75.75s-.75-.34-.75-.75V8Zm1.67 8.38c-.05.13-.12.23-.21.33-.1.09-.21.16-.33.21-.12.05-.25.08-.38.08s-.26-.03-.38-.08-.23-.12-.33-.21c-.09-.1-.16-.2-.21-.33A.995.995 0 0 1 11 16c0-.13.03-.26.08-.38s.12-.23.21-.33c.1-.09.21-.16.33-.21a1 1 0 0 1 .76 0c.12.05.23.12.33.21.09.1.16.21.21.33.05.12.08.25.08.38s-.03.26-.08.38Z","s":0}]},"Danger":{"l":[{"d":"M12 9v5M12 21.41H5.94c-3.47 0-4.92-2.48-3.24-5.51l3.12-5.62L8.76 5c1.78-3.21 4.7-3.21 6.48 0l2.94 5.29 3.12 5.62c1.68 3.03.22 5.51-3.24 5.51H12v-.01Z","s":1},{"d":"M11.995 17h.009","s":1}],"b":[{"d":"M21.76 15.92 15.36 4.4C14.5 2.85 13.31 2 12 2s-2.5.85-3.36 2.4l-6.4 11.52c-.81 1.47-.9 2.88-.25 3.99.65 1.11 1.93 1.72 3.61 1.72h12.8c1.68 0 2.96-.61 3.61-1.72.65-1.11.56-2.53-.25-3.99ZM11.25 9c0-.41.34-.75.75-.75s.75.34.75.75v5c0 .41-.34.75-.75.75s-.75-.34-.75-.75V9Zm1.46 8.71-.15.12c-.06.04-.12.07-.18.09-.06.03-.12.05-.19.06-.06.01-.13.02-.19.02s-.13-.01-.2-.02a.636.636 0 0 1-.18-.06.757.757 0 0 1-.18-.09l-.15-.12c-.18-.19-.29-.45-.29-.71 0-.26.11-.52.29-.71l.15-.12c.06-.04.12-.07.18-.09.06-.03.12-.05.18-.06.13-.03.27-.03.39 0 .07.01.13.03.19.06.06.02.12.05.18.09l.15.12c.18.19.29.45.29.71 0 .26-.11.52-.29.71Z","s":0}]},"Edit2":{"l":[{"d":"m13.26 3.6-8.21 8.69c-.31.33-.61.98-.67 1.43l-.37 3.24c-.13 1.17.71 1.97 1.87 1.77l3.22-.55c.45-.08 1.08-.41 1.39-.75l8.21-8.69c1.42-1.5 2.06-3.21-.15-5.3-2.2-2.07-3.87-1.34-5.29.16Z","s":1},{"d":"M11.89 5.05a6.126 6.126 0 0 0 5.45 5.15M3 22h18","s":1}],"b":[{"d":"M21 22H3c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h18c.41 0 .75.34.75.75s-.34.75-.75.75ZM19.02 3.482c-1.94-1.94-3.84-1.99-5.83 0l-1.21 1.21c-.1.1-.14.26-.1.4a8.129 8.129 0 0 0 5.53 5.53.4.4 0 0 0 .41-.1l1.2-1.21c.99-.98 1.47-1.93 1.47-2.89.01-.99-.47-1.95-1.47-2.94ZM15.61 11.53c-.29-.14-.57-.28-.84-.44a8.8 8.8 0 0 1-.64-.42c-.17-.11-.37-.27-.56-.43a1.22 1.22 0 0 1-.17-.15c-.33-.28-.7-.64-1.03-1.04-.03-.02-.08-.09-.15-.18-.1-.12-.27-.32-.42-.55a5.49 5.49 0 0 1-.39-.59c-.16-.27-.3-.54-.44-.82a6.88 6.88 0 0 1-.061-.135c-.148-.333-.583-.43-.84-.173L4.34 12.331c-.13.13-.25.38-.28.55l-.54 3.83c-.1.68.09 1.32.51 1.75.36.35.86.54 1.4.54.12 0 .24-.01.36-.03l3.84-.54c.18-.03.43-.15.55-.28l5.722-5.721c.26-.26.161-.705-.176-.85a26.852 26.852 0 0 1-.116-.05Z","s":0}]},"Buildings2":{"l":[{"d":"M6.7 18H4.15C2.72 18 2 17.28 2 15.85V4.15C2 2.72 2.72 2 4.15 2h4.3c1.43 0 2.15.72 2.15 2.15V6","s":1},{"d":"M17.37 8.42v11.16c0 1.61-.8 2.42-2.41 2.42H9.12c-1.61 0-2.42-.81-2.42-2.42V8.42C6.7 6.81 7.51 6 9.12 6h5.84c1.61 0 2.41.81 2.41 2.42Z","s":1},{"d":"M13.4 6V4.15c0-1.43.72-2.15 2.15-2.15h4.3C21.28 2 22 2.72 22 4.15v11.7c0 1.43-.72 2.15-2.15 2.15h-2.48M10 11h4M10 14h4M12 22v-3","s":1}],"b":[{"d":"M10.6 4.15c0 .19-.16.35-.35.35H9.12C6.96 4.5 5.2 6.26 5.2 8.42v9.23c0 .19-.16.35-.35.35h-.7C2.96 18 2 17.04 2 15.85V4.15C2 2.96 2.96 2 4.15 2h4.3c1.19 0 2.15.96 2.15 2.15ZM22 4.15v11.7c0 1.19-.96 2.15-2.15 2.15h-.63c-.19 0-.35-.16-.35-.35V8.42c0-2.16-1.76-3.92-3.92-3.92h-1.2c-.19 0-.35-.16-.35-.35 0-1.19.96-2.15 2.15-2.15h4.3C21.04 2 22 2.96 22 4.15Z","s":0},{"d":"M14.95 6H9.12C7.78 6 6.7 7.08 6.7 8.42v11.16C6.7 20.92 7.78 22 9.12 22h1.63c.28 0 .5-.22.5-.5V19c0-.41.34-.75.75-.75s.75.34.75.75v2.5c0 .28.22.5.5.5h1.71c1.33 0 2.41-1.08 2.41-2.41V8.42c0-1.34-1.08-2.42-2.42-2.42ZM14 14.75h-4c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h4c.41 0 .75.34.75.75s-.34.75-.75.75Zm0-3h-4c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h4c.41 0 .75.34.75.75s-.34.75-.75.75Z","s":0}]},"Map1":{"l":[{"d":"M2.29 7.78v9.73c0 1.9 1.35 2.68 2.99 1.74l2.35-1.34c.51-.29 1.36-.32 1.89-.05l5.25 2.63c.53.26 1.38.24 1.89-.05l4.33-2.48c.55-.32 1.01-1.1 1.01-1.74V6.49c0-1.9-1.35-2.68-2.99-1.74l-2.35 1.34c-.51.29-1.36.32-1.89.05L9.52 3.52c-.53-.26-1.38-.24-1.89.05L3.3 6.05c-.56.32-1.01 1.1-1.01 1.73ZM8.56 4v13M15.73 6.62V20","s":1}],"b":[{"d":"M7.63 3.57c.178-.098.37.052.37.257v13.556c0 .223-.153.412-.35.516a1.448 1.448 0 0 0-.02.01l-2.35 1.34c-1.64.94-2.99.16-2.99-1.74V7.78c0-.63.45-1.41 1.01-1.73l4.33-2.48ZM14.722 6.103A.5.5 0 0 1 15 6.55v13.153a.5.5 0 0 1-.717.45l-4.25-2.047a.5.5 0 0 1-.283-.45V4.447a.5.5 0 0 1 .722-.449l4.25 2.105ZM22 6.49v9.73c0 .63-.45 1.41-1.01 1.73l-3.491 2.001a.5.5 0 0 1-.749-.434V6.33a.5.5 0 0 1 .252-.434L19.01 4.75C20.65 3.81 22 4.59 22 6.49Z","s":0}]},"Gps":{"l":[{"d":"M12 19.5a7.5 7.5 0 1 0 0-15 7.5 7.5 0 0 0 0 15Z","s":1},{"d":"M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12 4V2M4 12H2M12 20v2M20 12h2","s":1}],"b":[{"d":"M22 11.25h-2.04c-.36-3.81-3.4-6.86-7.21-7.21V2c0-.41-.34-.75-.75-.75s-.75.34-.75.75v2.04c-3.81.36-6.86 3.4-7.21 7.21H2c-.41 0-.75.34-.75.75s.34.75.75.75h2.04c.36 3.81 3.4 6.86 7.21 7.21V22c0 .41.34.75.75.75s.75-.34.75-.75v-2.04c3.81-.36 6.86-3.4 7.21-7.21H22c.41 0 .75-.34.75-.75s-.34-.75-.75-.75Zm-10 3.87c-1.72 0-3.12-1.4-3.12-3.12 0-1.72 1.4-3.12 3.12-3.12 1.72 0 3.12 1.4 3.12 3.12 0 1.72-1.4 3.12-3.12 3.12Z","s":0}]},"Star1":{"l":[{"d":"m13.73 3.51 1.76 3.52c.24.49.88.96 1.42 1.05l3.19.53c2.04.34 2.52 1.82 1.05 3.28l-2.48 2.48c-.42.42-.65 1.23-.52 1.81l.71 3.07c.56 2.43-.73 3.37-2.88 2.1l-2.99-1.77c-.54-.32-1.43-.32-1.98 0l-2.99 1.77c-2.14 1.27-3.44.32-2.88-2.1l.71-3.07c.13-.58-.1-1.39-.52-1.81l-2.48-2.48c-1.46-1.46-.99-2.94 1.05-3.28l3.19-.53c.53-.09 1.17-.56 1.41-1.05l1.76-3.52c.96-1.91 2.52-1.91 3.47 0Z","s":1}],"b":[{"d":"M5.74 16c.11-.49-.09-1.19-.44-1.54l-2.43-2.43c-.76-.76-1.06-1.57-.84-2.27.23-.7.94-1.18 2-1.36l3.12-.52c.45-.08 1-.48 1.21-.89l1.72-3.45C10.58 2.55 11.26 2 12 2s1.42.55 1.92 1.54l1.72 3.45c.13.26.4.51.69.68L5.56 18.44c-.14.14-.38.01-.34-.19L5.74 16ZM18.7 14.462c-.36.36-.56 1.05-.44 1.54l.69 3.01c.29 1.25.11 2.19-.51 2.64a1.5 1.5 0 0 1-.9.27c-.51 0-1.11-.19-1.77-.58l-2.93-1.74c-.46-.27-1.22-.27-1.68 0l-2.93 1.74c-1.11.65-2.06.76-2.67.31-.23-.17-.4-.4-.51-.7l12.16-12.16c.46-.46 1.11-.67 1.74-.56l1.01.17c1.06.18 1.77.66 2 1.36.22.7-.08 1.51-.84 2.27l-2.42 2.43Z","s":0}]},"More":{"l":[{"d":"M5 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2ZM19 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2ZM12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2Z","s":1}],"b":[{"d":"M16.19 2H7.81C4.17 2 2 4.17 2 7.81v8.37C2 19.83 4.17 22 7.81 22h8.37c3.64 0 5.81-2.17 5.81-5.81V7.81C22 4.17 19.83 2 16.19 2ZM7 13.31c-.72 0-1.31-.59-1.31-1.31 0-.72.59-1.31 1.31-1.31.72 0 1.31.59 1.31 1.31 0 .72-.59 1.31-1.31 1.31Zm5 0c-.72 0-1.31-.59-1.31-1.31 0-.72.59-1.31 1.31-1.31.72 0 1.31.59 1.31 1.31 0 .72-.59 1.31-1.31 1.31Zm5 0c-.72 0-1.31-.59-1.31-1.31 0-.72.59-1.31 1.31-1.31.72 0 1.31.59 1.31 1.31 0 .72-.59 1.31-1.31 1.31Z","s":0}]},"Refresh2":{"l":[{"d":"M14.55 21.67C18.84 20.54 22 16.64 22 12c0-5.52-4.44-10-10-10C5.33 2 2 7.56 2 7.56m0 0V3m0 4.56H6.44","s":1},{"d":"M2 12c0 5.52 4.48 10 10 10","s":1}],"b":[{"d":"M14.55 22.42c-.33 0-.64-.22-.73-.56-.1-.4.13-.81.53-.92a9.256 9.256 0 006.89-8.95c0-5.1-4.15-9.25-9.25-9.25-4.33 0-7.17 2.53-8.5 4.06h2.94c.41 0 .75.34.75.75s-.32.76-.74.76H2.01c-.07 0-.14-.01-.21-.03a.899.899 0 01-.24-.12.659.659 0 01-.21-.23c-.05-.1-.09-.2-.1-.31V3c0-.41.34-.75.75-.75s.75.34.75.75v2.39C4.38 3.64 7.45 1.25 12 1.25c5.93 0 10.75 4.82 10.75 10.75 0 4.88-3.29 9.16-8.01 10.4-.06.01-.13.02-.19.02zM11.29 22.73c-.02 0-.05 0-.07-.01-1.07-.07-2.12-.31-3.12-.7a.751.751 0 01-.43-.97c.15-.38.59-.58.97-.43.86.34 1.77.54 2.69.61h.01c.4.02.7.36.7.76v.04a.76.76 0 01-.75.7zm-5.51-2.15c-.17 0-.33-.05-.47-.16-.84-.67-1.57-1.46-2.18-2.35a.73.73 0 01.19-1.04.76.76 0 011.04.19c.53.77 1.16 1.45 1.89 2.02.17.14.28.35.28.58 0 .17-.05.34-.16.48-.14.18-.36.28-.59.28zM2.44 15.7c-.33 0-.62-.21-.71-.52-.32-1.03-.48-2.1-.48-3.18 0-.41.34-.75.75-.75s.75.34.75.75c0 .93.14 1.85.41 2.73.02.07.03.15.03.23 0 .33-.21.61-.52.71-.08.02-.15.03-.23.03z","s":0},{"d":"M12 16a4 4 0 100-8 4 4 0 000 8z","s":0}]},"TruckFast":{"l":[{"d":"M12 14h1c1.1 0 2-.9 2-2V2H6c-1.5 0-2.81.83-3.49 2.05","s":1},{"d":"M2 17c0 1.66 1.34 3 3 3h1c0-1.1.9-2 2-2s2 .9 2 2h4c0-1.1.9-2 2-2s2 .9 2 2h1c1.66 0 3-1.34 3-3v-3h-3c-.55 0-1-.45-1-1v-3c0-.55.45-1 1-1h1.29l-1.71-2.99A2.016 2.016 0 0 0 16.84 5H15v7c0 1.1-.9 2-2 2h-1","s":1},{"d":"M8 22a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM16 22a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM22 12v2h-3c-.55 0-1-.45-1-1v-3c0-.55.45-1 1-1h1.29L22 12ZM2 8h6M2 11h4M2 14h2","s":1}],"b":[{"d":"M21.5 15.5c.28 0 .5.22.5.5v1c0 1.66-1.34 3-3 3 0-1.65-1.35-3-3-3s-3 1.35-3 3h-2c0-1.65-1.35-3-3-3s-3 1.35-3 3c-1.66 0-3-1.34-3-3v-2c0-.55.45-1 1-1h9.5a2.5 2.5 0 0 0 2.5-2.5V6c0-.55.45-1 1-1h.84c.72 0 1.38.39 1.74 1.01l.64 1.12c.09.16-.03.37-.22.37a2.5 2.5 0 0 0-2.5 2.5v3a2.5 2.5 0 0 0 2.5 2.5h2.5Z","s":0},{"d":"M8 22a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM16 22a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM22 12.53V14h-3c-.55 0-1-.45-1-1v-3c0-.55.45-1 1-1h1.29l1.45 2.54c.17.3.26.64.26.99ZM13.08 2H5.69a3.69 3.69 0 0 0-3.62 2.98h4.37c.38 0 .68.31.68.69 0 .38-.3.68-.68.68H2v1.38h2.6c.38 0 .69.31.69.69 0 .38-.31.68-.69.68H2v1.38h.77c.38 0 .69.31.69.69 0 .38-.31.68-.69.68H2v.23c0 .55.45 1 1 1h9.15c1.02 0 1.85-.83 1.85-1.85V2.92c0-.51-.41-.92-.92-.92ZM2.07 4.98H.94c-.38 0-.69.31-.69.69 0 .38.31.68.69.68H2v-.66c0-.24.03-.48.07-.71ZM1.85 7.73H.94c-.38 0-.69.31-.69.69 0 .38.31.68.69.68H2V7.73h-.15ZM1.85 10.48H.94c-.38 0-.69.31-.69.69 0 .38.31.68.69.68H2v-1.37h-.15Z","s":0}]},"Profile":{"l":[{"d":"M12.16 10.87c-.1-.01-.22-.01-.33 0a4.42 4.42 0 0 1-4.27-4.43C7.56 3.99 9.54 2 12 2a4.435 4.435 0 0 1 .16 8.87ZM7.16 14.56c-2.42 1.62-2.42 4.26 0 5.87 2.75 1.84 7.26 1.84 10.01 0 2.42-1.62 2.42-4.26 0-5.87-2.74-1.83-7.25-1.83-10.01 0Z","s":1}],"b":[{"d":"M12 2C9.38 2 7.25 4.13 7.25 6.75c0 2.57 2.01 4.65 4.63 4.74.08-.01.16-.01.22 0h.07a4.738 4.738 0 0 0 4.58-4.74C16.75 4.13 14.62 2 12 2ZM17.08 14.149c-2.79-1.86-7.34-1.86-10.15 0-1.27.85-1.97 2-1.97 3.23s.7 2.37 1.96 3.21c1.4.94 3.24 1.41 5.08 1.41 1.84 0 3.68-.47 5.08-1.41 1.26-.85 1.96-1.99 1.96-3.23-.01-1.23-.7-2.37-1.96-3.21Z","s":0}]},"Flash":{"l":[{"d":"M6.09 13.28h3.09v7.2c0 1.68.91 2.02 2.02.76l7.57-8.6c.93-1.05.54-1.92-.87-1.92h-3.09v-7.2c0-1.68-.91-2.02-2.02-.76l-7.57 8.6c-.92 1.06-.53 1.92.87 1.92Z","s":1}],"b":[{"d":"M17.91 10.72h-3.09v-7.2c0-1.68-.91-2.02-2.02-.76l-.8.91-6.77 7.7c-.93 1.05-.54 1.91.86 1.91h3.09v7.2c0 1.68.91 2.02 2.02.76l.8-.91 6.77-7.7c.93-1.05.54-1.91-.86-1.91Z","s":0}]},"Notification":{"l":[{"d":"M12.02 2.91c-3.31 0-6 2.69-6 6v2.89c0 .61-.26 1.54-.57 2.06L4.3 15.77c-.71 1.18-.22 2.49 1.08 2.93 4.31 1.44 8.96 1.44 13.27 0 1.21-.4 1.74-1.83 1.08-2.93l-1.15-1.91c-.3-.52-.56-1.45-.56-2.06V8.91c0-3.3-2.7-6-6-6Z","s":1},{"d":"M13.87 3.2a6.754 6.754 0 0 0-3.7 0c.29-.74 1.01-1.26 1.85-1.26.84 0 1.56.52 1.85 1.26Z","s":1},{"d":"M15.02 19.06c0 1.65-1.35 3-3 3-.82 0-1.58-.34-2.12-.88a3.01 3.01 0 0 1-.88-2.12","s":1}],"b":[{"d":"m19.34 14.49-1-1.66c-.21-.37-.4-1.07-.4-1.48V8.82a5.91 5.91 0 0 0-3.37-5.33A2.926 2.926 0 0 0 11.99 2c-1.09 0-2.07.59-2.59 1.52-1.95.97-3.3 2.98-3.3 5.3v2.53c0 .41-.19 1.11-.4 1.47l-1.01 1.67c-.4.67-.49 1.41-.24 2.09.24.67.81 1.19 1.55 1.44 1.94.66 3.98.98 6.02.98 2.04 0 4.08-.32 6.02-.97.7-.23 1.24-.76 1.5-1.45s.19-1.45-.2-2.09ZM14.83 20.01A3.014 3.014 0 0 1 12 22c-.79 0-1.57-.32-2.12-.89-.32-.3-.56-.7-.7-1.11.13.02.26.03.4.05.23.03.47.06.71.08.57.05 1.15.08 1.73.08.57 0 1.14-.03 1.7-.08.21-.02.42-.03.62-.06l.49-.06Z","s":0}]},"CloseCircle":{"l":[{"d":"M12 22c5.5 0 10-4.5 10-10S17.5 2 12 2 2 6.5 2 12s4.5 10 10 10ZM9.17 14.83l5.66-5.66M14.83 14.83 9.17 9.17","s":1}],"b":[{"d":"M12 2C6.49 2 2 6.49 2 12s4.49 10 10 10 10-4.49 10-10S17.51 2 12 2Zm3.36 12.3c.29.29.29.77 0 1.06-.15.15-.34.22-.53.22s-.38-.07-.53-.22l-2.3-2.3-2.3 2.3c-.15.15-.34.22-.53.22s-.38-.07-.53-.22a.754.754 0 0 1 0-1.06l2.3-2.3-2.3-2.3a.754.754 0 0 1 0-1.06c.29-.29.77-.29 1.06 0l2.3 2.3 2.3-2.3c.29-.29.77-.29 1.06 0 .29.29.29.77 0 1.06l-2.3 2.3 2.3 2.3Z","s":0}]},"ArrowDown2":{"l":[{"d":"M19.92 8.95l-6.52 6.52c-.77.77-2.03.77-2.8 0L4.08 8.95","s":1}],"b":[{"d":"M17.919 8.18H6.079c-.96 0-1.44 1.16-.76 1.84l5.18 5.18c.83.83 2.18.83 3.01 0l1.97-1.97 3.21-3.21c.67-.68.19-1.84-.77-1.84z","s":0}]},"Sms":{"l":[{"d":"M17 20.5H7c-3 0-5-1.5-5-5v-7c0-3.5 2-5 5-5h10c3 0 5 1.5 5 5v7c0 3.5-2 5-5 5Z","s":1},{"d":"m17 9-3.13 2.5c-1.03.82-2.72.82-3.75 0L7 9","s":1}],"b":[{"d":"M17 3.5H7c-3 0-5 1.5-5 5v7c0 3.5 2 5 5 5h10c3 0 5-1.5 5-5v-7c0-3.5-2-5-5-5Zm.47 6.09-3.13 2.5c-.66.53-1.5.79-2.34.79-.84 0-1.69-.26-2.34-.79l-3.13-2.5a.77.77 0 0 1-.12-1.06c.26-.32.73-.38 1.05-.12l3.13 2.5c.76.61 2.05.61 2.81 0l3.13-2.5c.32-.26.8-.21 1.05.12.26.32.21.8-.11 1.06Z","s":0}]},"Copy":{"l":[{"d":"M16 12.9v4.2c0 3.5-1.4 4.9-4.9 4.9H6.9C3.4 22 2 20.6 2 17.1v-4.2C2 9.4 3.4 8 6.9 8h4.2c3.5 0 4.9 1.4 4.9 4.9z","s":1},{"d":"M22 6.9v4.2c0 3.5-1.4 4.9-4.9 4.9H16v-3.1C16 9.4 14.6 8 11.1 8H8V6.9C8 3.4 9.4 2 12.9 2h4.2C20.6 2 22 3.4 22 6.9z","s":1}],"b":[{"d":"M16 12.9v4.2c0 3.5-1.4 4.9-4.9 4.9H6.9C3.4 22 2 20.6 2 17.1v-4.2C2 9.4 3.4 8 6.9 8h4.2c3.5 0 4.9 1.4 4.9 4.9Z","s":0},{"d":"M17.1 2h-4.2C9.817 2 8.37 3.094 8.07 5.739c-.064.553.395 1.011.952 1.011H11.1c4.2 0 6.15 1.95 6.15 6.15v2.078c0 .557.457 1.015 1.01.952C20.907 15.63 22 14.183 22 11.1V6.9C22 3.4 20.6 2 17.1 2Z","s":0}]},"MessageQuestion":{"l":[{"d":"M17 18.43h-4l-4.45 2.96A.997.997 0 0 1 7 20.56v-2.13c-3 0-5-2-5-5v-6c0-3 2-5 5-5h10c3 0 5 2 5 5v6c0 3-2 5-5 5Z","s":1},{"d":"M12 11.36v-.21c0-.68.42-1.04.84-1.33.41-.28.82-.64.82-1.3 0-.92-.74-1.66-1.66-1.66-.92 0-1.66.74-1.66 1.66M11.995 13.75h.01","s":1}],"b":[{"d":"M17 2.43H7c-3 0-5 2-5 5v6c0 3 2 5 5 5v2.13c0 .8.89 1.28 1.55.83L13 18.43h4c3 0 5-2 5-5v-6c0-3-2-5-5-5ZM12 14.6a.749.749 0 1 1 0-1.5.749.749 0 1 1 0 1.5Zm1.26-4.15c-.39.26-.51.43-.51.71v.21c0 .41-.34.75-.75.75s-.75-.34-.75-.75v-.21c0-1.16.85-1.73 1.17-1.95.37-.25.49-.42.49-.68 0-.5-.41-.91-.91-.91s-.91.41-.91.91c0 .41-.34.75-.75.75s-.75-.34-.75-.75c0-1.33 1.08-2.41 2.41-2.41s2.41 1.08 2.41 2.41c0 1.14-.84 1.71-1.15 1.92Z","s":0}]},"Timer1":{"l":[{"d":"M20.75 13.25c0 4.83-3.92 8.75-8.75 8.75s-8.75-3.92-8.75-8.75S7.17 4.5 12 4.5s8.75 3.92 8.75 8.75ZM12 8v5","s":1},{"d":"M9 2h6","s":1}],"b":[{"d":"M12 4.648c-4.78 0-8.67 3.89-8.67 8.67 0 4.78 3.89 8.68 8.67 8.68 4.78 0 8.67-3.89 8.67-8.67 0-4.78-3.89-8.68-8.67-8.68Zm.75 8.35c0 .41-.34.75-.75.75s-.75-.34-.75-.75v-5c0-.41.34-.75.75-.75s.75.34.75.75v5ZM14.89 3.45H9.11c-.4 0-.72-.32-.72-.72 0-.4.32-.73.72-.73h5.78c.4 0 .72.32.72.72 0 .4-.32.73-.72.73Z","s":0}]},"Whatsapp":{"l":[{"d":"M6.9 20.6c1.5.9 3.3 1.4 5.1 1.4 5.5 0 10-4.5 10-10S17.5 2 12 2 2 6.5 2 12c0 1.8.5 3.5 1.3 5l-.86 3.306a1 1 0 0 0 1.243 1.213L6.9 20.6Z","s":1},{"d":"M16.5 14.848c0 .162-.036.329-.113.491a1.856 1.856 0 0 1-.306.459c-.221.243-.464.418-.74.531-.27.113-.563.171-.878.171-.46 0-.951-.108-1.47-.328a7.922 7.922 0 0 1-1.55-.892 12.95 12.95 0 0 1-1.478-1.26 12.79 12.79 0 0 1-1.257-1.471 8.02 8.02 0 0 1-.884-1.534C7.608 10.5 7.5 10.01 7.5 9.543c0-.306.054-.598.162-.868.108-.275.28-.527.519-.752.288-.284.603-.423.937-.423.126 0 .252.027.365.081.117.054.22.135.302.252l1.046 1.472c.08.112.14.216.18.315.04.094.063.189.063.274a.61.61 0 0 1-.095.32 1.53 1.53 0 0 1-.252.319l-.343.356a.24.24 0 0 0-.072.18c0 .035.005.067.014.103.013.036.027.063.036.09.08.149.22.342.419.576.203.234.419.473.653.711.244.239.478.459.717.662.234.197.428.332.581.413l.082.037a.311.311 0 0 0 .112.018.248.248 0 0 0 .185-.077l.342-.338c.113-.112.221-.197.325-.252a.6.6 0 0 1 .32-.094.72.72 0 0 1 .275.059c.099.04.203.098.315.175l1.492 1.058a.683.683 0 0 1 .248.287.921.921 0 0 1 .072.351Z","s":1}],"b":[{"d":"M21.98 11.41c-.34-5.8-5.61-10.27-11.68-9.27-4.18.69-7.53 4.08-8.18 8.26-.38 2.42.12 4.71 1.21 6.6l-.89 3.31c-.2.75.49 1.43 1.23 1.22l3.26-.9c1.48.87 3.21 1.37 5.06 1.37 5.64 0 10.32-4.97 9.99-10.59zm-5.1 4.31a2.279 2.279 0 01-1.16 1.1c-.3.13-.63.19-.98.19-.51 0-1.06-.12-1.63-.37a9.16 9.16 0 01-1.72-.99c-.58-.42-1.12-.89-1.64-1.4-.52-.52-.98-1.07-1.4-1.64-.41-.57-.74-1.14-.98-1.71-.24-.57-.36-1.12-.36-1.64 0-.34.06-.67.18-.97.12-.31.31-.59.58-.84.32-.32.67-.47 1.04-.47.14 0 .28.03.41.09.13.06.25.15.34.28l1.16 1.64c.09.13.16.24.2.35.05.11.07.21.07.31 0 .12-.04.24-.11.36s-.16.24-.28.36l-.38.4c-.06.06-.08.12-.08.2 0 .04.01.08.02.12.02.04.03.07.04.1.09.17.25.38.47.64a13.482 13.482 0 001.53 1.53c.26.22.48.37.65.46.03.01.06.03.09.04.04.02.08.02.13.02.09 0 .15-.03.21-.09l.38-.38c.13-.13.25-.22.36-.28.12-.07.23-.11.36-.11.1 0 .2.02.31.07.11.05.23.11.35.2l1.66 1.18c.13.09.22.2.28.32.05.13.08.25.08.39-.06.17-.1.36-.18.54z","s":0}]},"Shop":{"l":[{"d":"M3.01 11.22v4.49C3.01 20.2 4.81 22 9.3 22h5.39c4.49 0 6.29-1.8 6.29-6.29v-4.49","s":1},{"d":"M12 12c1.83 0 3.18-1.49 3-3.32L14.34 2H9.67L9 8.68C8.82 10.51 10.17 12 12 12Z","s":1},{"d":"M18.31 12c2.02 0 3.5-1.64 3.3-3.65l-.28-2.75C20.97 3 19.97 2 17.35 2H14.3l.7 7.01c.17 1.65 1.66 2.99 3.31 2.99ZM5.64 12c1.65 0 3.14-1.34 3.3-2.99l.22-2.21.48-4.8H6.59C3.97 2 2.97 3 2.61 5.6l-.27 2.75C2.14 10.36 3.62 12 5.64 12ZM12 17c-1.67 0-2.5.83-2.5 2.5V22h5v-2.5c0-1.67-.83-2.5-2.5-2.5Z","s":1}],"b":[{"d":"m22.36 8.27-.29-2.77c-.42-3.02-1.79-4.25-4.72-4.25H6.59c-2.94 0-4.3 1.23-4.73 4.28l-.27 2.75c-.1 1.07.19 2.11.82 2.92.76.99 1.93 1.55 3.23 1.55 1.26 0 2.47-.63 3.23-1.64A3.754 3.754 0 0 0 12 12.75c1.29 0 2.42-.6 3.11-1.6.77.99 1.96 1.6 3.2 1.6 1.33 0 2.53-.59 3.28-1.63.6-.8.87-1.81.77-2.85ZM11.35 16.66a2.495 2.495 0 0 0-2.23 2.49v2.74c0 .27.22.49.49.49h4.77c.27 0 .49-.22.49-.49V19.5c.01-2.09-1.22-3.08-3.52-2.84Z","s":0},{"d":"M21.37 14.398v2.98c0 2.76-2.24 5-5 5a.49.49 0 0 1-.49-.49v-2.39c0-1.28-.39-2.28-1.15-2.96-.67-.61-1.58-.91-2.71-.91-.25 0-.5.01-.77.04a3.485 3.485 0 0 0-3.13 3.48v2.74c0 .27-.22.49-.49.49-2.76 0-5-2.24-5-5v-2.96a1 1 0 0 1 1.34-.94c.27.09.54.16.82.2.12.02.25.04.37.04.16.02.32.03.48.03 1.16 0 2.3-.43 3.2-1.17.86.74 1.98 1.17 3.16 1.17 1.19 0 2.29-.41 3.15-1.15.9.73 2.02 1.15 3.16 1.15.18 0 .36-.01.53-.03a4.818 4.818 0 0 0 1.21-.26.997.997 0 0 1 1.32.94Z","s":0}]},"Bag2":{"l":[{"d":"M7.5 7.67V6.7c0-2.25 1.81-4.46 4.06-4.67a4.5 4.5 0 0 1 4.94 4.48v1.38M9 22h6c4.02 0 4.74-1.61 4.95-3.57l.75-6C20.97 9.99 20.27 8 16 8H8c-4.27 0-4.97 1.99-4.7 4.43l.75 6C4.26 20.39 4.98 22 9 22Z","s":1},{"d":"M15.495 12h.01M8.495 12h.008","s":1}],"b":[{"d":"M19.96 8.958c-.67-.74-1.68-1.17-3.08-1.32v-.76c0-1.37-.58-2.69-1.6-3.61a4.847 4.847 0 0 0-3.76-1.25c-2.39.23-4.4 2.54-4.4 5.04v.58c-1.4.15-2.41.58-3.08 1.32-.97 1.08-.94 2.52-.83 3.52l.7 5.57c.21 1.95 1 3.95 5.3 3.95h5.58c4.3 0 5.09-2 5.3-3.94l.7-5.59c.11-.99.13-2.43-.83-3.51Zm-8.3-5.55a3.482 3.482 0 0 1 3.83 3.47v.7H8.51v-.52c0-1.78 1.47-3.49 3.15-3.65Zm-3.24 9.74h-.01c-.55 0-1-.45-1-1s.45-1 1-1c.56 0 1.01.45 1.01 1s-.45 1-1 1Zm7 0h-.01c-.55 0-1-.45-1-1s.45-1 1-1c.56 0 1.01.45 1.01 1s-.45 1-1 1Z","s":0}]},"Personalcard":{"l":[{"d":"M17 21H7c-4 0-5-1-5-5V8c0-4 1-5 5-5h10c4 0 5 1 5 5v8c0 4-1 5-5 5ZM14 8h5M15 12h4M17 16h2","s":1},{"d":"M8.5 11.29a1.81 1.81 0 1 0 0-3.62 1.81 1.81 0 0 0 0 3.62ZM12 16.33a3.02 3.02 0 0 0-2.74-2.72 7.72 7.72 0 0 0-1.52 0A3.03 3.03 0 0 0 5 16.33","s":1}],"b":[{"d":"M18 3H6C3.79 3 2 4.78 2 6.97v10.06C2 19.22 3.79 21 6 21h12c2.21 0 4-1.78 4-3.97V6.97C22 4.78 20.21 3 18 3ZM8.5 7.17c1.27 0 2.31 1.04 2.31 2.31s-1.04 2.31-2.31 2.31-2.31-1.04-2.31-2.31S7.23 7.17 8.5 7.17Zm3.87 9.49c-.09.1-.23.16-.37.16H5c-.14 0-.28-.06-.37-.16a.52.52 0 0 1-.13-.38 3.548 3.548 0 0 1 3.19-3.17 8.66 8.66 0 0 1 1.61 0c1.68.16 3.03 1.49 3.19 3.17.02.14-.03.28-.12.38Zm6.63.09h-2c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h2c.41 0 .75.34.75.75s-.34.75-.75.75Zm0-4h-4c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h4c.41 0 .75.34.75.75s-.34.75-.75.75Zm0-4h-5c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h5c.41 0 .75.34.75.75s-.34.75-.75.75Z","s":0}]},"Lock1":{"l":[{"d":"M6 10V8c0-3.31 1-6 6-6s6 2.69 6 6v2M12 18.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z","s":1},{"d":"M17 22H7c-4 0-5-1-5-5v-2c0-4 1-5 5-5h10c4 0 5 1 5 5v2c0 4-1 5-5 5Z","s":1}],"b":[{"d":"M18.75 8v2.1c-.44-.06-.94-.09-1.5-.1V8c0-3.15-.89-5.25-5.25-5.25S6.75 4.85 6.75 8v2c-.56.01-1.06.04-1.5.1V8c0-2.9.7-6.75 6.75-6.75S18.75 5.1 18.75 8Z","s":0},{"d":"M18.75 10.1c-.44-.06-.94-.09-1.5-.1H6.75c-.56.01-1.06.04-1.5.1C2.7 10.41 2 11.66 2 15v2c0 4 1 5 5 5h10c4 0 5-1 5-5v-2c0-3.34-.7-4.59-3.25-4.9ZM8.71 16.71c-.19.18-.45.29-.71.29-.13 0-.26-.03-.38-.08-.13-.05-.23-.12-.33-.21-.18-.19-.29-.45-.29-.71 0-.13.03-.26.08-.38s.12-.23.21-.33c.1-.09.2-.16.33-.21.37-.16.81-.07 1.09.21.09.1.16.21.21.33.05.12.08.25.08.38 0 .26-.11.52-.29.71Zm4.21-.33c-.05.12-.12.23-.21.33-.19.18-.45.29-.71.29-.27 0-.52-.11-.71-.29-.09-.1-.16-.21-.21-.33A.995.995 0 0 1 11 16c0-.27.11-.52.29-.71.37-.37 1.04-.37 1.42 0 .18.19.29.44.29.71 0 .13-.03.26-.08.38Zm3.79.33c-.19.18-.45.29-.71.29-.26 0-.52-.11-.71-.29-.18-.19-.29-.44-.29-.71 0-.27.11-.52.29-.71.38-.37 1.05-.37 1.42 0 .04.05.08.1.12.16.04.05.07.11.09.17.03.06.05.12.06.18.01.07.02.14.02.2 0 .26-.11.52-.29.71Z","s":0}]},"CardEdit":{"l":[{"d":"M1.996 8.5h9.5M5.996 16.5h2M10.496 16.5h4","s":1},{"d":"M21.996 12.03v4.08c0 3.51-.89 4.39-4.44 4.39H6.436c-3.55 0-4.44-.88-4.44-4.39V7.89c0-3.51.89-4.39 4.44-4.39h8.06","s":1},{"d":"m19.076 4.13-3.71 3.71c-.14.14-.28.42-.31.62l-.2 1.42c-.07.51.29.87.8.8l1.42-.2c.2-.03.48-.17.62-.31l3.71-3.71c.64-.64.94-1.38 0-2.32-.95-.95-1.69-.65-2.33-.01Z","s":1},{"d":"M18.546 4.66c.32 1.13 1.2 2.01 2.32 2.32","s":1}],"b":[{"d":"M13.5 4.608v2.93c0 .67-.54 1.21-1.21 1.21H3.21c-.68 0-1.21-.56-1.21-1.23.01-1.13.46-2.16 1.21-2.91S5 3.398 6.14 3.398h6.15c.67 0 1.21.54 1.21 1.21ZM2 11.46v5c0 2.29 1.85 4.14 4.14 4.14h11.71c2.29 0 4.15-1.86 4.15-4.15v-4.99c0-.67-.54-1.21-1.21-1.21H3.21c-.67 0-1.21.54-1.21 1.21Zm6 5.79H6c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h2c.41 0 .75.34.75.75s-.34.75-.75.75Zm6.5 0h-4c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h4c.41 0 .75.34.75.75s-.34.75-.75.75ZM19.97 1.75h-2.94c-1.27 0-2.03.76-2.03 2.03v2.94c0 1.27.76 2.03 2.03 2.03h2.94c1.27 0 2.03-.76 2.03-2.03V3.78c0-1.27-.76-2.03-2.03-2.03Zm-1.96 5.57c-.03.03-.1.07-.15.07l-1.04.15c-.03.01-.07.01-.1.01-.15 0-.28-.05-.37-.15a.528.528 0 0 1-.14-.47l.15-1.04c.01-.05.04-.12.07-.15l1.7-1.7c.03.07.06.15.09.23.04.08.08.15.12.22.03.06.07.12.11.16.04.06.08.12.11.15a1.848 1.848 0 0 0 .32.33c.02.02.04.04.05.04.05.04.11.09.15.12.06.04.11.08.17.11.07.04.15.08.23.12.08.04.16.07.23.09l-1.7 1.71Zm2.39-2.39-.33.33c-.01.02-.04.03-.07.03h-.03c-.72-.21-1.29-.78-1.5-1.5-.01-.04 0-.08.03-.11l.33-.33c.54-.54 1.05-.53 1.58 0 .27.27.4.53.4.79-.01.26-.14.52-.41.79Z","s":0}]},"Radar":{"l":[{"d":"M6 4c1.67-1.25 3.75-2 6-2 5.52 0 10 4.48 10 10s-4.48 10-10 10S2 17.52 2 12c0-1.81.48-3.51 1.33-4.98L12 12","s":1}],"b":[{"d":"M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2Zm0 17.75c-4.27 0-7.75-3.48-7.75-7.75 0-1.36.36-2.69 1.03-3.86a.75.75 0 0 1 1.02-.28l6.07 3.49c.36.21.48.66.28 1.02-.21.36-.66.48-1.02.28L6.24 9.56c-.32.77-.49 1.6-.49 2.44 0 3.45 2.8 6.25 6.25 6.25s6.25-2.8 6.25-6.25a6.252 6.252 0 0 0-10-5 .75.75 0 0 1-.9-1.2A7.715 7.715 0 0 1 12 4.25c4.27 0 7.75 3.48 7.75 7.75s-3.48 7.75-7.75 7.75Z","s":0}]},"Global":{"l":[{"d":"M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10Z","s":1},{"d":"M8 3h1a28.424 28.424 0 0 0 0 18H8M15 3a28.424 28.424 0 0 1 0 18","s":1},{"d":"M3 16v-1a28.424 28.424 0 0 0 18 0v1M3 9a28.424 28.424 0 0 1 18 0","s":1}],"b":[{"d":"M7.649 20.91c-.03 0-.07.02-.1.02-1.94-.96-3.52-2.55-4.49-4.49 0-.03.02-.07.02-.1 1.22.36 2.48.63 3.73.84.22 1.26.48 2.51.84 3.73ZM20.94 16.45c-.99 1.99-2.64 3.6-4.65 4.57.38-1.27.7-2.55.91-3.84 1.26-.21 2.5-.48 3.72-.84-.01.04.02.08.02.11ZM21.02 7.71c-1.26-.38-2.53-.69-3.82-.91-.21-1.29-.52-2.57-.91-3.82 2.07.99 3.74 2.66 4.73 4.73ZM7.65 3.089c-.36 1.22-.62 2.46-.83 3.72-1.29.2-2.57.52-3.84.9.97-2.01 2.58-3.66 4.57-4.65.03 0 .07.03.1.03ZM15.492 6.59c-2.32-.26-4.66-.26-6.98 0 .25-1.37.57-2.74 1.02-4.06.02-.08.01-.14.02-.22.79-.19 1.6-.31 2.45-.31.84 0 1.66.12 2.44.31.01.08.01.14.03.22.45 1.33.77 2.69 1.02 4.06ZM6.59 15.492c-1.38-.25-2.74-.57-4.06-1.02-.08-.02-.14-.01-.22-.02-.19-.79-.31-1.6-.31-2.45 0-.84.12-1.66.31-2.44.08-.01.14-.01.22-.03 1.33-.44 2.68-.77 4.06-1.02-.25 2.32-.25 4.66 0 6.98ZM22 12.002c0 .85-.12 1.66-.31 2.45-.08.01-.14 0-.22.02-1.33.44-2.69.77-4.06 1.02.26-2.32.26-4.66 0-6.98 1.37.25 2.74.57 4.06 1.02.08.02.14.03.22.03.19.79.31 1.6.31 2.44ZM15.492 17.41c-.25 1.38-.57 2.74-1.02 4.06-.02.08-.02.14-.03.22-.78.19-1.6.31-2.44.31-.85 0-1.66-.12-2.45-.31-.01-.08 0-.14-.02-.22a29.77 29.77 0 0 1-1.02-4.06c1.16.13 2.32.22 3.49.22 1.17 0 2.34-.09 3.49-.22ZM15.763 15.763a30.035 30.035 0 0 1-7.526 0 30.039 30.039 0 0 1 0-7.526 30.039 30.039 0 0 1 7.526 0 30.035 30.035 0 0 1 0 7.526Z","s":0}]},"Add":{"l":[{"d":"M6 12h12M12 18V6","s":1}],"b":[{"d":"M16.19 2H7.81C4.17 2 2 4.17 2 7.81v8.37C2 19.83 4.17 22 7.81 22h8.37c3.64 0 5.81-2.17 5.81-5.81V7.81C22 4.17 19.83 2 16.19 2ZM18 12.75h-5.25V18c0 .41-.34.75-.75.75s-.75-.34-.75-.75v-5.25H6c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h5.25V6c0-.41.34-.75.75-.75s.75.34.75.75v5.25H18c.41 0 .75.34.75.75s-.34.75-.75.75Z","s":0}]},"Minus":{"l":[{"d":"M6 12h12","s":1}],"b":[{"d":"M16.19 2H7.81C4.17 2 2 4.17 2 7.81v8.37C2 19.83 4.17 22 7.81 22h8.37c3.64 0 5.81-2.17 5.81-5.81V7.81C22 4.17 19.83 2 16.19 2ZM18 12.75H6c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h12c.41 0 .75.34.75.75s-.34.75-.75.75Z","s":0}]},"Warning2":{"l":[{"d":"M12 7.75V13M21.08 8.58v6.84c0 1.12-.6 2.16-1.57 2.73l-5.94 3.43c-.97.56-2.17.56-3.15 0l-5.94-3.43a3.15 3.15 0 0 1-1.57-2.73V8.58c0-1.12.6-2.16 1.57-2.73l5.94-3.43c.97-.56 2.17-.56 3.15 0l5.94 3.43c.97.57 1.57 1.6 1.57 2.73Z","s":1},{"d":"M12 16.2v.1","s":1}],"b":[{"d":"m19.51 5.85-5.94-3.43c-.97-.56-2.17-.56-3.15 0L4.49 5.85a3.15 3.15 0 0 0-1.57 2.73v6.84c0 1.12.6 2.16 1.57 2.73l5.94 3.43c.97.56 2.17.56 3.15 0l5.94-3.43a3.15 3.15 0 0 0 1.57-2.73V8.58a3.192 3.192 0 0 0-1.58-2.73Zm-8.26 1.9c0-.41.34-.75.75-.75s.75.34.75.75V13c0 .41-.34.75-.75.75s-.75-.34-.75-.75V7.75Zm1.67 8.88c-.05.12-.12.23-.21.33a.99.99 0 0 1-1.09.21c-.13-.05-.23-.12-.33-.21-.09-.1-.16-.21-.22-.33a.986.986 0 0 1-.07-.38c0-.26.1-.52.29-.71.1-.09.2-.16.33-.21.37-.16.81-.07 1.09.21.09.1.16.2.21.33.05.12.08.25.08.38s-.03.26-.08.38Z","s":0}]},"EmojiHappy":{"l":[{"d":"M9 22h6c5 0 7-2 7-7V9c0-5-2-7-7-7H9C4 2 2 4 2 9v6c0 5 2 7 7 7Z","s":1},{"d":"M15.5 9.75a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3ZM8.5 9.75a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3ZM8.4 13.3h7.2c.5 0 .9.4.9.9 0 2.49-2.01 4.5-4.5 4.5s-4.5-2.01-4.5-4.5c0-.5.4-.9.9-.9Z","s":1}],"b":[{"d":"M16.19 2H7.81C4.17 2 2 4.17 2 7.81v8.37C2 19.83 4.17 22 7.81 22h8.37c3.64 0 5.81-2.17 5.81-5.81V7.81C22 4.17 19.83 2 16.19 2ZM8.5 6.38c1.03 0 1.88.84 1.88 1.88s-.84 1.88-1.88 1.88-1.88-.86-1.88-1.89c0-1.03.85-1.87 1.88-1.87Zm3.5 12.7c-2.69 0-4.88-2.19-4.88-4.88 0-.7.57-1.28 1.27-1.28h7.2c.7 0 1.27.57 1.27 1.28.02 2.69-2.17 4.88-4.86 4.88Zm3.5-8.96c-1.03 0-1.88-.84-1.88-1.88s.84-1.88 1.88-1.88 1.88.84 1.88 1.88-.85 1.88-1.88 1.88Z","s":0}]},"Like1":{"l":[{"d":"m7.48 18.35 3.1 2.4c.4.4 1.3.6 1.9.6h3.8c1.2 0 2.5-.9 2.8-2.1l2.4-7.3c.5-1.4-.4-2.6-1.9-2.6h-4c-.6 0-1.1-.5-1-1.2l.5-3.2c.2-.9-.4-1.9-1.3-2.2-.8-.3-1.8.1-2.2.7l-4.1 6.1","s":1},{"d":"M2.38 18.35v-9.8c0-1.4.6-1.9 2-1.9h1c1.4 0 2 .5 2 1.9v9.8c0 1.4-.6 1.9-2 1.9h-1c-1.4 0-2-.5-2-1.9Z","s":1}],"b":[{"d":"M8.39 18.49V8.33c0-.4.12-.79.34-1.12l2.73-4.06c.43-.65 1.5-1.11 2.41-.77.98.33 1.63 1.43 1.42 2.41l-.52 3.27c-.04.3.04.57.21.78.17.19.42.31.69.31h4.11c.79 0 1.47.32 1.87.88.38.54.45 1.24.2 1.95l-2.46 7.49c-.31 1.24-1.66 2.25-3 2.25h-3.9c-.67 0-1.61-.23-2.04-.66l-1.28-.99c-.49-.37-.78-.96-.78-1.58ZM5.21 6.379H4.18c-1.55 0-2.18.6-2.18 2.08v10.06c0 1.48.63 2.08 2.18 2.08h1.03c1.55 0 2.18-.6 2.18-2.08V8.459c0-1.48-.63-2.08-2.18-2.08Z","s":0}]},"Send":{"l":[{"d":"m9.51 4.23 8.56 4.28c3.84 1.92 3.84 5.06 0 6.98l-8.56 4.28c-5.76 2.88-8.11.52-5.23-5.23l.87-1.73c.22-.44.22-1.17 0-1.61l-.87-1.74C1.4 3.71 3.76 1.35 9.51 4.23ZM5.44 12h5.4","s":1}],"b":[{"d":"m18.07 8.509-8.56-4.28c-5.75-2.88-8.11-.52-5.23 5.23l.87 1.74c.25.51.25 1.1 0 1.61l-.87 1.73c-2.88 5.75-.53 8.11 5.23 5.23l8.56-4.28c3.84-1.92 3.84-5.06 0-6.98Zm-3.23 4.24h-5.4c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h5.4c.41 0 .75.34.75.75s-.34.75-.75.75Z","s":0}]},"MenuBoard":{"l":[{"d":"m21.93 6.76-3.37 13.53A2.228 2.228 0 0 1 16.38 22H3.24c-1.51 0-2.59-1.48-2.14-2.93L5.31 5.55a2.25 2.25 0 0 1 2.14-1.59h12.3c.95 0 1.74.58 2.07 1.38.19.43.23.92.11 1.42Z","s":1},{"d":"M16 22h4.78c1.29 0 2.3-1.09 2.21-2.38L22 6M9.68 6.38l1.04-4.32M16.38 6.39l.94-4.34M7.7 12h8M6.7 16h8","s":1}],"b":[{"d":"m20.9 9.85.59 9.89c.02.27-.11.45-.18.53-.08.09-.25.23-.53.23h-2.73l2.16-10.65h.69ZM22 6l-.01.02c.02.24 0 .49-.06.74l-7.37 13.53A2.228 2.228 0 0 1 12.38 22h8.4a2.21 2.21 0 0 0 2.21-2.38L22 6ZM11.45 2.241c.1-.4-.15-.81-.55-.91-.4-.09-.81.15-.91.55l-.5 2.07h1.54l.42-1.71ZM18.05 2.209c.09-.41-.17-.8-.58-.89a.75.75 0 0 0-.89.58l-.45 2.07h1.54l.38-1.76Z","s":0},{"d":"M21.82 5.331c-.33-.8-1.11-1.37-2.07-1.37h-2.08l-.56 2.59c-.08.35-.39.59-.73.59-.05 0-.11 0-.16-.02a.765.765 0 0 1-.58-.89l.49-2.28h-5.1l-.63 2.6c-.08.34-.39.57-.73.57-.06 0-.12-.01-.18-.02a.75.75 0 0 1-.55-.91l.54-2.25H7.45c-.98 0-1.85.64-2.14 1.58L1.1 19.071c-.44 1.45.63 2.93 2.14 2.93h13.14c1.04 0 1.94-.7 2.18-1.71l3.37-13.53c.06-.25.08-.5.06-.74a2 2 0 0 0-.17-.69Zm-7.12 11.42h-8c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h8c.41 0 .75.34.75.75s-.34.75-.75.75Zm1-4h-8c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h8c.41 0 .75.34.75.75s-.34.75-.75.75Z","s":0}]},"Element3":{"l":[{"d":"M22 8.52V3.98C22 2.57 21.36 2 19.77 2h-4.04c-1.59 0-2.23.57-2.23 1.98v4.53c0 1.42.64 1.98 2.23 1.98h4.04c1.59.01 2.23-.56 2.23-1.97ZM22 19.77v-4.04c0-1.59-.64-2.23-2.23-2.23h-4.04c-1.59 0-2.23.64-2.23 2.23v4.04c0 1.59.64 2.23 2.23 2.23h4.04c1.59 0 2.23-.64 2.23-2.23ZM10.5 8.52V3.98C10.5 2.57 9.86 2 8.27 2H4.23C2.64 2 2 2.57 2 3.98v4.53c0 1.42.64 1.98 2.23 1.98h4.04c1.59.01 2.23-.56 2.23-1.97ZM10.5 19.77v-4.04c0-1.59-.64-2.23-2.23-2.23H4.23c-1.59 0-2.23.64-2.23 2.23v4.04C2 21.36 2.64 22 4.23 22h4.04c1.59 0 2.23-.64 2.23-2.23Z","s":1}],"b":[{"d":"M22 8.52V3.98C22 2.57 21.36 2 19.77 2h-4.04c-1.59 0-2.23.57-2.23 1.98v4.53c0 1.42.64 1.98 2.23 1.98h4.04c1.59.01 2.23-.56 2.23-1.97ZM22 19.77v-4.04c0-1.59-.64-2.23-2.23-2.23h-4.04c-1.59 0-2.23.64-2.23 2.23v4.04c0 1.59.64 2.23 2.23 2.23h4.04c1.59 0 2.23-.64 2.23-2.23ZM10.5 8.52V3.98C10.5 2.57 9.86 2 8.27 2H4.23C2.64 2 2 2.57 2 3.98v4.53c0 1.42.64 1.98 2.23 1.98h4.04c1.59.01 2.23-.56 2.23-1.97ZM10.5 19.77v-4.04c0-1.59-.64-2.23-2.23-2.23H4.23c-1.59 0-2.23.64-2.23 2.23v4.04C2 21.36 2.64 22 4.23 22h4.04c1.59 0 2.23-.64 2.23-2.23Z","s":0}]},"Grid2":{"l":[{"d":"M9 22h6c5 0 7-2 7-7V9c0-5-2-7-7-7H9C4 2 2 4 2 9v6c0 5 2 7 7 7ZM12 2v20M2 12h20","s":1}],"b":[{"d":"M11.25 12.75V22H7.81C4.17 22 2 19.83 2 16.19v-3.44h9.25ZM22 7.81v3.44h-9.25V2h3.44C19.83 2 22 4.17 22 7.81ZM11.25 2v9.25H2V7.81C2 4.17 4.17 2 7.81 2h3.44ZM22 12.75v3.44c0 3.64-2.17 5.81-5.81 5.81h-3.44v-9.25H22Z","s":0}]},"Diagram":{"l":[{"d":"M2 2v17c0 1.66 1.34 3 3 3h17","s":1},{"d":"m5 17 4.59-5.36c.76-.88 2.11-.94 2.93-.11l.95.95c.82.82 2.17.77 2.93-.11L21 7","s":1}],"b":[{"d":"M22 22.75H5c-2.07 0-3.75-1.68-3.75-3.75V2c0-.41.34-.75.75-.75s.75.34.75.75v17c0 1.24 1.01 2.25 2.25 2.25h17c.41 0 .75.34.75.75s-.34.75-.75.75Z","s":0},{"d":"M5 17.75c-.17 0-.35-.06-.49-.18a.756.756 0 0 1-.08-1.06l4.59-5.36c.5-.58 1.22-.93 1.98-.96.76-.02 1.51.26 2.05.8l.95.95c.25.25.57.37.93.37.35-.01.67-.17.9-.44l4.59-5.36c.27-.31.74-.35 1.06-.08.31.27.35.74.08 1.06l-4.59 5.36c-.5.58-1.22.93-1.98.96a2.78 2.78 0 0 1-2.05-.8l-.94-.95c-.25-.25-.58-.38-.93-.37-.35.01-.67.17-.9.44l-4.59 5.36a.8.8 0 0 1-.58.26Z","s":0}]},"Setting4":{"l":[{"d":"M22 6.5h-6M6 6.5H2M10 10a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7ZM22 17.5h-4M8 17.5H2M14 21a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z","s":1}],"b":[{"d":"M21.3 7.58h-5.58c-.39 0-.7-.31-.7-.7 0-.39.31-.7.7-.7h5.58c.39 0 .7.31.7.7 0 .39-.31.7-.7.7ZM6.42 7.58H2.7c-.39 0-.7-.31-.7-.7 0-.39.31-.7.7-.7h3.72c.39 0 .7.31.7.7 0 .39-.32.7-.7.7Z","s":0},{"d":"M10.14 10.83a3.95 3.95 0 1 0 0-7.9 3.95 3.95 0 0 0 0 7.9ZM21.3 17.81h-3.72c-.39 0-.7-.31-.7-.7 0-.39.31-.7.7-.7h3.72c.39 0 .7.31.7.7 0 .39-.31.7-.7.7ZM8.28 17.81H2.7c-.39 0-.7-.31-.7-.7 0-.39.31-.7.7-.7h5.58c.39 0 .7.31.7.7 0 .39-.32.7-.7.7Z","s":0},{"d":"M13.86 21.072a3.95 3.95 0 1 0 0-7.9 3.95 3.95 0 0 0 0 7.9Z","s":0}]},"People":{"l":[{"d":"M18 7.16a.605.605 0 0 0-.19 0 2.573 2.573 0 0 1-2.48-2.58c0-1.43 1.15-2.58 2.58-2.58a2.58 2.58 0 0 1 2.58 2.58A2.589 2.589 0 0 1 18 7.16ZM16.97 14.44c1.37.23 2.88-.01 3.94-.72 1.41-.94 1.41-2.48 0-3.42-1.07-.71-2.6-.95-3.97-.71M5.97 7.16c.06-.01.13-.01.19 0a2.573 2.573 0 0 0 2.48-2.58C8.64 3.15 7.49 2 6.06 2a2.58 2.58 0 0 0-2.58 2.58c.01 1.4 1.11 2.53 2.49 2.58ZM7 14.44c-1.37.23-2.88-.01-3.94-.72-1.41-.94-1.41-2.48 0-3.42 1.07-.71 2.6-.95 3.97-.71M12 14.63a.605.605 0 0 0-.19 0 2.573 2.573 0 0 1-2.48-2.58c0-1.43 1.15-2.58 2.58-2.58a2.58 2.58 0 0 1 2.58 2.58c-.01 1.4-1.11 2.54-2.49 2.58ZM9.09 17.78c-1.41.94-1.41 2.48 0 3.42 1.6 1.07 4.22 1.07 5.82 0 1.41-.94 1.41-2.48 0-3.42-1.59-1.06-4.22-1.06-5.82 0Z","s":1}],"b":[{"d":"M17.53 7.77a.739.739 0 0 0-.21 0 2.874 2.874 0 0 1-2.78-2.88C14.54 3.3 15.83 2 17.43 2c1.59 0 2.89 1.29 2.89 2.89a2.89 2.89 0 0 1-2.79 2.88ZM20.792 14.7c-1.12.75-2.69 1.03-4.14.84.38-.82.58-1.73.59-2.69 0-1-.22-1.95-.64-2.78 1.48-.2 3.05.08 4.18.83 1.58 1.04 1.58 2.75.01 3.8ZM6.44 7.77c.07-.01.14-.01.21 0a2.874 2.874 0 0 0 2.78-2.88 2.885 2.885 0 1 0-5.77 0c0 1.56 1.23 2.83 2.78 2.88ZM6.551 12.85c0 .97.21 1.89.59 2.72-1.41.15-2.88-.15-3.96-.86-1.58-1.05-1.58-2.76 0-3.81 1.07-.72 2.58-1.01 4-.85-.41.84-.63 1.79-.63 2.8ZM12.12 15.87a1.13 1.13 0 0 0-.26 0 3.425 3.425 0 0 1-3.31-3.43C8.56 10.54 10.09 9 12 9c1.9 0 3.44 1.54 3.44 3.44a3.434 3.434 0 0 1-3.32 3.43ZM8.87 17.94c-1.51 1.01-1.51 2.67 0 3.67 1.72 1.15 4.54 1.15 6.26 0 1.51-1.01 1.51-2.67 0-3.67-1.71-1.15-4.53-1.15-6.26 0Z","s":0}]},"Box":{"l":[{"d":"M3.17 7.44 12 12.55l8.77-5.08M12 21.61v-9.07","s":1},{"d":"M9.93 2.48 4.59 5.45c-1.21.67-2.2 2.35-2.2 3.73v5.65c0 1.38.99 3.06 2.2 3.73l5.34 2.97c1.14.63 3.01.63 4.15 0l5.34-2.97c1.21-.67 2.2-2.35 2.2-3.73V9.18c0-1.38-.99-3.06-2.2-3.73l-5.34-2.97c-1.15-.64-3.01-.64-4.15 0Z","s":1},{"d":"M17 13.24V9.58L7.51 4.1","s":1}],"b":[{"d":"m20.208 7.821-7.7 4.46c-.31.18-.7.18-1.02 0l-7.7-4.46c-.55-.32-.69-1.07-.27-1.54.29-.33.62-.6.97-.79l5.42-3c1.16-.65 3.04-.65 4.2 0l5.42 3c.35.19.68.47.97.79.4.47.26 1.22-.29 1.54ZM11.43 14.139v6.82c0 .76-.77 1.26-1.45.93-2.06-1.01-5.53-2.9-5.53-2.9-1.22-.69-2.22-2.43-2.22-3.86v-5.16c0-.79.83-1.29 1.51-.9l7.19 4.17c.3.19.5.53.5.9ZM12.57 14.139v6.82c0 .76.77 1.26 1.45.93 2.06-1.01 5.53-2.9 5.53-2.9 1.22-.69 2.22-2.43 2.22-3.86v-5.16c0-.79-.83-1.29-1.51-.9l-7.19 4.17c-.3.19-.5.53-.5.9Z","s":0}]},"Receipt2":{"l":[{"d":"M20 7.04v9.92c0 1.52-.14 2.6-.5 3.37 0 .01-.01.03-.02.04-.22.28-.51.42-.85.42-.53 0-1.17-.35-1.86-1.09-.82-.88-2.08-.81-2.8.15l-1.01 1.34c-.4.54-.93.81-1.46.81-.53 0-1.06-.27-1.46-.81l-1.02-1.35c-.71-.95-1.96-1.02-2.78-.15l-.01.01c-1.13 1.21-2.13 1.39-2.71.67a.076.076 0 0 1-.02-.04c-.36-.77-.5-1.85-.5-3.37V7.04c0-1.52.14-2.6.5-3.37 0-.01 0-.02.02-.03.57-.73 1.58-.55 2.71.66l.01.01c.82.87 2.07.8 2.78-.15l1.02-1.35c.4-.54.93-.81 1.46-.81.53 0 1.06.27 1.46.81l1.01 1.34c.72.96 1.98 1.03 2.8.15.69-.74 1.33-1.09 1.86-1.09.34 0 .63.15.85.43.02.01.02.02.02.03.36.77.5 1.85.5 3.37ZM8 10.25h8M8 13.75h6","s":1}],"b":[{"d":"M19.5 3.67c0-.01 0-.02-.02-.03-.22-.28-.51-.43-.85-.43-.53 0-1.17.35-1.86 1.09-.82.88-2.08.81-2.8-.15l-1.01-1.34c-.4-.54-.93-.81-1.46-.81-.53 0-1.06.27-1.46.81L9.02 4.16c-.71.95-1.96 1.02-2.78.15l-.01-.01C5.1 3.09 4.09 2.91 3.52 3.64c-.02.01-.02.02-.02.03-.36.77-.5 1.85-.5 3.37v9.92c0 1.52.14 2.6.5 3.37 0 .01.01.03.02.04.58.72 1.58.54 2.71-.67l.01-.01c.82-.87 2.07-.8 2.78.15l1.02 1.35c.4.54.93.81 1.46.81.53 0 1.06-.27 1.46-.81l1.01-1.34c.72-.96 1.98-1.03 2.8-.15.69.74 1.33 1.09 1.86 1.09.34 0 .63-.14.85-.42.01-.01.02-.03.02-.04.36-.77.5-1.85.5-3.37V7.04c0-1.52-.14-2.6-.5-3.37ZM14 14.5H8c-.41 0-.75-.34-.75-.75S7.59 13 8 13h6c.41 0 .75.34.75.75s-.34.75-.75.75Zm2-3.5H8c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h8c.41 0 .75.34.75.75s-.34.75-.75.75Z","s":0}]},"MoneyRecive":{"l":[{"d":"M9.5 13.75c0 .97.75 1.75 1.67 1.75h1.88c.8 0 1.45-.68 1.45-1.53 0-.91-.4-1.24-.99-1.45l-3.01-1.05c-.59-.21-.99-.53-.99-1.45 0-.84.65-1.53 1.45-1.53h1.88c.92 0 1.67.78 1.67 1.75M12 7.5v9","s":1},{"d":"M22 12c0 5.52-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2","s":1},{"d":"M17 3v4h4M22 2l-5 5","s":1}],"b":[{"d":"M18.809 6.25h1.36c-.19-.27-.39-.52-.6-.77l-.76.77ZM18.52 4.42c-.25-.21-.5-.41-.77-.6v1.36l.77-.76ZM19.58 5.481l2.95-2.95c.29-.29.29-.77 0-1.06a.754.754 0 0 0-1.06 0l-2.95 2.95c.38.33.73.69 1.06 1.06ZM17.752 3c0-.41-.34-.75-.75-.75-.4 0-.72.32-.74.71.52.25 1.02.53 1.49.86V3ZM21.752 7c0-.41-.34-.75-.75-.75h-.83c.33.47.62.97.86 1.49.4-.02.72-.34.72-.74ZM12.75 14.75h.3c.39 0 .7-.35.7-.78 0-.54-.15-.62-.49-.74l-.51-.18v1.7Z","s":0},{"d":"M21.04 7.74c-.01 0-.02.01-.04.01h-4c-.1 0-.19-.02-.29-.06a.782.782 0 0 1-.41-.41.868.868 0 0 1-.05-.28V3c0-.01.01-.02.01-.04C14.96 2.35 13.52 2 12 2 6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10c0-1.52-.35-2.96-.96-4.26Zm-7.29 4.08c.64.22 1.5.69 1.5 2.16 0 1.25-.99 2.28-2.2 2.28h-.3v.25c0 .41-.34.75-.75.75s-.75-.34-.75-.75v-.25h-.08c-1.33 0-2.42-1.12-2.42-2.5 0-.42.34-.76.75-.76s.75.34.75.75c0 .55.41 1 .92 1h.08v-2.22l-1-.35c-.64-.22-1.5-.69-1.5-2.16 0-1.25.99-2.28 2.2-2.28h.3V7.5c0-.41.34-.75.75-.75s.75.34.75.75v.25h.08c1.33 0 2.42 1.12 2.42 2.5 0 .41-.34.75-.75.75s-.75-.34-.75-.75c0-.55-.41-1-.92-1h-.08v2.22l1 .35Z","s":0},{"d":"M10.25 10.03c0 .54.15.62.49.74l.51.18v-1.7h-.3c-.38 0-.7.35-.7.78Z","s":0}]},"Verify":{"l":[{"d":"m8.38 12 2.41 2.42 4.83-4.84","s":1},{"d":"M10.75 2.45c.69-.59 1.82-.59 2.52 0l1.58 1.36c.3.26.86.47 1.26.47h1.7c1.06 0 1.93.87 1.93 1.93v1.7c0 .39.21.96.47 1.26l1.36 1.58c.59.69.59 1.82 0 2.52l-1.36 1.58c-.26.3-.47.86-.47 1.26v1.7c0 1.06-.87 1.93-1.93 1.93h-1.7c-.39 0-.96.21-1.26.47l-1.58 1.36c-.69.59-1.82.59-2.52 0l-1.58-1.36c-.3-.26-.86-.47-1.26-.47H6.18c-1.06 0-1.93-.87-1.93-1.93V16.1c0-.39-.21-.95-.46-1.25l-1.35-1.59c-.58-.69-.58-1.81 0-2.5l1.35-1.59c.25-.3.46-.86.46-1.25V6.2c0-1.06.87-1.93 1.93-1.93h1.73c.39 0 .96-.21 1.26-.47l1.58-1.35Z","s":1}],"b":[{"d":"m21.56 10.739-1.36-1.58c-.26-.3-.47-.86-.47-1.26v-1.7c0-1.06-.87-1.93-1.93-1.93h-1.7c-.39 0-.96-.21-1.26-.47l-1.58-1.36c-.69-.59-1.82-.59-2.52 0l-1.57 1.37c-.3.25-.87.46-1.26.46H6.18c-1.06 0-1.93.87-1.93 1.93v1.71c0 .39-.21.95-.46 1.25l-1.35 1.59c-.58.69-.58 1.81 0 2.5l1.35 1.59c.25.3.46.86.46 1.25v1.71c0 1.06.87 1.93 1.93 1.93h1.73c.39 0 .96.21 1.26.47l1.58 1.36c.69.59 1.82.59 2.52 0l1.58-1.36c.3-.26.86-.47 1.26-.47h1.7c1.06 0 1.93-.87 1.93-1.93v-1.7c0-.39.21-.96.47-1.26l1.36-1.58c.58-.69.58-1.83-.01-2.52Zm-5.4-.63-4.83 4.83a.75.75 0 0 1-1.06 0l-2.42-2.42a.754.754 0 0 1 0-1.06c.29-.29.77-.29 1.06 0l1.89 1.89 4.3-4.3c.29-.29.77-.29 1.06 0 .29.29.29.77 0 1.06Z","s":0}]},"Eye":{"l":[{"d":"M15.58 12c0 1.98-1.6 3.58-3.58 3.58S8.42 13.98 8.42 12s1.6-3.58 3.58-3.58 3.58 1.6 3.58 3.58Z","s":1},{"d":"M12 20.27c3.53 0 6.82-2.08 9.11-5.68.9-1.41.9-3.78 0-5.19-2.29-3.6-5.58-5.68-9.11-5.68-3.53 0-6.82 2.08-9.11 5.68-.9 1.41-.9 3.78 0 5.19 2.29 3.6 5.58 5.68 9.11 5.68Z","s":1}],"b":[{"d":"M21.25 9.15C18.94 5.52 15.56 3.43 12 3.43c-1.78 0-3.51.52-5.09 1.49-1.58.98-3 2.41-4.16 4.23-1 1.57-1 4.12 0 5.69 2.31 3.64 5.69 5.72 9.25 5.72 1.78 0 3.51-.52 5.09-1.49 1.58-.98 3-2.41 4.16-4.23 1-1.56 1-4.12 0-5.69ZM12 16.04c-2.24 0-4.04-1.81-4.04-4.04S9.76 7.96 12 7.96s4.04 1.81 4.04 4.04-1.8 4.04-4.04 4.04Z","s":0},{"d":"M11.998 9.14a2.855 2.855 0 0 0 0 5.71c1.57 0 2.86-1.28 2.86-2.85s-1.29-2.86-2.86-2.86Z","s":0}]},"Home2":{"l":[{"d":"m9.02 2.84-5.39 4.2C2.73 7.74 2 9.23 2 10.36v7.41c0 2.32 1.89 4.22 4.21 4.22h11.58c2.32 0 4.21-1.9 4.21-4.21V10.5c0-1.21-.81-2.76-1.8-3.45l-6.18-4.33c-1.4-.98-3.65-.93-5 .12ZM12 17.99v-3","s":1}],"b":[{"d":"m20.04 6.822-5.76-4.03c-1.57-1.1-3.98-1.04-5.49.13l-5.01 3.91c-1 .78-1.79 2.38-1.79 3.64v6.9c0 2.55 2.07 4.63 4.62 4.63h10.78c2.55 0 4.62-2.07 4.62-4.62v-6.78c0-1.35-.87-3.01-1.97-3.78Zm-7.29 11.18c0 .41-.34.75-.75.75s-.75-.34-.75-.75v-3c0-.41.34-.75.75-.75s.75.34.75.75v3Z","s":0}]},"Scan":{"l":[{"d":"M2 9V6.5C2 4.01 4.01 2 6.5 2H9M15 2h2.5C19.99 2 22 4.01 22 6.5V9M22 16v1.5c0 2.49-2.01 4.5-4.5 4.5H16M9 22H6.5C4.01 22 2 19.99 2 17.5V15M17 9.5v5c0 2-1 3-3 3h-4c-2 0-3-1-3-3v-5c0-2 1-3 3-3h4c2 0 3 1 3 3ZM19 12H5","s":1}],"b":[{"d":"M2.77 10C2.34 10 2 9.66 2 9.23V6.92A4.93 4.93 0 0 1 6.92 2h2.31c.43 0 .77.34.77.77s-.34.77-.77.77H6.92c-1.87 0-3.38 1.52-3.38 3.38v2.31c0 .43-.35.77-.77.77ZM21.23 10a.77.77 0 0 1-.77-.77V6.92c0-1.87-1.52-3.38-3.38-3.38h-2.31a.77.77 0 0 1 0-1.54h2.31A4.93 4.93 0 0 1 22 6.92v2.31c0 .43-.34.77-.77.77ZM17.082 22h-1.39a.77.77 0 0 1 0-1.54h1.39c1.87 0 3.38-1.52 3.38-3.38V15.7a.77.77 0 0 1 1.54 0v1.38a4.93 4.93 0 0 1-4.92 4.92ZM9.23 22H6.92A4.93 4.93 0 0 1 2 17.08v-2.31c0-.43.34-.77.77-.77s.77.34.77.77v2.31c0 1.87 1.52 3.38 3.38 3.38h2.31a.77.77 0 0 1 0 1.54ZM18.46 11.23H5.54a.77.77 0 0 0 0 1.54H18.46a.77.77 0 0 0 0-1.54ZM6.898 13.94v.33c0 1.66 1.34 3 3 3h4.2c1.66 0 3-1.34 3-3v-.33c0-.12-.09-.21-.21-.21h-9.78c-.12 0-.21.09-.21.21ZM6.898 10.06v-.33c0-1.66 1.34-3 3-3h4.2c1.66 0 3 1.34 3 3v.33c0 .12-.09.21-.21.21h-9.78c-.12 0-.21-.09-.21-.21Z","s":0}]},"Signpost":{"l":[{"d":"M17.22 2H8.96c-.4 0-.78.14-1.09.38L5.68 4.13c-.88.7-.88 2.03 0 2.73l2.19 1.75c.31.25.7.38 1.09.38h8.26c.97 0 1.75-.78 1.75-1.75v-3.5c0-.96-.78-1.74-1.75-1.74ZM6.8 12h8.26c.4 0 .78.14 1.09.38l2.19 1.75c.88.7.88 2.03 0 2.73l-2.19 1.75c-.31.25-.7.38-1.09.38H6.8c-.97 0-1.75-.78-1.75-1.75v-3.5c0-.96.78-1.74 1.75-1.74ZM12 12V9M12 22v-3M9 22h6","s":1}],"b":[{"d":"m18.34 14.13-2.18-1.75c-.31-.24-.7-.38-1.1-.38h-2.31V9h4.47c.97 0 1.75-.78 1.75-1.75v-3.5c0-.97-.78-1.75-1.75-1.75H8.96c-.39 0-.78.14-1.09.38L5.68 4.13c-.87.7-.87 2.04 0 2.74l2.19 1.75c.31.24.7.38 1.09.38h2.29v3H6.8c-.97 0-1.75.78-1.75 1.75v3.5c0 .97.78 1.75 1.75 1.75h4.45v2.25H9c-.41 0-.75.34-.75.75s.34.75.75.75h6c.41 0 .75-.34.75-.75s-.34-.75-.75-.75h-2.25V19h2.31c.4 0 .79-.14 1.1-.38l2.18-1.75c.88-.7.88-2.04 0-2.74Z","s":0}]},"Direct":{"l":[{"d":"M9 22h6c5 0 7-2 7-7V9c0-5-2-7-7-7H9C4 2 2 4 2 9v6c0 5 2 7 7 7Z","s":1},{"d":"M2 13h3.76a2 2 0 0 1 1.79 1.11l.89 1.79C9 17 10 17 10.24 17h3.53a2 2 0 0 0 1.79-1.11l.89-1.79a2 2 0 0 1 1.79-1.11h3.74M10.34 7h3.33M9.5 10h5","s":1}],"b":[{"d":"M21.3 12.23h-3.48c-.98 0-1.85.54-2.29 1.42l-.84 1.66c-.2.4-.6.65-1.04.65h-3.28c-.31 0-.75-.07-1.04-.65l-.84-1.65a2.567 2.567 0 0 0-2.29-1.42H2.7c-.39 0-.7.31-.7.7v3.26C2 19.83 4.18 22 7.82 22h8.38c3.43 0 5.54-1.88 5.8-5.22v-3.85c0-.38-.31-.7-.7-.7Z","s":0},{"d":"M16.19 2H7.81C4.17 2 2 4.17 2 7.81v3.04c.22-.08.46-.12.7-.12h3.5c1.55 0 2.94.86 3.63 2.25l.75 1.47h2.86l.75-1.48a4.035 4.035 0 0 1 3.63-2.24h3.48c.24 0 .48.04.7.12V7.81C22 4.17 19.83 2 16.19 2Zm-5.74 3.41h3.1c.38 0 .7.31.7.69 0 .39-.32.7-.7.7h-3.1c-.38 0-.7-.31-.7-.7a.7.7 0 0 1 .7-.69Zm3.88 4.18H9.67c-.38 0-.69-.31-.69-.69 0-.39.31-.7.69-.7h4.66c.38 0 .69.31.69.7 0 .38-.31.69-.69.69Z","s":0}]},"DirectRight":{"l":[{"d":"M19.29 9.17 7.7 3.07C4.95 1.62 1.96 4.55 3.35 7.33l1.62 3.24c.45.9.45 1.96 0 2.86l-1.62 3.24c-1.39 2.78 1.6 5.7 4.35 4.26l11.59-6.1c2.28-1.2 2.28-4.46 0-5.66Z","s":1}],"b":[{"d":"m2.71 17.02 1.74-3.48c.48-.97.48-2.1 0-3.07L2.71 6.98C1.22 4 4.43.85 7.38 2.41l1.54.82c.22.11.39.29.48.51l5.69 12.65c.23.52.02 1.13-.48 1.39l-7.24 3.81C4.43 23.15 1.22 20 2.71 17.02ZM16.31 15.6l-3.73-8.28c-.42-.93.58-1.87 1.48-1.39l5.77 3.04c2.45 1.29 2.45 4.79 0 6.08l-2.04 1.07c-.55.28-1.22.05-1.48-.52Z","s":0}]},"Cd":{"l":[{"d":"M11 21c5.523 0 10-4.477 10-10S16.523 1 11 1 1 5.477 1 11s4.477 10 10 10Z","s":1},{"d":"M11 13a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z","s":1}],"b":[{"d":"M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2Zm0 12.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5Z","s":0}]}};
+</script>
+<script type="text/babel" data-presets="react">
+
+const {ConfigProvider, Button, Card, Tag, Alert, Radio, Switch, Avatar, Divider, Typography,
+       Space, Flex, Segmented, Rate, Badge, Input, Tooltip, Skeleton, Result, Progress} = antd;
+const {useState} = React;
+const T = {ink:'#16181C', ink2:'#3D434C', muted:'#767C86', line:'#C9C7BE', line2:'#E4E2DA',
+  signal:'#F0B31A', signalInk:'#6B4A00', signalSoft:'#FAEFCE', warn:'#B33A0C', warnSoft:'#F6E5DC',
+  ok:'#1B6B47', okSoft:'#DDEDE4', paper:'#E9E8E2', paper2:'#F3F2ED'};
+
+/* ---------- Iconsax icon (paths extracted from iconsax-react) ---------- */
+function Icon({name, size=20, color='currentColor', variant='l', style}){
+  const parts = (ICONS[name] && ICONS[name][variant]) || [];
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" style={{flex:'0 0 auto', ...style}} aria-hidden="true">
+      {parts.map((p,i)=> p.s
+        ? <path key={i} d={p.d} stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" opacity={p.o}/>
+        : <path key={i} d={p.d} fill={color} opacity={p.o}/>)}
+    </svg>
+  );
+}
+
+/* ---------- primitives ---------- */
+const Mono = ({children, style}) => <span className="mono" style={style}>{children}</span>;
+const Label = ({children}) => <div className="u-label">{children}</div>;
+
+function Phone({children, statusRight='LAST 100M'}){
+  return (
+    <div className="u-phone">
+      <div className="u-statusbar">
+        <Mono>9:41</Mono>
+        <Flex gap={6} align="center" style={{color:T.ink}}>
+          <Icon name="Cd" size={13} variant="b"/><Icon name="Global" size={13}/><Mono style={{fontSize:11}}>82%</Mono>
+        </Flex>
+      </div>
+      <div className="u-screen-body">{children}</div>
+      <div className="u-home-bar"/>
+    </div>
+  );
+}
+
+function TopBar({title, sub, right}){
+  return (
+    <div className="u-topbar">
+      <Button type="text" shape="circle" icon={<Icon name="ArrowLeft2" size={20}/>} />
+      <div className="t"><b>{title}</b><span>{sub}</span></div>
+      {right || <Button type="text" shape="circle" icon={<Icon name="More" size={20}/>} />}
+    </div>
+  );
+}
+
+function MapView({height=150, riderTop='58%', riderLeft='24%', pinTop='42%', pinLeft='72%', pinLabel='จุดนัดรับ', walk}){
+  return (
+    <div className="u-map" style={{height}}>
+      <div className="u-road" style={{left:0,right:0,top:'54%',height:16}}/>
+      <div className="u-road" style={{top:0,bottom:0,left:'66%',width:14}}/>
+      <div className="u-pin" style={{top:pinTop,left:pinLeft}}>
+        <div className="u-dot" style={{background:T.signal}}><Icon name="Location" size={18} color={T.signalInk} variant="b"/></div>
+        <div className="u-tag">{pinLabel}</div>
+      </div>
+      <div className="u-pin" style={{top:riderTop,left:riderLeft}}>
+        <div className="u-dot" style={{background:T.ink}}><Icon name="TruckFast" size={18} color="#fff" variant="b"/></div>
+      </div>
+      {walk && <div style={{position:'absolute',right:10,bottom:10,background:'#fff',border:'1px solid '+T.line2,
+        borderRadius:8,padding:'4px 9px',fontSize:11.5,display:'flex',gap:6,alignItems:'center'}}>
+        <Icon name="Routing" size={14} color={T.ink2}/><Mono>{walk}</Mono></div>}
+    </div>
+  );
+}
+
+/* ---------- Handoff Point Card (design-system component) ---------- */
+function HandoffCard({confirmedAt, onEdit, compact}){
+  return (
+    <Card size="small" style={{background:T.signalSoft, borderColor:'#EBD79A', borderRadius:14}}
+          styles={{body:{padding:compact?12:14}}}>
+      <Flex gap={12} align="flex-start">
+        <div style={{width:34,height:34,borderRadius:10,background:T.signal,display:'grid',placeItems:'center',flex:'0 0 auto'}}>
+          <Icon name="Location" size={19} color={T.signalInk} variant="b"/>
+        </div>
+        <div style={{flex:1,minWidth:0}}>
+          <Flex justify="space-between" align="center" gap={8}>
+            <span className="u-label" style={{color:T.signalInk}}>จุดนัดรับ</span>
+            {confirmedAt && <Tag bordered={false} color="success" style={{margin:0,fontSize:11}}>
+              <Flex gap={4} align="center"><Icon name="TickCircle" size={12} variant="b"/> ลูกค้ายืนยัน {confirmedAt}</Flex></Tag>}
+          </Flex>
+          <div style={{fontSize:16.5,fontWeight:600,lineHeight:1.45,marginTop:2}}>อาคาร A · ทางเข้าฝั่ง B</div>
+          <div style={{fontSize:14,color:T.signalInk,lineHeight:1.5}}>ล็อบบี้ ชั้น 1 · รับที่เคาน์เตอร์</div>
+          {onEdit && <Button type="link" size="small" onClick={onEdit}
+            style={{padding:0,height:'auto',marginTop:6,color:T.signalInk,fontWeight:600}}
+            icon={<Icon name="Edit2" size={15}/>}>เปลี่ยนจุดนัดรับ</Button>}
+        </div>
+      </Flex>
+    </Card>
+  );
+}
+
+function RiderCard({sub='กำลังเข้าซอย · 120 ม.'}){
+  return (
+    <Card size="small" style={{borderRadius:14, borderColor:T.line2}} styles={{body:{padding:12}}}>
+      <Flex gap={12} align="center">
+        <Badge dot color={T.ok} offset={[-4,32]}>
+          <Avatar size={42} style={{background:T.ink}} icon={<Icon name="Profile" size={20} color="#fff"/>}/>
+        </Badge>
+        <div style={{flex:1,minWidth:0}}>
+          <div style={{fontSize:15,fontWeight:600,lineHeight:1.4}}>สมชาย ก.</div>
+          <Flex gap={6} align="center" style={{fontSize:12.5,color:T.muted}}>
+            <Icon name="Star1" size={13} color={T.signal} variant="b"/><Mono>4.9</Mono>
+            <span>·</span><Mono>กท 1234</Mono>
+          </Flex>
+          <div style={{fontSize:12.5,color:T.muted}}>{sub}</div>
+        </div>
+        <Space size={6}>
+          <Tooltip title="แชต"><Button shape="circle" icon={<Icon name="Messages2" size={18}/>}/></Tooltip>
+          <Tooltip title="โทร"><Button shape="circle" icon={<Icon name="Call" size={18}/>}/></Tooltip>
+        </Space>
+      </Flex>
+    </Card>
+  );
+}
+
+const STATE_STEPS = ['ใกล้ถึง','ถึงแล้ว','กำลังหาจุดนัด','รออยู่','ส่งมอบ'];
+function StateTrack({current}){
+  return (
+    <div style={{padding:'4px 0 14px'}}>
+      <Flex gap={5}>
+        {STATE_STEPS.map((t,i)=>(
+          <div key={t} style={{flex:1,height:4,borderRadius:99,
+            background: i<current ? T.ink : i===current ? T.signal : T.line2}}/>
+        ))}
+      </Flex>
+      <Flex justify="space-between" align="center" style={{marginTop:7}}>
+        <span style={{fontSize:12.5,fontWeight:600,color:T.ink2}}>{STATE_STEPS[current]}</span>
+        <Mono style={{fontSize:11,color:T.muted}}>
+          {String(current+1).padStart(2,'0')} / {String(STATE_STEPS.length).padStart(2,'0')}
+        </Mono>
+      </Flex>
+    </div>
+  );
+}
+
+/* ---------- Status model: one card, five states ---------- */
+const STATES = {
+  near:     {step:0, eta:'2',  unit:'นาที', sub:'ไรเดอร์กำลังเข้าซอย',        primary:'กำลังลงไป',        secondary:'ให้ไรเดอร์รอที่จุดนัด', tone:'default'},
+  arrived:  {step:1, title:'ไรเดอร์ถึงจุดนัดแล้ว', sub:'รออยู่ที่ทางเข้าฝั่ง B', primary:'กำลังลงไป',        secondary:'ขอเวลาอีก 3 นาที',      tone:'signal'},
+  notfound: {step:2, title:'ไรเดอร์หาจุดนัดไม่พบ',  sub:'หาทางเข้าไม่เจอ · แจ้งเมื่อ 09:43', primary:'แชร์ตำแหน่งของฉัน', secondary:'แก้จุดนัด · โทรหา', tone:'warn'},
+  waiting:  {step:3, eta:'3',  unit:'นาทีแล้ว', sub:'ไรเดอร์รออยู่ที่จุดนัดรับ',  primary:'แจ้งว่าใกล้ถึงแล้ว', secondary:'ขอให้ฝากไว้ที่เคาน์เตอร์', tone:'signal'},
+  done:     {step:4, title:'ส่งมอบเรียบร้อย',      sub:'09:47 · ที่ล็อบบี้ ชั้น 1',  primary:'ให้คะแนน',          secondary:'ดูใบเสร็จ',            tone:'ok'},
+};
+
+function StatusHero({s}){
+  const toneColor = s.tone==='warn'?T.warn : s.tone==='ok'?T.ok : T.ink;
+  if(s.eta) return (
+    <div style={{padding:'6px 0 14px'}}>
+      <Flex align="baseline" gap={8}>
+        <span className="u-eta-num">{s.eta}</span>
+        <span style={{fontSize:19,fontWeight:500,color:T.ink2}}>{s.unit}</span>
+      </Flex>
+      <Flex gap={7} align="center" style={{color:T.ink2,fontSize:15,marginTop:2}}>
+        <Icon name="TruckFast" size={17} color={T.ink2}/>{s.sub}
+      </Flex>
+    </div>
+  );
+  return (
+    <div style={{padding:'6px 0 14px'}}>
+      <Flex gap={9} align="center">
+        <Icon name={s.tone==='warn'?'Danger':s.tone==='ok'?'TickCircle':'Location'} size={24}
+              color={toneColor} variant="b"/>
+        <span style={{fontSize:23,fontWeight:600,lineHeight:1.3,color:toneColor}}>{s.title}</span>
+      </Flex>
+      <div style={{color:T.ink2,fontSize:15,marginTop:2}}>{s.sub}</div>
+    </div>
+  );
+}
+
+/* ---------- C-01 · หน้าติดตามออร์เดอร์ (รับได้ทุกสถานะ) ---------- */
+function CustomerTrack({stateKey='near', onEdit, onPrimary, toast, children}){
+  const s = STATES[stateKey];
+  return (
+    <Phone>
+      <TopBar title="ออร์เดอร์ #A2481" sub="ครัวป้าแดง · ข้าวมันไก่ 2 ที่"/>
+      <div className="u-scroll">
+        <StateTrack current={s.step}/>
+        {toast &&
+          <Alert type="success" showIcon style={{borderRadius:12,marginBottom:12}}
+            icon={<Icon name="TickCircle" size={18} color={T.ok} variant="b"/>}
+            message={<span style={{fontSize:13.5}}>{toast}</span>}/>}
+        <StatusHero s={s}/>
+        {stateKey==='notfound' &&
+          <Alert type="warning" showIcon banner={false} style={{borderRadius:12,marginBottom:12}}
+            icon={<Icon name="Danger" size={18} color={T.warn} variant="b"/>}
+            message={<span style={{fontSize:14}}>ไรเดอร์รออยู่บริเวณทางเข้าฝั่ง B มา <Mono>2</Mono> นาทีแล้ว</span>}/>}
+        <HandoffCard onEdit={stateKey==='done'?null:onEdit}/>
+        <div style={{height:12}}/>
+        <MapView height={148} walk={stateKey==='notfound'?'เดิน 40 ม.':null}/>
+        <div style={{height:12}}/>
+        <RiderCard sub={s.sub}/>
+        {stateKey==='done' &&
+          <Card size="small" style={{marginTop:12,borderRadius:14,borderColor:T.line2}} styles={{body:{padding:14}}}>
+            <div style={{fontSize:14.5,fontWeight:600,marginBottom:4}}>การส่งมอบเป็นอย่างไร</div>
+            <Rate defaultValue={5} style={{color:T.signal}}/>
+          </Card>}
+        <div style={{height:8}}/>
+      </div>
+      <div className="u-bottom-dock">
+        {stateKey==='notfound'
+          ? <Space direction="vertical" size={8} style={{width:'100%'}}>
+              <Button type="primary" size="large" block onClick={onPrimary} icon={<Icon name="Gps" size={19} color="#fff"/>}>แชร์ตำแหน่งของฉัน</Button>
+              <Flex gap={8}>
+                <Button size="large" block icon={<Icon name="Edit2" size={18}/>} onClick={onEdit}>แก้จุดนัด</Button>
+                <Button size="large" block icon={<Icon name="Call" size={18}/>}>โทรหา</Button>
+              </Flex>
+            </Space>
+          : <>
+              <Button type="primary" size="large" block onClick={onPrimary}>{s.primary}</Button>
+              <div style={{textAlign:'center',marginTop:6}}>
+                <Button type="link" size="small" style={{color:T.muted}}>{s.secondary}</Button>
+              </div>
+            </>}
+      </div>
+      {children}
+    </Phone>
+  );
+}
+
+/* ---------- C-02 · Bottom sheet เลือกจุดนัดรับ ---------- */
+const SPOTS = [
+  {v:'b', title:'ทางเข้าฝั่ง B · ล็อบบี้', note:'ใช้สำเร็จ 4 ครั้งที่นี่', suggested:true},
+  {v:'a', title:'ทางเข้าฝั่ง A · ป้อมยาม',  note:'ใช้ล่าสุด 12 ส.ค.'},
+  {v:'p', title:'ลานจอดหลังตึก',           note:'ไรเดอร์คนอื่นใช้บ่อยตอนกลางคืน'},
+];
+function HandoffSheet({onClose, onConfirm}){
+  const [val,setVal] = useState('b');
+  return (
+    <>
+      <div className="u-scrim" onClick={onClose}/>
+      <div className="u-sheet">
+        <div className="u-grip"/>
+        <div style={{padding:'6px 20px 0'}}>
+          <Flex justify="space-between" align="center">
+            <span style={{fontSize:18,fontWeight:600}}>เลือกจุดนัดรับ</span>
+            <Button type="text" shape="circle" onClick={onClose} icon={<Icon name="CloseCircle" size={20}/>}/>
+          </Flex>
+          <div style={{fontSize:13.5,color:T.muted,marginBottom:10}}>ค่าเริ่มต้นถูกเลือกไว้แล้ว · กดยืนยันได้เลย</div>
+        </div>
+        <div className="u-scroll" style={{padding:'0 20px'}}>
+          <Radio.Group value={val} onChange={e=>setVal(e.target.value)} style={{width:'100%'}}>
+            <Space direction="vertical" size={10} style={{width:'100%'}}>
+              {SPOTS.map(sp=>(
+                <Card key={sp.v} size="small" hoverable onClick={()=>setVal(sp.v)}
+                  style={{borderRadius:14, borderColor: val===sp.v?T.signal:T.line2,
+                          background: val===sp.v?T.signalSoft:'#fff',
+                          boxShadow: val===sp.v?'0 0 0 1px '+T.signal:'none'}}
+                  styles={{body:{padding:12}}}>
+                  <Flex gap={10} align="flex-start">
+                    <Radio value={sp.v} style={{marginTop:2}}/>
+                    <div style={{flex:1,minWidth:0}}>
+                      <Flex gap={8} align="center" wrap="wrap">
+                        <span style={{fontSize:15,fontWeight:600}}>{sp.title}</span>
+                        {sp.suggested && <Tag bordered={false} style={{margin:0,fontSize:10.5,background:T.signal,color:T.signalInk,fontWeight:600}}>ค่าเริ่มต้น</Tag>}
+                      </Flex>
+                      <Flex gap={6} align="center" style={{fontSize:12.5,color:T.muted}}>
+                        <Icon name="TickCircle" size={13} color={T.muted}/>{sp.note}
+                      </Flex>
+                    </div>
+                  </Flex>
+                </Card>
+              ))}
+            </Space>
+          </Radio.Group>
+          <Divider style={{margin:'14px 0 12px',borderColor:T.line2}}>
+            <span className="u-label">หรือปักหมุดเอง</span>
+          </Divider>
+          <MapView height={116} pinLeft="50%" pinTop="46%" pinLabel="ลากเพื่อปักหมุด"/>
+          <div style={{height:10}}/>
+          <Input.TextArea rows={2} maxLength={60} showCount placeholder="โน้ตถึงไรเดอร์ เช่น บอกยามว่ามาส่งห้อง 1204"/>
+          <Flex justify="space-between" align="center" style={{padding:'14px 2px 4px'}}>
+            <Flex gap={8} align="center" style={{fontSize:14.5}}>
+              <Icon name="Refresh2" size={17} color={T.ink2}/> จำไว้ใช้ครั้งต่อไป
+            </Flex>
+            <Switch defaultChecked/>
+          </Flex>
+        </div>
+        <div className="u-bottom-dock" style={{borderRadius:0}}>
+          <Button type="primary" size="large" block onClick={onConfirm||onClose}
+            icon={<Icon name="TickCircle" size={19} color="#fff"/>}>ยืนยันจุดนัดรับ</Button>
+        </div>
+      </div>
+    </>
+  );
+}
+
+/* ---------- R-01 · นำทางช่วงท้าย ---------- */
+function RiderNav({mode='nav', waited='0:42', onArrive, onNotFound, onDeliver}){
+  const arrived = mode==='arrived';
+  return (
+    <Phone>
+      {arrived
+      ? <div style={{background:T.ok,color:'#fff',padding:'12px 18px',display:'flex',gap:11,alignItems:'center'}}>
+          <Icon name="TickCircle" size={22} color="#fff" variant="b"/>
+          <div style={{flex:1}}>
+            <div style={{fontSize:16,fontWeight:600,lineHeight:1.3}}>ถึงจุดนัดแล้ว · รอลูกค้าลงมา</div>
+            <div style={{fontSize:12.5,opacity:.85}}>รอมา <span className="mono">{waited}</span> · ลูกค้าแจ้งว่ากำลังลงไป</div>
+          </div>
+        </div>
+      : <div style={{background:T.ink,color:'#fff',padding:'12px 18px',display:'flex',gap:12,alignItems:'center'}}>
+        <Icon name="DirectRight" size={26} color={T.signal} variant="b" style={{transform:'rotate(180deg)'}}/>
+        <div style={{flex:1}}>
+          <div style={{fontSize:17,fontWeight:600,lineHeight:1.3}}>เลี้ยวซ้าย เข้าซอยลาดพร้าว 15</div>
+          <div style={{fontSize:12.5,opacity:.7}}>ปลายทาง <Mono>อีก 2 นาที</Mono></div>
+        </div>
+        <Mono style={{fontSize:26,fontWeight:600}}>120<span style={{fontSize:13,marginLeft:3}}>ม.</span></Mono>
+      </div>}
+      <div className="u-scroll" style={{paddingTop:12}}>
+        <MapView height={216} riderTop="72%" riderLeft="30%" walk="เหลือ 120 ม."/>
+        <div style={{height:12}}/>
+        <HandoffCard confirmedAt="09:41"/>
+        <div style={{height:12}}/>
+        <Card size="small" style={{borderRadius:14,borderColor:T.line2}} styles={{body:{padding:12}}}>
+          <Flex justify="space-between" align="center">
+            <Flex gap={10} align="center">
+              <Icon name="Buildings2" size={20} color={T.ink2}/>
+              <div>
+                <div style={{fontSize:14.5,fontWeight:600}}>คอนโด A · ห้อง 1204</div>
+                <div style={{fontSize:12.5,color:T.muted}}>ออร์เดอร์ #A2481 · ครัวป้าแดง</div>
+              </div>
+            </Flex>
+            <div style={{textAlign:'right'}}>
+              <div className="u-label">ค่าส่ง</div>
+              <Mono style={{fontSize:16,fontWeight:600}}>฿38</Mono>
+            </div>
+          </Flex>
+        </Card>
+        <div style={{height:8}}/>
+      </div>
+      <div className="u-bottom-dock">
+        {arrived
+          ? <Button type="primary" size="large" block onClick={onDeliver} icon={<Icon name="TickCircle" size={19} color="#fff"/>}>ส่งมอบเรียบร้อย</Button>
+          : <Button type="primary" size="large" block onClick={onArrive} icon={<Icon name="Location" size={19} color="#fff"/>}>ถึงจุดนัดแล้ว</Button>}
+        <div style={{textAlign:'center',marginTop:6}}>
+          <Button type="link" size="small" danger onClick={onNotFound} icon={<Icon name="MessageQuestion" size={16}/>}>หาจุดนัดไม่พบ</Button>
+        </div>
+      </div>
+    </Phone>
+  );
+}
+
+/* ---------- R-02 · แจ้งว่าหาไม่พบ ---------- */
+const REASONS = [
+  {k:'entrance', t:'หาทางเข้าไม่เจอ', i:'Signpost'},
+  {k:'locked',   t:'ประตูล็อก',       i:'Lock1'},
+  {k:'parking',  t:'ไม่มีที่จอด',      i:'Box'},
+  {k:'room',     t:'เลขห้องไม่ตรง',    i:'Personalcard'},
+];
+function RiderNotFound({onSend, onBack}){
+  const [pick,setPick] = useState('entrance');
+  return (
+    <Phone>
+      <TopBar title="แจ้งว่าหาจุดนัดไม่พบ" sub="ออร์เดอร์ #A2481" right={<Button type="text" shape="circle" icon={<Icon name="CloseCircle" size={20}/>}/>}/>
+      <div className="u-scroll">
+        <Alert type="info" showIcon style={{borderRadius:12,marginBottom:14,background:T.paper2,borderColor:T.line2}}
+          icon={<Icon name="InfoCircle" size={18} color={T.ink2} variant="b"/>}
+          message={<span style={{fontSize:13.5,color:T.ink2}}>ลูกค้าจะได้รับแจ้งเตือนทันที และเรื่องนี้ไม่กระทบคะแนนของคุณ</span>}/>
+        <Label>เกิดอะไรขึ้น · เลือกหนึ่งข้อ</Label>
+        <div style={{height:8}}/>
+        <Space direction="vertical" size={9} style={{width:'100%'}}>
+          {REASONS.map(r=>(
+            <Card key={r.k} size="small" hoverable onClick={()=>setPick(r.k)}
+              style={{borderRadius:14, borderColor: pick===r.k?T.ink:T.line2,
+                      background: pick===r.k?'#fff':'transparent',
+                      boxShadow: pick===r.k?'0 0 0 1px '+T.ink:'none'}}
+              styles={{body:{padding:'14px 14px'}}}>
+              <Flex gap={12} align="center">
+                <Icon name={r.i} size={22} color={pick===r.k?T.ink:T.muted} variant={pick===r.k?'b':'l'}/>
+                <span style={{flex:1,fontSize:15.5,fontWeight:pick===r.k?600:400}}>{r.t}</span>
+                {pick===r.k && <Icon name="TickCircle" size={20} color={T.ok} variant="b"/>}
+              </Flex>
+            </Card>
+          ))}
+        </Space>
+        <div style={{height:14}}/>
+        <Label>ไม่บังคับ</Label>
+        <div style={{height:8}}/>
+        <div className="u-dash">
+          <Icon name="Camera" size={20} color={T.muted}/>
+          <div style={{flex:1}}>ถ่ายภาพจุดที่คุณยืนอยู่ ให้ลูกค้าเห็น</div>
+          <Button size="small">ถ่ายภาพ</Button>
+        </div>
+        <div style={{height:8}}/>
+      </div>
+      <div className="u-bottom-dock">
+        <Button type="primary" size="large" block onClick={onSend} icon={<Icon name="Send2" size={19} color="#fff"/>}>ส่งให้ลูกค้า</Button>
+        <div style={{textAlign:'center',marginTop:6}}>
+          <Button type="link" size="small" onClick={onBack} style={{color:T.muted}}>กลับไปหน้านำทาง</Button>
+        </div>
+      </div>
+    </Phone>
+  );
+}
+
+/* ---------- R-03 · ได้ข้อมูลเพิ่ม ---------- */
+function RiderUpdated({onContinue}){
+  return (
+    <Phone>
+      <div style={{background:T.ok,color:'#fff',padding:'12px 18px',display:'flex',gap:11,alignItems:'center'}}>
+        <Icon name="Gps" size={22} color="#fff" variant="b"/>
+        <div style={{flex:1}}>
+          <div style={{fontSize:16,fontWeight:600,lineHeight:1.3}}>ลูกค้าแชร์ตำแหน่งแล้ว</div>
+          <div style={{fontSize:12.5,opacity:.85}}>อัปเดตเมื่อ <Mono>09:44</Mono></div>
+        </div>
+      </div>
+      <div className="u-scroll" style={{paddingTop:12}}>
+        <MapView height={238} riderTop="70%" riderLeft="28%" pinTop="34%" pinLeft="60%" pinLabel="ลูกค้าอยู่ตรงนี้" walk="เดิน 40 ม."/>
+        <div style={{height:12}}/>
+        <Card size="small" style={{background:T.signalSoft,borderColor:'#EBD79A',borderRadius:14}} styles={{body:{padding:14}}}>
+          <Flex gap={12} align="flex-start">
+            <div style={{width:34,height:34,borderRadius:10,background:T.signal,display:'grid',placeItems:'center'}}>
+              <Icon name="Location" size={19} color={T.signalInk} variant="b"/>
+            </div>
+            <div style={{flex:1}}>
+              <Flex gap={8} align="center">
+                <span className="u-label" style={{color:T.signalInk}}>จุดนัดใหม่</span>
+                <Tag bordered={false} style={{margin:0,fontSize:10.5,background:'#fff',color:T.signalInk}}>เปลี่ยนจากเดิม</Tag>
+              </Flex>
+              <div style={{fontSize:16.5,fontWeight:600,lineHeight:1.45}}>ล็อบบี้ฝั่งลิฟต์</div>
+              <Flex gap={7} align="center" style={{fontSize:13.5,color:T.signalInk}}>
+                <Icon name="Routing" size={15}/> ห่างจากคุณ <Mono style={{fontWeight:600}}>40 ม.</Mono> · เดิน <Mono>1 นาที</Mono>
+              </Flex>
+            </div>
+          </Flex>
+        </Card>
+        <div style={{height:12}}/>
+        <Card size="small" style={{borderRadius:14,borderColor:T.line2}} styles={{body:{padding:12}}}>
+          <Flex gap={10} align="center">
+            <Icon name="Sms" size={19} color={T.ink2}/>
+            <div style={{flex:1,fontSize:14}}>“ยืนอยู่หน้าลิฟต์ ใส่เสื้อสีแดงครับ”</div>
+          </Flex>
+        </Card>
+        <div style={{height:8}}/>
+      </div>
+      <div className="u-bottom-dock">
+        <Button type="primary" size="large" block onClick={onContinue} icon={<Icon name="DirectRight" size={19} color="#fff"/>}>นำทางต่อ</Button>
+        <div style={{textAlign:'center',marginTop:6}}>
+          <Button type="link" size="small" style={{color:T.muted}}>ส่งมอบเรียบร้อยแล้ว</Button>
+        </div>
+      </div>
+    </Phone>
+  );
+}
+
+const theme = {
+  token:{
+    colorPrimary: T.ink, colorInfo: T.ink, colorSuccess: T.ok, colorWarning: T.signal, colorError: T.warn,
+    colorText: T.ink, colorTextSecondary: T.ink2, colorTextTertiary: T.muted,
+    colorBorder: T.line2, colorBorderSecondary: T.line2,
+    colorBgContainer: '#FFFFFF', colorBgLayout: T.paper,
+    borderRadius: 12, borderRadiusLG: 14, controlHeightLG: 50, controlHeight: 40,
+    fontFamily: "'IBM Plex Sans Thai', system-ui, sans-serif", fontSize: 15, lineHeight: 1.65,
+  },
+  components:{
+    Button:{ fontWeight:600, primaryShadow:'none', defaultShadow:'none', dangerShadow:'none' },
+    Card:{ headerFontSize:15.5 },
+    Alert:{ withDescriptionPadding:14 },
+    Segmented:{ itemSelectedBg: T.ink, itemSelectedColor:'#fff' },
+  }
+};
+/* ================= ส่วนที่ฝังในเด็ค ================= */
+const {Timeline} = antd;
+const now = () => dayjs().format('HH:mm');
+
+function Cap({id, children}){
+  return <div className="u-frame-cap"><div className="id">{id}</div><p>{children}</p></div>;
+}
+function StepHead({n, actor, action, system}){
+  return (
+    <div className="u-step">
+      <span className="u-step-n">{n}</span>
+      <div>
+        <b><span className="u-actor">{actor}</span> {action}</b>
+        <span>{system}</span>
+      </div>
+    </div>
+  );
+}
+
+/* ---------- 1) screen flow แตกตาม action ---------- */
+function FlowScreens(){
+  return (
+    <div className="u-frames">
+      <div className="u-frame-col">
+        <StepHead n="01" actor="ลูกค้า" action="เปิดหน้าติดตามออร์เดอร์" system="ระบบ: เสนอจุดนัดรับจากประวัติที่เคยส่งสำเร็จในพิกัดนี้"/>
+        <CustomerTrack stateKey="near"/>
+        <Cap id="C-01 · ใกล้ถึง">เวลาอยู่บนสุด จุดนัดรับเป็นลำดับสอง และมีปุ่มหลักปุ่มเดียวคือลงไปรอ</Cap>
+      </div>
+      <div className="u-frame-col">
+        <StepHead n="02" actor="ลูกค้า" action="แตะ “เปลี่ยนจุดนัดรับ”" system="ระบบ: เปิด sheet โดยเลือกค่าเริ่มต้นไว้ให้แล้ว"/>
+        <CustomerTrack stateKey="near"><HandoffSheet onClose={()=>{}}/></CustomerTrack>
+        <Cap id="C-02 · เลือกจุดนัดรับ">ตัวเลือกที่ระบบเดาไว้อยู่บนสุดและถูกเลือกแล้ว ลูกค้าจึงกดยืนยันได้เลยโดยไม่ต้องพิมพ์</Cap>
+      </div>
+      <div className="u-frame-col">
+        <StepHead n="03" actor="ลูกค้า" action="กด “ยืนยันจุดนัดรับ”" system="ระบบ: บันทึกและส่งให้ไรเดอร์เห็นทันที"/>
+        <CustomerTrack stateKey="near" toast="บันทึกจุดนัดรับแล้ว · ไรเดอร์เห็นแล้วเมื่อ 09:41"/>
+        <Cap id="C-01′ · ยืนยันแล้ว">ยืนยันเสร็จแล้วกลับสู่หน้าเดิม ไม่พาผู้ใช้ไปหน้าใหม่ เพราะงานหลักของหน้านี้ยังเป็นการรอ</Cap>
+      </div>
+      <div className="u-frame-col">
+        <StepHead n="04" actor="ไรเดอร์" action="เข้าระยะ 120 เมตร" system="ระบบ: แสดงจุดนัดรับที่ลูกค้ายืนยันใต้แผนที่"/>
+        <RiderNav/>
+        <Cap id="R-01 · นำทางช่วงท้าย">แทรกจุดนัดรับในตำแหน่งที่โครงเดิมใช้เป็นการ์ดออร์เดอร์ ไม่แย่งที่แถบคำสั่งถัดไป</Cap>
+      </div>
+      <div className="u-frame-col">
+        <StepHead n="05" actor="ไรเดอร์" action="กด “หาจุดนัดไม่พบ”" system="ระบบ: ให้เลือกเหตุผลเป็นปุ่ม ไม่ต้องพิมพ์"/>
+        <RiderNotFound/>
+        <Cap id="R-02 · แจ้งว่าหาไม่พบ">เหตุผลที่เก็บได้กลายเป็นข้อมูลปรับปรุงจุดนัดรับของอาคารนั้นในรอบถัดไป</Cap>
+      </div>
+      <div className="u-frame-col">
+        <StepHead n="06" actor="ลูกค้า" action="ได้รับแจ้งเตือน" system="ระบบ: เสนอทางออกสามทาง โดยยกทางที่เร็วที่สุดเป็นปุ่มหลัก"/>
+        <CustomerTrack stateKey="notfound"/>
+        <Cap id="C-03 · ไรเดอร์หาไม่เจอ">การโทรถูกลดเป็นตัวเลือกรอง เพราะช้าที่สุดในสามอย่าง</Cap>
+      </div>
+      <div className="u-frame-col">
+        <StepHead n="07" actor="ลูกค้า" action="กด “แชร์ตำแหน่งของฉัน”" system="ระบบ: ส่งพิกัดสดให้ไรเดอร์และคำนวณระยะเดินเท้าใหม่"/>
+        <RiderUpdated/>
+        <Cap id="R-03 · ได้ข้อมูลเพิ่ม">แสดงเฉพาะสิ่งที่เปลี่ยนไปและระยะที่เหลือ ไม่แสดงข้อมูลออร์เดอร์ทั้งชุดซ้ำ</Cap>
+      </div>
+      <div className="u-frame-col">
+        <StepHead n="08" actor="ทั้งสองฝ่าย" action="เจอกันที่จุดนัด" system="ระบบ: ปิดออร์เดอร์และล็อกจุดนัดรับไว้เป็นประวัติของอาคาร"/>
+        <CustomerTrack stateKey="done"/>
+        <Cap id="C-05 · ส่งมอบแล้ว">จุดนัดรับที่ใช้สำเร็จถูกบันทึกไว้ ทำให้ครั้งถัดไปของอาคารนี้ระบบเดาได้แม่นขึ้น</Cap>
+      </div>
+    </div>
+  );
+}
+
+/* ---------- 2) prototype กดเล่นได้ · สองฝั่งใช้สถานะเดียวกัน ---------- */
+const STAGE_LABEL = {
+  near:'ไรเดอร์กำลังมา', arrived:'ไรเดอร์ถึงจุดนัด', nf_form:'ไรเดอร์กำลังแจ้งปัญหา',
+  nf_alert:'ลูกค้าได้รับแจ้งเตือน', shared:'ลูกค้าแชร์ตำแหน่งแล้ว', final:'ไรเดอร์ถึงจุดใหม่', done:'ส่งมอบเรียบร้อย'
+};
+const CUSTOMER_VIEW = {near:'near', arrived:'arrived', nf_form:'arrived', nf_alert:'notfound', shared:'waiting', final:'waiting', done:'done'};
+
+function RiderDone({onReset}){
+  return (
+    <Phone>
+      <div className="u-scroll" style={{paddingTop:40}}>
+        <Flex vertical align="center" gap={10} style={{textAlign:'center',padding:'30px 10px'}}>
+          <Icon name="TickCircle" size={62} color={T.ok} variant="b"/>
+          <div style={{fontSize:22,fontWeight:600}}>ส่งมอบสำเร็จ</div>
+          <div style={{color:T.muted,fontSize:14.5}}>ออร์เดอร์ #A2481 · ใช้เวลาที่จุดนัด <Mono>1:12</Mono></div>
+          <Card size="small" style={{width:'100%',marginTop:10,borderRadius:14,borderColor:T.line2}}>
+            <Flex justify="space-between"><span style={{color:T.muted}}>ค่าส่ง</span><Mono style={{fontWeight:600}}>฿38</Mono></Flex>
+          </Card>
+        </Flex>
+      </div>
+      <div className="u-bottom-dock">
+        <Button type="primary" size="large" block onClick={onReset}>รับงานถัดไป</Button>
+      </div>
+    </Phone>
+  );
+}
+
+function Prototype(){
+  const [role,setRole]   = useState('customer');
+  const [stage,setStage] = useState('near');
+  const [sheet,setSheet] = useState(false);
+  const [toast,setToast] = useState(null);
+  const [log,setLog]     = useState([{who:'ระบบ', m:'เสนอจุดนัดรับจากประวัติ · ทางเข้าฝั่ง B ล็อบบี้', t:'09:39'}]);
+  const push = (who,m) => setLog(l=>[...l,{who,m,t:now()}]);
+
+  const reset = () => { setStage('near'); setSheet(false); setToast(null); setRole('customer');
+    setLog([{who:'ระบบ', m:'เสนอจุดนัดรับจากประวัติ · ทางเข้าฝั่ง B ล็อบบี้', t:'09:39'}]); };
+
+  const customer =
+    <CustomerTrack
+      stateKey={CUSTOMER_VIEW[stage]}
+      toast={toast}
+      onEdit={()=>{ setSheet(true); push('ลูกค้า','เปิดหน้าเลือกจุดนัดรับ'); }}
+      onPrimary={()=>{
+        if(stage==='nf_alert'){ setStage('shared'); push('ลูกค้า','แชร์ตำแหน่งสดให้ไรเดอร์'); setRole('rider'); }
+        else if(stage==='done'){ push('ลูกค้า','ให้คะแนนการส่งมอบ 5 ดาว'); }
+        else { setToast('แจ้งไรเดอร์แล้วว่ากำลังลงไป'); push('ลูกค้า','กด “กำลังลงไป”'); }
+      }}>
+      {sheet && <HandoffSheet
+        onClose={()=>setSheet(false)}
+        onConfirm={()=>{ setSheet(false); setToast('บันทึกจุดนัดรับแล้ว · ไรเดอร์เห็นทันที'); push('ลูกค้า','ยืนยันจุดนัดรับ · ทางเข้าฝั่ง B ล็อบบี้'); }}/>}
+    </CustomerTrack>;
+
+  let rider;
+  if(stage==='nf_form')      rider = <RiderNotFound onBack={()=>setStage('arrived')}
+                                       onSend={()=>{ setStage('nf_alert'); setToast(null); push('ไรเดอร์','แจ้งว่าหาทางเข้าไม่เจอ'); setRole('customer'); }}/>;
+  else if(stage==='shared')  rider = <RiderUpdated onContinue={()=>{ setStage('final'); push('ไรเดอร์','นำทางต่อไปจุดใหม่ · เหลือ 40 ม.'); }}/>;
+  else if(stage==='done')    rider = <RiderDone onReset={reset}/>;
+  else rider = <RiderNav
+      mode={stage==='near' ? 'nav' : 'arrived'}
+      onArrive={()=>{ setStage('arrived'); setToast(null); push('ไรเดอร์','กด “ถึงจุดนัดแล้ว”'); setRole('customer'); }}
+      onNotFound={()=>{ setStage('nf_form'); push('ไรเดอร์','เปิดหน้าจอแจ้งว่าหาจุดนัดไม่พบ'); }}
+      onDeliver={()=>{ setStage('done'); setToast(null); push('ทั้งสองฝ่าย','ส่งมอบสำเร็จที่จุดนัดรับ'); }}/>;
+
+  return (
+    <Flex gap={30} wrap="wrap" align="flex-start" style={{maxWidth:'100%'}}>
+      <div className="u-frame-col">{role==='customer' ? customer : rider}</div>
+      <div style={{flex:'1 1 320px',minWidth:0,maxWidth:520}}>
+        <Segmented block value={role} onChange={setRole} size="large"
+          options={[{label:'มุมมองลูกค้า',value:'customer'},{label:'มุมมองไรเดอร์',value:'rider'}]}/>
+        <div style={{height:14}}/>
+        <Card style={{borderRadius:16,borderColor:T.line2}}>
+          <Flex justify="space-between" align="center" wrap="wrap" gap={8}>
+            <div className="u-label">สถานะร่วมของออร์เดอร์นี้</div>
+            <Tag bordered={false} color={stage==='done'?'success':stage==='nf_alert'||stage==='nf_form'?'error':'default'}
+                 style={{margin:0,fontWeight:600}}>{STAGE_LABEL[stage]}</Tag>
+          </Flex>
+          <p className="u-note" style={{fontSize:13.5,margin:'8px 0 0'}}>
+            กดปุ่มบนหน้าจอได้เลย แล้วสลับมุมมองเพื่อดูว่าอีกฝ่ายเห็นอะไรในเหตุการณ์เดียวกัน
+            ทั้งสองฝั่งอ่านจากจุดนัดรับชุดเดียวกัน ไม่ได้ส่งข้อความหากันเอง
+          </p>
+        </Card>
+        <div style={{height:14}}/>
+        <Card style={{borderRadius:16,borderColor:T.line2}}>
+          <Flex justify="space-between" align="center" style={{marginBottom:12}}>
+            <div className="u-label">สิ่งที่เกิดขึ้นตามลำดับ</div>
+            <Button size="small" onClick={reset} icon={<Icon name="Refresh2" size={15}/>}>เริ่มใหม่</Button>
+          </Flex>
+          <Timeline
+            items={log.map(e=>({
+              color: e.who==='ไรเดอร์' ? '#16181C' : e.who==='ระบบ' ? '#767C86' : '#F0B31A',
+              children: (
+                <div style={{fontSize:13.5,lineHeight:1.55}}>
+                  <Mono style={{fontSize:11.5,color:T.muted}}>{e.t}</Mono>
+                  <b style={{margin:'0 6px',fontWeight:600}}>{e.who}</b>{e.m}
+                </div>)
+            }))}/>
+        </Card>
+      </div>
+    </Flex>
+  );
+}
+
+/* ---------- 3) สลับสถานะ · การ์ดใบเดียวกัน ---------- */
+function StatesDemo(){
+  const [state,setState] = useState('near');
+  return (
+    <Flex gap={30} wrap="wrap" align="flex-start" style={{maxWidth:'100%'}}>
+      <div className="u-frame-col"><CustomerTrack stateKey={state}/></div>
+      <div style={{flex:'1 1 320px',minWidth:0,maxWidth:520}}>
+        <Segmented block value={state} onChange={setState}
+          options={[{label:'ใกล้ถึง',value:'near'},{label:'ถึงแล้ว',value:'arrived'},
+                    {label:'หาไม่เจอ',value:'notfound'},{label:'รออยู่',value:'waiting'},
+                    {label:'ส่งมอบ',value:'done'}]}/>
+        <div style={{height:18}}/>
+        <Card style={{borderRadius:16,borderColor:T.line2}}>
+          <div className="u-label">สิ่งที่เปลี่ยนตามสถานะ</div>
+          <div style={{height:8}}/>
+          {[['ข้อความหลัก', STATES[state].title || (STATES[state].eta+' '+STATES[state].unit)],
+            ['ปุ่มหลัก', STATES[state].primary],
+            ['ตัวเลือกรอง', STATES[state].secondary],
+            ['จุดนัดรับ', state==='done' ? 'ล็อก แก้ไขไม่ได้แล้ว' : state==='notfound' ? 'แก้ไขได้ · ยกเป็นทางออก' : 'แก้ไขได้']
+          ].map(([k,v])=>(
+            <div className="u-tokrow" key={k}><span style={{color:T.muted}}>{k}</span><b style={{fontWeight:600,textAlign:'right'}}>{v}</b></div>
+          ))}
+        </Card>
+      </div>
+    </Flex>
+  );
+}
+
+/* ---------- 4) ชุดคอมโพเนนต์ ---------- */
+const INVENTORY = [
+  ['Status Card','Card + Progress track','รับได้ทั้ง 5 สถานะผ่าน property เดียว'],
+  ['Handoff Point Card','Card + Tag + Button(link)','ข้อมูลชุดเดียวที่ใช้ร่วมกันสองฝั่ง'],
+  ['ETA Display','Typography + mono','ตัวเลขไม่ขยับเวลานับถอยหลัง'],
+  ['Rider Card','Card + Avatar + Badge','แชตและโทรเป็นปุ่มรอง'],
+  ['Primary Button','Button type=primary size=large','หนึ่งปุ่มหลักต่อหนึ่งสถานะ'],
+  ['Bottom Sheet','Sheet + Radio.Group + Switch','ค่าเริ่มต้นถูกเลือกไว้ล่วงหน้า'],
+  ['Notification Banner','Alert','ใช้ tone warning กับเส้นทางที่ผิดแผน'],
+  ['Location Picker','Radio.Group + TextArea + Map','ปักหมุดเองเป็นทางเลือกสุดท้าย'],
+];
+function DesignKit(){
+  const [loading,setLoading] = useState(false);
+  return (
+    <div className="u-grid3">
+      <Card title="สถานะของคอมโพเนนต์" style={{borderRadius:16,borderColor:T.line2}}>
+        <Space direction="vertical" size={12} style={{width:'100%'}}>
+          <Flex gap={8} wrap="wrap">
+            <Button type="primary">default</Button>
+            <Button type="primary" loading={loading} onClick={()=>{setLoading(true);setTimeout(()=>setLoading(false),1600);}}>loading</Button>
+            <Button type="primary" disabled>disabled</Button>
+          </Flex>
+          <Flex gap={8} wrap="wrap">
+            <Button>secondary</Button>
+            <Button danger>error</Button>
+            <Button type="link" style={{color:T.muted}}>tertiary</Button>
+          </Flex>
+          <Alert type="error" showIcon style={{borderRadius:10}}
+            icon={<Icon name="Danger" size={17} color={T.warn} variant="b"/>}
+            message={<span style={{fontSize:13.5}}>ส่งข้อมูลไม่สำเร็จ · ลองอีกครั้ง</span>}/>
+          <div className="u-dash" style={{justifyContent:'center'}}>
+            <Icon name="Location" size={18} color={T.muted}/> ยังไม่มีจุดนัดรับที่บันทึกไว้
+          </div>
+          <Skeleton active paragraph={{rows:2}} title={false}/>
+        </Space>
+      </Card>
+      <Card title="ไอคอน · Iconsax" style={{borderRadius:16,borderColor:T.line2}}>
+        <Flex wrap="wrap" gap={13}>
+          {['Location','Routing','DirectRight','TruckFast','Gps','Buildings2','Call','Messages2',
+            'Camera','Send2','TickCircle','Danger','InfoCircle','Edit2','Lock1','Signpost'].map(n=>(
+            <Tooltip key={n} title={n}>
+              <div style={{width:42,height:42,borderRadius:10,border:'1px solid '+T.line2,display:'grid',placeItems:'center',background:'#fff'}}>
+                <Icon name={n} size={21} color={T.ink}/>
+              </div>
+            </Tooltip>
+          ))}
+        </Flex>
+        <p className="u-note" style={{marginTop:14,fontSize:13.5}}>ใช้ตัวแปร Linear เป็นค่าเริ่มต้น สลับเป็น Bold เฉพาะตอนที่ไอคอนถูกเลือกหรืออยู่บนพื้นสี เพื่อให้น้ำหนักของไอคอนบอกสถานะได้เอง</p>
+      </Card>
+      <Card title="ประกอบจากอะไรของ Ant Design" style={{borderRadius:16,borderColor:T.line2}}>
+        {INVENTORY.map(([name,base,why])=>(
+          <div key={name} style={{padding:'9px 0',borderBottom:'1px dashed '+T.line2}}>
+            <Flex justify="space-between" gap={12} wrap="wrap">
+              <b style={{fontWeight:600,fontSize:14.5}}>{name}</b>
+              <Mono style={{fontSize:12,color:T.ink2,textAlign:'right'}}>{base}</Mono>
+            </Flex>
+            <div style={{fontSize:13,color:T.muted,lineHeight:1.5}}>{why}</div>
+          </div>
+        ))}
+      </Card>
+    </div>
+  );
+}
+
+function mount(id, node){
+  const el = document.getElementById(id);
+  if(!el) return;
+  ReactDOM.createRoot(el).render(<ConfigProvider theme={theme}>{node}</ConfigProvider>);
+}
+mount('ui-hero',   <CustomerTrack stateKey="near"/>);
+mount('ui-c01',    <CustomerTrack stateKey="near"/>);
+mount('ui-flow',   <FlowScreens/>);
+mount('ui-proto',  <Prototype/>);
+mount('ui-states', <StatesDemo/>);
+mount('ui-kit',    <DesignKit/>);
+
+</script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+# ไฟล์ทำงานภายใน ไม่ต้องขึ้น git
+ui.html
+
+# macOS
+.DS_Store
