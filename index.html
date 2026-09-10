@@ -1941,6 +1941,14 @@ function RiderUpdated({onContinue}){
 const theme = {
   token:{
     colorPrimary: T.ink, colorInfo: T.ink, colorSuccess: T.ok, colorWarning: T.signal, colorError: T.warn,
+    /* พื้นและขอบของสถานะ กำหนดเองแทนให้ antd ไล่เฉดจากสีเข้ม ซึ่งออกมาทึบ */
+    colorSuccessBg: T.okSoft, colorSuccessBgHover: T.okSoft, colorSuccessBorder: '#BBD9C9',
+    colorSuccessBorderHover: '#BBD9C9', colorSuccessText: T.ok, colorSuccessTextActive: T.ok,
+    colorWarningBg: T.signalSoft, colorWarningBgHover: T.signalSoft, colorWarningBorder: '#EBD79A',
+    colorWarningBorderHover: '#EBD79A', colorWarningText: T.signalInk, colorWarningTextActive: T.signalInk,
+    colorErrorBg: T.warnSoft, colorErrorBgHover: T.warnSoft, colorErrorBorder: '#E8C6B6',
+    colorErrorBorderHover: '#E8C6B6', colorErrorText: T.warn, colorErrorTextActive: T.warn,
+    colorInfoBg: T.paper2, colorInfoBorder: T.line2,
     colorText: T.ink, colorTextSecondary: T.ink2, colorTextTertiary: T.muted,
     colorBorder: T.line2, colorBorderSecondary: T.line2,
     colorBgContainer: '#FFFFFF', colorBgLayout: T.paper,
